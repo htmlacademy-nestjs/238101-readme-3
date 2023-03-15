@@ -1,7 +1,7 @@
 # Личный проект «Readme»
 
-* Студент: [Дмитрий Ивлев](https://up.htmlacademy.ru/nodejs-2/3/user/238101).
-* Наставник: `Неизвестно`.
+- Студент: [Дмитрий Ивлев](https://up.htmlacademy.ru/nodejs-2/3/user/238101).
+- Наставник: [Глеб Клецков](https://htmlacademy.ru/profile/id1487865).
 
 ---
 
