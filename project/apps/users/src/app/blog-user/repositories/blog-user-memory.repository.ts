@@ -4,7 +4,9 @@ import { CRUDRepository } from '@project/util/util-types';
 import { User } from '@project/shared/shared-types';
 
 import { BlogUserEntity } from '../entities';
+import { Injectable } from '@nestjs/common';
 
+@Injectable()
 export class BlogUserMemoryRepository
   implements CRUDRepository<BlogUserEntity, string, User>
 {
