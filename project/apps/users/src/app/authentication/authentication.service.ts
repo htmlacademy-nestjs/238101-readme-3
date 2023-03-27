@@ -15,7 +15,7 @@ export class AuthenticationService {
   constructor(private readonly blogUserRepository: BlogUserMemoryRepository) {}
 
   public async register(dto: CreateUserDto) {
-    const { avatar, email, name, password } = dto;
+    const { email, name, password } = dto;
 
     const existUser = await this.blogUserRepository.findByEmail(email);
 
@@ -24,7 +24,6 @@ export class AuthenticationService {
     }
 
     const userEntity = new BlogUserEntity({
-      avatar,
       email,
       name,
       passwordHash: '',
