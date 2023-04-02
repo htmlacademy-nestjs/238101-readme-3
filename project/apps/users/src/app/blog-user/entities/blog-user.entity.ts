@@ -1,9 +1,9 @@
-import { User } from '@project/shared/shared-types';
+import { Entity, User } from '@project/shared/shared-types';
 import { compare, genSalt, hash } from 'bcrypt';
 
 const SALT_ROUNDS = 10;
 
-export class BlogUserEntity implements User {
+export class BlogUserEntity implements User, Entity<User> {
   public _id: string;
   public avatar?: string;
   public email: string;
