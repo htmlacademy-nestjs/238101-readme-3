@@ -16,15 +16,15 @@ async function bootstrap() {
   app.setGlobalPrefix(globalPrefix);
 
   const config = new DocumentBuilder()
-    .setTitle('The «Users» service')
-    .setDescription('Users service API')
+    .setTitle('The «Blog» service')
+    .setDescription('Blog service API')
     .setVersion('1.0')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
 
-  const port = process.env.PORT || 3000;
+  const port = process.env.PORT || 3001;
   await app.listen(port);
 
   Logger.log(
