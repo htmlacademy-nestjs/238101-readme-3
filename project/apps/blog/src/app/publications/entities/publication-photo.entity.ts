@@ -13,8 +13,8 @@ export class PublicationPhotoEntity implements PublicationEntity {
   public tags?: string[];
   public type: PublicationKind.Photo = PublicationKind.Photo;
 
-  public createdAt: string;
-  public updatedAt: string;
+  public createdAt: number;
+  public updatedAt: number;
 
   constructor(publication: PublicationPhoto) {
     this.fillEntity(publication);

@@ -39,8 +39,8 @@ export class PublicationsService {
       status: PublicationStatus.Published,
       tags,
       type: PublicationKind.Link,
-      createdAt: '',
-      updatedAt: '',
+      createdAt: 0,
+      updatedAt: 0,
     });
 
     return this.publicationsRepository.create(publicationLink);
@@ -54,8 +54,8 @@ export class PublicationsService {
       status: PublicationStatus.Published,
       tags,
       type: PublicationKind.Photo,
-      createdAt: '',
-      updatedAt: '',
+      createdAt: 0,
+      updatedAt: 0,
     });
 
     return this.publicationsRepository.create(publicationPhoto);
@@ -70,8 +70,8 @@ export class PublicationsService {
       status: PublicationStatus.Published,
       tags,
       type: PublicationKind.Quote,
-      createdAt: '',
-      updatedAt: '',
+      createdAt: 0,
+      updatedAt: 0,
     });
 
     return this.publicationsRepository.create(publicationQuote);
@@ -87,8 +87,8 @@ export class PublicationsService {
       status: PublicationStatus.Published,
       tags,
       type: PublicationKind.Text,
-      createdAt: '',
-      updatedAt: '',
+      createdAt: 0,
+      updatedAt: 0,
     });
 
     return this.publicationsRepository.create(publicationText);
@@ -103,8 +103,8 @@ export class PublicationsService {
       status: PublicationStatus.Published,
       tags,
       type: PublicationKind.Video,
-      createdAt: '',
-      updatedAt: '',
+      createdAt: 0,
+      updatedAt: 0,
     });
 
     return this.publicationsRepository.create(publicationVideo);

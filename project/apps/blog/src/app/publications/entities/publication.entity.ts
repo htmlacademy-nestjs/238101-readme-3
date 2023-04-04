@@ -14,8 +14,8 @@ export abstract class PublicationEntity
   public tags?: string[];
   public type: PublicationKind;
 
-  public createdAt: string;
-  public updatedAt: string;
+  public createdAt: number;
+  public updatedAt: number;
 
   constructor(publication: Publication) {
     this.fillEntity(publication);

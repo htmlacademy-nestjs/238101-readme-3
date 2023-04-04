@@ -16,8 +16,8 @@ export class PublicationsMemoryRepository
     const entry = {
       ...item.toObject(),
       _id: randomUUID(),
-      createdAt: dayjs().toISOString(),
-      updatedAt: dayjs().toISOString(),
+      createdAt: dayjs().unix(),
+      updatedAt: dayjs().unix(),
     };
 
     this.repository[entry._id] = entry;
