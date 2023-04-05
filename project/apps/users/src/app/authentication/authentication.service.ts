@@ -6,13 +6,13 @@ import {
 } from '@nestjs/common';
 
 import { BlogUserEntity } from '../blog-user/entities';
-import { BlogUserMemoryRepository } from '../blog-user/repositories';
+import { BlogUserRepository } from '../blog-user/repositories';
 import { AuthUserErrorMessage } from './consts';
 import { CreateUserDto, LoginUserDto } from './dto';
 
 @Injectable()
 export class AuthenticationService {
-  constructor(private readonly blogUserRepository: BlogUserMemoryRepository) {}
+  constructor(private readonly blogUserRepository: BlogUserRepository) {}
 
   public async register(dto: CreateUserDto) {
     const { email, name, password } = dto;
