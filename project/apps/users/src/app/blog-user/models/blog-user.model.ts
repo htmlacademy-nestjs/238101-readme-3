@@ -25,8 +25,6 @@ export class BlogUserModel extends Document implements User {
 
   @Prop({
     required: true,
-    min: 6,
-    max: 12,
   })
   public passwordHash: string;
 }
