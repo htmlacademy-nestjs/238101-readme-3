@@ -1,11 +1,25 @@
-import { Body, Controller, Get, HttpStatus, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpStatus,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { fillObject } from '@project/util/util-core';
 
 import { AuthenticationService } from './authentication.service';
-import { CreateUserDto, LoginUserDto } from './dto';
-import { CreatedUserRdo, LoggedUserRdo, UserRdo } from './rdo';
+import { ChangePasswordDto, CreateUserDto, LoginUserDto } from './dto';
+import {
+  ChangePasswordFailedRdo,
+  ChangePasswordSuccessfullyRdo,
+  CreatedUserRdo,
+  LoggedUserRdo,
+  UserRdo,
+} from './rdo';
 
 @ApiTags('authentication')
 @Controller('auth')
@@ -38,6 +52,21 @@ export class AuthenticationController {
     const verifiedUser = await this.authService.verifyUser(dto);
 
     return fillObject(LoggedUserRdo, verifiedUser);
+  }
+
+  @Patch('change-password')
+  @ApiResponse({
+    status: HttpStatus.ACCEPTED,
+    description: 'password changed successfully',
+    type: ChangePasswordSuccessfullyRdo,
+  })
+  @ApiResponse({
+    status: HttpStatus.FORBIDDEN,
+    description: 'current password is incorrect',
+    type: ChangePasswordFailedRdo,
+  })
+  public async changePassword(@Body() dto: ChangePasswordDto) {
+    await this.authService.changePassword(dto);
   }
 
   @ApiResponse({

@@ -1,8 +1,16 @@
 import { Module } from '@nestjs/common';
-import { BlogUserMemoryRepository } from './repositories';
+import { MongooseModule } from '@nestjs/mongoose';
+
+import { BlogUserModel, BlogUserSchema } from './models';
+import { BlogUserRepository } from './repositories';
 
 @Module({
-  providers: [BlogUserMemoryRepository],
-  exports: [BlogUserMemoryRepository],
+  imports: [
+    MongooseModule.forFeature([
+      { name: BlogUserModel.name, schema: BlogUserSchema },
+    ]),
+  ],
+  providers: [BlogUserRepository],
+  exports: [BlogUserRepository],
 })
 export class BlogUserModule {}
