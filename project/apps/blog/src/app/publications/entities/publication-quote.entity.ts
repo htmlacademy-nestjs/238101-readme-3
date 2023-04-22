@@ -6,7 +6,7 @@ import {
 import { PublicationEntity } from './publication.entity';
 
 export class PublicationQuoteEntity implements PublicationEntity {
-  public _id?: string;
+  public id?: number;
 
   public authorQuote: string;
   public content: string;
@@ -22,7 +22,7 @@ export class PublicationQuoteEntity implements PublicationEntity {
   }
 
   fillEntity(entity: PublicationQuote) {
-    this._id = entity._id;
+    this.id = entity.id;
 
     this.authorQuote = entity.authorQuote;
     this.content = entity.content;

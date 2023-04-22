@@ -6,7 +6,7 @@ import {
 import { PublicationEntity } from './publication.entity';
 
 export class PublicationTextEntity implements PublicationEntity {
-  public _id?: string;
+  public id?: number;
 
   public announcement: string;
   public content: string;
@@ -23,7 +23,7 @@ export class PublicationTextEntity implements PublicationEntity {
   }
 
   fillEntity(entity: PublicationText) {
-    this._id = entity._id;
+    this.id = entity.id;
 
     this.announcement = entity.announcement;
     this.content = entity.content;

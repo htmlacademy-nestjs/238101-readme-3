@@ -5,7 +5,7 @@ import {
 } from '@project/shared/shared-types';
 
 export interface Publication {
-  _id?: string;
+  id?: number;
 
   status: PublicationStatus;
   tags?: Tag[];

@@ -8,7 +8,7 @@ import {
 export abstract class PublicationEntity
   implements Publication, Entity<Publication>
 {
-  public _id?: string;
+  public id?: number;
 
   public status: PublicationStatus;
   public tags?: string[];

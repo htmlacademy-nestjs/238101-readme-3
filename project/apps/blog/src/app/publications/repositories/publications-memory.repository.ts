@@ -8,7 +8,7 @@ import { PublicationEntities } from '../entities';
 
 @Injectable()
 export class PublicationsMemoryRepository
-  implements CRUDRepository<PublicationEntities, string, Publications>
+  implements CRUDRepository<PublicationEntities, number, Publications>
 {
   private repository: { [key: string]: Publications } = {};
 
@@ -29,7 +29,7 @@ export class PublicationsMemoryRepository
     return Object.values(this.repository);
   }
 
-  public async findById(id: string): Promise<Publications> {
+  public async findById(id: number): Promise<Publications> {
     if (!this.repository[id]) {
       return null;
     }
@@ -37,17 +37,17 @@ export class PublicationsMemoryRepository
     return { ...this.repository[id] };
   }
 
-  public async destroy(id: string): Promise<void> {
+  public async destroy(id: number): Promise<void> {
     delete this.repository[id];
   }
 
   public async update(
-    id: string,
+    id: number,
     item: PublicationEntities
   ): Promise<Publications> {
     this.repository[id] = {
       ...item.toObject(),
-      _id: id,
+      id: id,
     };
 
     return this.findById(id);

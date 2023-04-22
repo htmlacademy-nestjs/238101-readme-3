@@ -13,7 +13,7 @@ export class PublicationsRepository
   public async create(item: PublicationEntities): Promise<Publication> {
     const entityData = item.toObject();
 
-    const record = this.prisma.publication.create({
+    return this.prisma.publication.create({
       data: {
         ...entityData,
         comments: {
@@ -28,8 +28,6 @@ export class PublicationsRepository
         likes: true,
       },
     });
-
-    return record;
   }
 
   public async destroy(publicationId: number): Promise<void> {
