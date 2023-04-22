@@ -10,7 +10,7 @@ export class CreatePublicationLinkRdo {
     description: 'video publication id',
     example: '3a324a11-de87-4e95-91be-98ecca5f5f86',
   })
-  @Expose({ name: '_id' })
+  @Expose()
   public id: string;
 
   @ApiProperty({

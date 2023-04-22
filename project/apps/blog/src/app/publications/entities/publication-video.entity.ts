@@ -14,8 +14,8 @@ export class PublicationVideoEntity implements PublicationEntity {
   public tags?: string[];
   public type: PublicationKind.Video = PublicationKind.Video;
 
-  public createdAt: number;
-  public updatedAt: number;
+  public createdAt: string;
+  public updatedAt: string;
 
   constructor(publication: PublicationVideo) {
     this.fillEntity(publication);

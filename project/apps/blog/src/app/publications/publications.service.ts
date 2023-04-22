@@ -22,12 +22,12 @@ import {
   PublicationVideoEntity,
 } from './entities';
 
-import { PublicationsMemoryRepository } from './repositories/publications-memory.repository';
+import { PublicationsRepository } from './repositories/publications.repository';
 
 @Injectable()
 export class PublicationsService {
   constructor(
-    private readonly publicationsRepository: PublicationsMemoryRepository
+    private readonly publicationsRepository: PublicationsRepository
   ) {}
 
   async createLink(dto: CreatePublicationLinkDto) {
@@ -39,8 +39,6 @@ export class PublicationsService {
       status: PublicationStatus.Published,
       tags,
       type: PublicationKind.Link,
-      createdAt: 0,
-      updatedAt: 0,
     });
 
     return this.publicationsRepository.create(publicationLink);
@@ -54,8 +52,6 @@ export class PublicationsService {
       status: PublicationStatus.Published,
       tags,
       type: PublicationKind.Photo,
-      createdAt: 0,
-      updatedAt: 0,
     });
 
     return this.publicationsRepository.create(publicationPhoto);
@@ -70,8 +66,6 @@ export class PublicationsService {
       status: PublicationStatus.Published,
       tags,
       type: PublicationKind.Quote,
-      createdAt: 0,
-      updatedAt: 0,
     });
 
     return this.publicationsRepository.create(publicationQuote);
@@ -87,8 +81,6 @@ export class PublicationsService {
       status: PublicationStatus.Published,
       tags,
       type: PublicationKind.Text,
-      createdAt: 0,
-      updatedAt: 0,
     });
 
     return this.publicationsRepository.create(publicationText);
@@ -103,8 +95,6 @@ export class PublicationsService {
       status: PublicationStatus.Published,
       tags,
       type: PublicationKind.Video,
-      createdAt: 0,
-      updatedAt: 0,
     });
 
     return this.publicationsRepository.create(publicationVideo);
@@ -114,7 +104,7 @@ export class PublicationsService {
     return await this.publicationsRepository.findAll();
   }
 
-  async findById(id: string) {
+  async findById(id: number) {
     const publication = await this.publicationsRepository.findById(id);
 
     if (!publication) {

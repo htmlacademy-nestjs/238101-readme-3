@@ -1,12 +1,13 @@
-import { PublicationKind, Publications } from '@project/shared/shared-types';
+import { PublicationKind } from '@project/shared/shared-types';
 import { fillObject } from '@project/util/util-core';
 import { CreatePublicationLinkRdo } from './create-publication-link.rdo';
 import { CreatePublicationPhotoRdo } from './create-publication-photo.rdo';
 import { CreatePublicationQuoteRdo } from './create-publication-quote.rdo';
 import { CreatePublicationTextRdo } from './create-publication-text.rdo';
 import { CreatePublicationVideoRdo } from './create-publication-video.rdo';
+import { Publication } from '@prisma/client';
 
-export const transformPublicationToRdo = (publication: Publications) => {
+export const transformPublicationToRdo = (publication: Publication) => {
   if (publication.type === PublicationKind.Link) {
     return fillObject(CreatePublicationLinkRdo, publication);
   }

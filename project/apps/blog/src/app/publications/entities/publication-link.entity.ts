@@ -14,8 +14,8 @@ export class PublicationLinkEntity implements PublicationEntity {
   public tags?: string[];
   public type: PublicationKind.Link = PublicationKind.Link;
 
-  public createdAt: number;
-  public updatedAt: number;
+  public createdAt: string;
+  public updatedAt: string;
 
   constructor(publication: PublicationLink) {
     this.fillEntity(publication);

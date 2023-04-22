@@ -15,8 +15,8 @@ export class PublicationTextEntity implements PublicationEntity {
   public tags?: string[];
   public type: PublicationKind.Text = PublicationKind.Text;
 
-  public createdAt: number;
-  public updatedAt: number;
+  public createdAt: string;
+  public updatedAt: string;
 
   constructor(publication: PublicationText) {
     this.fillEntity(publication);

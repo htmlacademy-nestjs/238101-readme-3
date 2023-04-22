@@ -14,8 +14,8 @@ export class PublicationQuoteEntity implements PublicationEntity {
   public tags?: string[];
   public type: PublicationKind.Quote = PublicationKind.Quote;
 
-  public createdAt: number;
-  public updatedAt: number;
+  public createdAt: string;
+  public updatedAt: string;
 
   constructor(publication: PublicationQuote) {
     this.fillEntity(publication);
