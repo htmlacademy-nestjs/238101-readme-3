@@ -6,22 +6,22 @@ import {
 import { PublicationEntity } from './publication.entity';
 
 export class PublicationPhotoEntity implements PublicationEntity {
-  public _id?: string;
+  public id?: number;
 
   public photo: string;
   public status: PublicationStatus;
   public tags?: string[];
   public type: PublicationKind.Photo = PublicationKind.Photo;
 
-  public createdAt: number;
-  public updatedAt: number;
+  public createdAt: string;
+  public updatedAt: string;
 
   constructor(publication: PublicationPhoto) {
     this.fillEntity(publication);
   }
 
   fillEntity(entity: PublicationPhoto) {
-    this._id = entity._id;
+    this.id = entity.id;
 
     this.photo = entity.photo;
     this.status = entity.status;

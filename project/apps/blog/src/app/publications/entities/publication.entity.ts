@@ -8,14 +8,14 @@ import {
 export abstract class PublicationEntity
   implements Publication, Entity<Publication>
 {
-  public _id?: string;
+  public id?: number;
 
   public status: PublicationStatus;
   public tags?: string[];
   public type: PublicationKind;
 
-  public createdAt: number;
-  public updatedAt: number;
+  public createdAt?: string;
+  public updatedAt?: string;
 
   constructor(publication: Publication) {
     this.fillEntity(publication);

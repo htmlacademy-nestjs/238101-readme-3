@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { PublicationsService } from './publications.service';
 import { PublicationsController } from './publications.controller';
-import { PublicationsMemoryRepository } from './repositories/publications-memory.repository';
+import { PublicationsRepository } from './repositories/publications.repository';
 
 @Module({
-  providers: [PublicationsService, PublicationsMemoryRepository],
+  providers: [PublicationsService, PublicationsRepository],
   controllers: [PublicationsController],
   exports: [PublicationsService],
 })

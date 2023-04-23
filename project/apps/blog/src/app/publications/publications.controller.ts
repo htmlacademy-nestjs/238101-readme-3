@@ -130,7 +130,7 @@ export class PublicationsController {
   })
   @Get(':id')
   async findById(@Param('id') id: string) {
-    const publication = await this.publicationsService.findById(id);
+    const publication = await this.publicationsService.findById(+id);
     return transformPublicationToRdo(publication);
   }
 }

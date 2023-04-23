@@ -1,8 +1,12 @@
 import { Publication } from '@project/shared/shared-types';
 
 export interface Comment {
-  _id?: string;
+  id?: number;
 
-  content: string;
-  publicationId: Publication['_id'];
+  authorId: string;
+  publicationId: Publication['id'];
+  text: string;
+
+  createdAt?: Date;
+  updatedAt?: Date;
 }

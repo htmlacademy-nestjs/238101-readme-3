@@ -5,14 +5,14 @@ import {
 } from '@project/shared/shared-types';
 
 export interface Publication {
-  _id?: string;
+  id?: number;
 
   status: PublicationStatus;
   tags?: Tag[];
   type: PublicationKind;
 
-  createdAt: number;
-  updatedAt: number;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface PublicationLink extends Publication {

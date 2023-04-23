@@ -6,7 +6,7 @@ import {
 import { PublicationEntity } from './publication.entity';
 
 export class PublicationLinkEntity implements PublicationEntity {
-  public _id?: string;
+  public id?: number;
 
   public description?: string;
   public link: string;
@@ -14,15 +14,15 @@ export class PublicationLinkEntity implements PublicationEntity {
   public tags?: string[];
   public type: PublicationKind.Link = PublicationKind.Link;
 
-  public createdAt: number;
-  public updatedAt: number;
+  public createdAt: string;
+  public updatedAt: string;
 
   constructor(publication: PublicationLink) {
     this.fillEntity(publication);
   }
 
   fillEntity(entity: PublicationLink) {
-    this._id = entity._id;
+    this.id = entity.id;
 
     this.description = entity.description;
     this.link = entity.link;
