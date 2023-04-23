@@ -1,1 +1,2 @@
-export * from './create-comment.rdo';
+export * from './comment.rdo';
+export * from './delete-comment.rdo';

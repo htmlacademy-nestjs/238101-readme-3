@@ -28,6 +28,14 @@ export class CommentsRepository
     });
   }
 
+  public findByPublication(id: number): Promise<Comment[]> {
+    return this.prisma.comment.findMany({
+      where: {
+        publicationId: id,
+      },
+    });
+  }
+
   public update(id: number, item: CommentEntity): Promise<Comment> {
     return this.prisma.comment.update({
       data: {
