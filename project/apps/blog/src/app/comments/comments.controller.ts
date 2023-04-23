@@ -59,10 +59,6 @@ export class CommentsController {
   async getCommentById(@Param('id') id: string) {
     const comment = await this.commentsService.getCommentById(+id);
 
-    if (!comment) {
-      throw new NotFoundException(CommentMessage.NotFound);
-    }
-
     return fillObject(CommentRdo, comment);
   }
 

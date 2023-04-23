@@ -18,7 +18,13 @@ export class CommentsService {
   }
 
   async getCommentById(commentId: number) {
-    return this.commentsRepository.findById(commentId);
+    const comment = this.commentsRepository.findById(commentId);
+
+    if (!comment) {
+      throw new NotFoundException(CommentMessage.NotFound);
+    }
+
+    return comment;
   }
 
   async deleteComment(commentId: number) {
