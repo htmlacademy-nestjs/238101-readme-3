@@ -20,6 +20,7 @@ import {
   LoggedUserRdo,
   UserRdo,
 } from './rdo';
+import { MongoidValidationPipe } from '@project/shared/shared-pipes';
 
 @ApiTags('authentication')
 @Controller('auth')
@@ -75,7 +76,7 @@ export class AuthenticationController {
     type: UserRdo,
   })
   @Get(':id')
-  public async show(@Param('id') id: string) {
+  public async show(@Param('id', MongoidValidationPipe) id: string) {
     const existUser = await this.authService.getUser(id);
 
     return fillObject(UserRdo, existUser);

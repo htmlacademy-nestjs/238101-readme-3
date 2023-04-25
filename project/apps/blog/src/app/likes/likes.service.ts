@@ -12,7 +12,7 @@ export class LikesService {
   constructor(private readonly likesRepository: LikesRepository) {}
 
   public async addLike(publicationId: number, authorId: string) {
-    const existedLike = await this.findLikeByPublication(+publicationId);
+    const existedLike = await this.findLikeByPublication(publicationId);
 
     if (existedLike) {
       throw new ConflictException(LikeMessage.AlreadyExist);
