@@ -3,6 +3,7 @@ import { CRUDRepository } from '@project/util/util-types';
 import { PublicationEntities } from '../entities';
 import { PrismaService } from '../../prisma/prisma.service';
 import { Publication } from '@prisma/client';
+import { PostQuery } from '../query/publication.query';
 
 @Injectable()
 export class PublicationsRepository
@@ -50,8 +51,19 @@ export class PublicationsRepository
     });
   }
 
-  public findAll(): Promise<Publication[]> {
+  public findAll({
+    limit,
+    page,
+    sortDirection,
+  }: PostQuery): Promise<Publication[]> {
     return this.prisma.publication.findMany({
+      orderBy: [
+        {
+          createdAt: sortDirection,
+        },
+      ],
+      take: limit,
+      skip: page > 0 ? limit * (page - 1) : undefined,
       include: {
         comments: true,
         likes: true,

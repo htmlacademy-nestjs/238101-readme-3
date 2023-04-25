@@ -1,4 +1,12 @@
-import { Body, Controller, Get, HttpStatus, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpStatus,
+  Param,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { ApiResponse, ApiTags, getSchemaPath } from '@nestjs/swagger';
 
 import { fillObject } from '@project/util/util-core';
@@ -21,6 +29,7 @@ import {
   CreatePublicationVideoRdo,
   transformPublicationToRdo,
 } from './rdo';
+import { PostQuery } from './query/publication.query';
 
 @ApiTags('Publications')
 @Controller('publications')
@@ -105,8 +114,8 @@ export class PublicationsController {
     },
   })
   @Get()
-  async findAll() {
-    const publications = await this.publicationsService.findAll();
+  async findAll(@Query() query: PostQuery) {
+    const publications = await this.publicationsService.findAll(query);
 
     return publications.map((publication) =>
       transformPublicationToRdo(publication)
