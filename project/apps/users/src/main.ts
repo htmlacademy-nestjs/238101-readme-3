@@ -21,6 +21,7 @@ async function bootstrap() {
     .setTitle('The «Users» service')
     .setDescription('Users service API')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

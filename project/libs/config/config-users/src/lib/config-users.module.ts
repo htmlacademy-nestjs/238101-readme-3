@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 
-import { appConfig, dbConfig } from './config';
+import { appConfig, dbConfig, jwtConfig } from './config';
 
 const ENV_USERS_FILE_PATH = 'apps/users/.users.env';
 
@@ -10,7 +10,7 @@ const ENV_USERS_FILE_PATH = 'apps/users/.users.env';
     ConfigModule.forRoot({
       isGlobal: true,
       cache: true,
-      load: [appConfig, dbConfig],
+      load: [appConfig, dbConfig, jwtConfig],
       envFilePath: ENV_USERS_FILE_PATH,
     }),
   ],

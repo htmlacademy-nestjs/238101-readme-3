@@ -6,8 +6,9 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { fillObject } from '@project/util/util-core';
 
@@ -21,6 +22,7 @@ import {
   UserRdo,
 } from './rdo';
 import { MongoidValidationPipe } from '@project/shared/shared-pipes';
+import { JwtAuthGuard } from './guards';
 
 @ApiTags('authentication')
 @Controller('auth')
@@ -51,8 +53,9 @@ export class AuthenticationController {
   @Post('login')
   public async login(@Body() dto: LoginUserDto) {
     const verifiedUser = await this.authService.verifyUser(dto);
+    const loggedUser = await this.authService.createUserToken(verifiedUser);
 
-    return fillObject(LoggedUserRdo, verifiedUser);
+    return fillObject(LoggedUserRdo, Object.assign(verifiedUser, loggedUser));
   }
 
   @Patch('change-password')
@@ -75,6 +78,8 @@ export class AuthenticationController {
     status: HttpStatus.OK,
     type: UserRdo,
   })
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   public async show(@Param('id', MongoidValidationPipe) id: string) {
     const existUser = await this.authService.getUser(id);

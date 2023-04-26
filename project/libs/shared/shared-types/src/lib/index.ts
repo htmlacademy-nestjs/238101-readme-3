@@ -1,6 +1,7 @@
 export * from './app-errors';
 export * from './entity.interface';
 export * from './file.interface';
+export * from './token-payload.interface';
 
 export * from './Comment';
 export * from './Like';

@@ -10,10 +10,17 @@ import { BlogUserEntity } from '../blog-user/entities';
 import { BlogUserRepository } from '../blog-user/repositories';
 import { AuthUserErrorMessage } from './consts';
 import { ChangePasswordDto, CreateUserDto, LoginUserDto } from './dto';
+import { TokenPayload, User } from '@project/shared/shared-types';
+import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthenticationService {
-  constructor(private readonly blogUserRepository: BlogUserRepository) {}
+  constructor(
+    private readonly blogUserRepository: BlogUserRepository,
+    private readonly configService: ConfigService,
+    private readonly jwtService: JwtService
+  ) {}
 
   public async changePassword(dto: ChangePasswordDto) {
     const { id, currentPassword, newPassword } = dto;
@@ -92,5 +99,19 @@ export class AuthenticationService {
     }
 
     return existUser;
+  }
+
+  public async createUserToken(user: User) {
+    const { _id, name, email } = user;
+
+    const payload: TokenPayload = {
+      id: _id,
+      email,
+      name,
+    };
+
+    return {
+      accessToken: await this.jwtService.signAsync(payload),
+    };
   }
 }
