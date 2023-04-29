@@ -1,17 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { PublicationBaseDto } from './publication-base.dto';
 
-export class CreatePublicationPhotoDto {
+export class CreatePublicationPhotoDto extends PublicationBaseDto {
   @ApiProperty({
     description: 'photo, max 1Mb, jpg/png',
     example: 'cat.png',
   })
+  //TODO: file validation
   photo: string;
-
-  @ApiProperty({
-    description: 'tags for Photo',
-    example: ['cats'],
-    required: false,
-    isArray: true,
-  })
-  tags: string[];
 }

@@ -1,4 +1,4 @@
-import { IsEnum, IsIn, IsNumber, IsOptional } from 'class-validator';
+import { IsEnum, IsNumber, IsOptional } from 'class-validator';
 import { Transform } from 'class-transformer';
 import {
   PublicationQueryDefaultSettings,
@@ -24,6 +24,7 @@ export class PostQuery {
     default: PublicationSorting.Desc,
   })
   @IsEnum(PublicationSorting)
+  @Transform(({ value }) => value || PublicationSorting.Desc)
   @IsOptional()
   public sortDirection: PublicationSorting;
 

@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -23,6 +24,8 @@ import {
 } from './rdo';
 import { MongoidValidationPipe } from '@project/shared/shared-pipes';
 import { JwtAuthGuard } from './guards';
+import { RequestWithUser } from '@project/shared/shared-types';
+import { AuthUserMessage } from './consts';
 
 @ApiTags('authentication')
 @Controller('auth')
@@ -58,7 +61,6 @@ export class AuthenticationController {
     return fillObject(LoggedUserRdo, Object.assign(verifiedUser, loggedUser));
   }
 
-  @Patch('change-password')
   @ApiResponse({
     status: HttpStatus.ACCEPTED,
     description: 'password changed successfully',
@@ -69,8 +71,18 @@ export class AuthenticationController {
     description: 'current password is incorrect',
     type: ChangePasswordFailedRdo,
   })
-  public async changePassword(@Body() dto: ChangePasswordDto) {
-    await this.authService.changePassword(dto);
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @Patch('change-password')
+  public async changePassword(
+    @Req() req: RequestWithUser,
+    @Body() dto: ChangePasswordDto
+  ) {
+    await this.authService.changePassword(req.user.id, dto);
+
+    return fillObject(ChangePasswordSuccessfullyRdo, {
+      message: AuthUserMessage.PasswordChanged,
+    });
   }
 
   @ApiResponse({
