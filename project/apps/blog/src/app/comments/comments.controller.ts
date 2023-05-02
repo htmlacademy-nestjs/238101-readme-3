@@ -40,10 +40,10 @@ export class CommentsController {
   })
   @Get()
   async getAllCommentsByPublication(
-    @Query('publicationId') publicationId: string
+    @Query('publicationId') publicationId: number
   ) {
     const comments = await this.commentsService.getAllComentsByPublication(
-      +publicationId
+      publicationId
     );
 
     return comments.map((comment) => fillObject(CommentRdo, comment));
@@ -55,8 +55,8 @@ export class CommentsController {
     type: CommentRdo,
   })
   @Get(':id')
-  async getCommentById(@Param('id') id: string) {
-    const comment = await this.commentsService.getCommentById(+id);
+  async getCommentById(@Param('id') id: number) {
+    const comment = await this.commentsService.getCommentById(id);
 
     return fillObject(CommentRdo, comment);
   }
@@ -67,9 +67,7 @@ export class CommentsController {
     type: DeleteCommentRdo,
   })
   @Delete(':id')
-  async deleteComment(@Param('id') id: string) {
-    const commentId = +id;
-
+  async deleteComment(@Param('id') commentId: number) {
     await this.commentsService.deleteComment(commentId);
 
     return fillObject(DeleteCommentRdo, {

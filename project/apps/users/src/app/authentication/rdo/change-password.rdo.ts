@@ -1,10 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
+import { AuthUserMessage } from '../consts';
 
 export class ChangePasswordSuccessfullyRdo {
   @ApiProperty({
-    description: 'message that password changed successfully',
-    example: 'password changed successfully',
+    example: AuthUserMessage.PasswordChanged,
   })
   @Expose()
   message: string;
@@ -12,8 +12,7 @@ export class ChangePasswordSuccessfullyRdo {
 
 export class ChangePasswordFailedRdo {
   @ApiProperty({
-    description: 'message that current password is incorrect',
-    example: 'current password is incorrect',
+    example: AuthUserMessage.PasswordWrong,
   })
   @Expose()
   message: string;

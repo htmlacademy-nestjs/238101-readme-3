@@ -4,10 +4,20 @@ import {
   Get,
   HttpStatus,
   Param,
+  ParseFilePipeBuilder,
   Patch,
   Post,
+  Req,
+  UploadedFile,
+  UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiConsumes,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { fillObject } from '@project/util/util-core';
 
@@ -20,6 +30,15 @@ import {
   LoggedUserRdo,
   UserRdo,
 } from './rdo';
+import { MongoidValidationPipe } from '@project/shared/shared-pipes';
+import { JwtAuthGuard } from './guards';
+import { RequestWithUser } from '@project/shared/shared-types';
+import {
+  ALLOWED_AVATAR_EXTENCION,
+  AuthUserMessage,
+  MAX_AVATAR_BITE_SIZE,
+} from './consts';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @ApiTags('authentication')
 @Controller('auth')
@@ -31,10 +50,26 @@ export class AuthenticationController {
     status: HttpStatus.CREATED,
     type: CreatedUserRdo,
   })
+  @ApiConsumes('multipart/form-data')
   @Post('register')
-  public async create(@Body() dto: CreateUserDto) {
+  @UseInterceptors(FileInterceptor('avatar'))
+  public async create(
+    @Body() dto: CreateUserDto,
+    @UploadedFile(
+      new ParseFilePipeBuilder()
+        .addFileTypeValidator({
+          fileType: ALLOWED_AVATAR_EXTENCION,
+        })
+        .addMaxSizeValidator({
+          maxSize: MAX_AVATAR_BITE_SIZE,
+        })
+        .build({
+          errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
+        })
+    )
+    avatar: Express.Multer.File
+  ) {
     const newUser = await this.authService.register(dto);
-
     return fillObject(UserRdo, newUser);
   }
 
@@ -50,11 +85,11 @@ export class AuthenticationController {
   @Post('login')
   public async login(@Body() dto: LoginUserDto) {
     const verifiedUser = await this.authService.verifyUser(dto);
+    const loggedUser = await this.authService.createUserToken(verifiedUser);
 
-    return fillObject(LoggedUserRdo, verifiedUser);
+    return fillObject(LoggedUserRdo, Object.assign(verifiedUser, loggedUser));
   }
 
-  @Patch('change-password')
   @ApiResponse({
     status: HttpStatus.ACCEPTED,
     description: 'password changed successfully',
@@ -65,8 +100,18 @@ export class AuthenticationController {
     description: 'current password is incorrect',
     type: ChangePasswordFailedRdo,
   })
-  public async changePassword(@Body() dto: ChangePasswordDto) {
-    await this.authService.changePassword(dto);
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @Patch('change-password')
+  public async changePassword(
+    @Req() req: RequestWithUser,
+    @Body() dto: ChangePasswordDto
+  ) {
+    await this.authService.changePassword(req.user.id, dto);
+
+    return fillObject(ChangePasswordSuccessfullyRdo, {
+      message: AuthUserMessage.PasswordChanged,
+    });
   }
 
   @ApiResponse({
@@ -74,8 +119,10 @@ export class AuthenticationController {
     status: HttpStatus.OK,
     type: UserRdo,
   })
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
-  public async show(@Param('id') id: string) {
+  public async show(@Param('id', MongoidValidationPipe) id: string) {
     const existUser = await this.authService.getUser(id);
 
     return fillObject(UserRdo, existUser);

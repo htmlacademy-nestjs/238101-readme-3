@@ -8,20 +8,27 @@ import {
 
 import { BlogUserEntity } from '../blog-user/entities';
 import { BlogUserRepository } from '../blog-user/repositories';
-import { AuthUserErrorMessage } from './consts';
+import { AuthUserMessage } from './consts';
 import { ChangePasswordDto, CreateUserDto, LoginUserDto } from './dto';
+import { TokenPayload, User } from '@project/shared/shared-types';
+import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthenticationService {
-  constructor(private readonly blogUserRepository: BlogUserRepository) {}
+  constructor(
+    private readonly blogUserRepository: BlogUserRepository,
+    private readonly configService: ConfigService,
+    private readonly jwtService: JwtService
+  ) {}
 
-  public async changePassword(dto: ChangePasswordDto) {
-    const { id, currentPassword, newPassword } = dto;
+  public async changePassword(id: string, dto: ChangePasswordDto) {
+    const { currentPassword, newPassword } = dto;
 
     const existUser = await this.blogUserRepository.findById(id);
 
     if (!existUser) {
-      throw new NotFoundException(AuthUserErrorMessage.NotFound);
+      throw new NotFoundException(AuthUserMessage.NotFound);
     }
 
     const blogUserEntity = new BlogUserEntity(existUser);
@@ -31,7 +38,7 @@ export class AuthenticationService {
     );
 
     if (!isPasswordValid) {
-      throw new ForbiddenException(AuthUserErrorMessage.PasswordWrong);
+      throw new ForbiddenException(AuthUserMessage.PasswordWrong);
     }
 
     const updatedBlogUserEntity = await blogUserEntity.setPassword(newPassword);
@@ -50,7 +57,7 @@ export class AuthenticationService {
     const existUser = await this.blogUserRepository.findByEmail(email);
 
     if (existUser) {
-      throw new ConflictException(AuthUserErrorMessage.Exists);
+      throw new ConflictException(AuthUserMessage.Exists);
     }
 
     const userEntity = new BlogUserEntity({
@@ -70,7 +77,7 @@ export class AuthenticationService {
     const existUser = await this.blogUserRepository.findByEmail(email);
 
     if (!existUser) {
-      throw new NotFoundException(AuthUserErrorMessage.NotFound);
+      throw new NotFoundException(AuthUserMessage.NotFound);
     }
 
     const blogUserEntity = new BlogUserEntity(existUser);
@@ -78,7 +85,7 @@ export class AuthenticationService {
     const isPasswordValid = await blogUserEntity.comparePassword(password);
 
     if (!isPasswordValid) {
-      throw new UnauthorizedException(AuthUserErrorMessage.PasswordWrong);
+      throw new UnauthorizedException(AuthUserMessage.PasswordWrong);
     }
 
     return blogUserEntity.toObject();
@@ -88,9 +95,23 @@ export class AuthenticationService {
     const existUser = await this.blogUserRepository.findById(id);
 
     if (!existUser) {
-      throw new NotFoundException(AuthUserErrorMessage.NotFound);
+      throw new NotFoundException(AuthUserMessage.NotFound);
     }
 
     return existUser;
+  }
+
+  public async createUserToken(user: User) {
+    const { _id, name, email } = user;
+
+    const payload: TokenPayload = {
+      id: _id,
+      email,
+      name,
+    };
+
+    return {
+      accessToken: await this.jwtService.signAsync(payload),
+    };
   }
 }

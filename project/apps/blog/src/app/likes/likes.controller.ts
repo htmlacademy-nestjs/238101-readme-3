@@ -15,8 +15,8 @@ export class LikesController {
     type: LikeRdo,
   })
   @Post()
-  async addLike(@Query('publicationId') publicationId: string) {
-    const createdLike = await this.likesService.addLike(+publicationId, '123');
+  async addLike(@Query('publicationId') publicationId: number) {
+    const createdLike = await this.likesService.addLike(publicationId, '123');
 
     return fillObject(LikeRdo, createdLike);
   }
@@ -26,8 +26,8 @@ export class LikesController {
     type: LikeRemovedRdo,
   })
   @Delete()
-  async removeLike(@Query('publicationId') publicationId: string) {
-    await this.likesService.removeLike(+publicationId);
+  async removeLike(@Query('publicationId') publicationId: number) {
+    await this.likesService.removeLike(publicationId);
 
     return fillObject(LikeRemovedRdo, { message: LikeMessage.RemovedSuccess });
   }

@@ -23,6 +23,7 @@ import {
 } from './entities';
 
 import { PublicationsRepository } from './repositories/publications.repository';
+import { PostQuery } from './query/publication.query';
 
 @Injectable()
 export class PublicationsService {
@@ -100,8 +101,8 @@ export class PublicationsService {
     return this.publicationsRepository.create(publicationVideo);
   }
 
-  async findAll() {
-    return await this.publicationsRepository.findAll();
+  async findAll(query: PostQuery) {
+    return await this.publicationsRepository.findAll(query);
   }
 
   async findById(id: number) {
