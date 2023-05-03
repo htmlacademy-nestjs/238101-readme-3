@@ -6,7 +6,7 @@ import { AuthenticationService } from './authentication.service';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { getJwtOptions } from '@project/config/config-users';
-import { JwtAccessStrategy } from './strategies';
+import { LocalStrategy, JwtAccessStrategy } from './strategies';
 
 @Module({
   imports: [
@@ -17,6 +17,6 @@ import { JwtAccessStrategy } from './strategies';
     }),
   ],
   controllers: [AuthenticationController],
-  providers: [AuthenticationService, JwtAccessStrategy],
+  providers: [AuthenticationService, JwtAccessStrategy, LocalStrategy],
 })
 export class AuthenticationModule {}

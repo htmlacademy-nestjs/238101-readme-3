@@ -14,6 +14,7 @@ import {
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
+  ApiBody,
   ApiConsumes,
   ApiResponse,
   ApiTags,
@@ -31,8 +32,11 @@ import {
   UserRdo,
 } from './rdo';
 import { MongoidValidationPipe } from '@project/shared/shared-pipes';
-import { JwtAuthGuard } from './guards';
-import { RequestWithUser } from '@project/shared/shared-types';
+import { JwtAuthGuard, LocalAuthGuard } from './guards';
+import {
+  RequestWithTokenPayload,
+  RequestWithUser,
+} from '@project/shared/shared-types';
 import {
   ALLOWED_AVATAR_EXTENCION,
   AuthUserMessage,
@@ -82,12 +86,13 @@ export class AuthenticationController {
     status: HttpStatus.UNAUTHORIZED,
     description: 'Password or Login is wrong.',
   })
+  @ApiBody({
+    type: LoginUserDto,
+  })
+  @UseGuards(LocalAuthGuard)
   @Post('login')
-  public async login(@Body() dto: LoginUserDto) {
-    const verifiedUser = await this.authService.verifyUser(dto);
-    const loggedUser = await this.authService.createUserToken(verifiedUser);
-
-    return fillObject(LoggedUserRdo, Object.assign(verifiedUser, loggedUser));
+  public async login(@Req() { user }: RequestWithUser) {
+    return this.authService.createUserToken(user);
   }
 
   @ApiResponse({
@@ -104,10 +109,10 @@ export class AuthenticationController {
   @UseGuards(JwtAuthGuard)
   @Patch('change-password')
   public async changePassword(
-    @Req() req: RequestWithUser,
+    @Req() { user }: RequestWithTokenPayload,
     @Body() dto: ChangePasswordDto
   ) {
-    await this.authService.changePassword(req.user.id, dto);
+    await this.authService.changePassword(user.id, dto);
 
     return fillObject(ChangePasswordSuccessfullyRdo, {
       message: AuthUserMessage.PasswordChanged,
