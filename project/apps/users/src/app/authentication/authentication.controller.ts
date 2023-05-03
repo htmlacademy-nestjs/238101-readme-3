@@ -29,10 +29,11 @@ import {
   ChangePasswordSuccessfullyRdo,
   CreatedUserRdo,
   LoggedUserRdo,
+  TokenPair,
   UserRdo,
 } from './rdo';
 import { MongoidValidationPipe } from '@project/shared/shared-pipes';
-import { JwtAuthGuard, LocalAuthGuard } from './guards';
+import { JwtAuthGuard, JwtRefreshGuard, LocalAuthGuard } from './guards';
 import {
   RequestWithTokenPayload,
   RequestWithUser,
@@ -92,6 +93,19 @@ export class AuthenticationController {
   @UseGuards(LocalAuthGuard)
   @Post('login')
   public async login(@Req() { user }: RequestWithUser) {
+    const loggedUser = await this.authService.createUserToken(user);
+    return fillObject(LoggedUserRdo, Object.assign(user, loggedUser));
+  }
+
+  @ApiResponse({
+    description: 'Get a new access/refresh tokens',
+    status: HttpStatus.OK,
+    type: TokenPair,
+  })
+  @ApiBearerAuth()
+  @UseGuards(JwtRefreshGuard)
+  @Post('refresh')
+  public async refreshToken(@Req() { user }: RequestWithUser) {
     return this.authService.createUserToken(user);
   }
 

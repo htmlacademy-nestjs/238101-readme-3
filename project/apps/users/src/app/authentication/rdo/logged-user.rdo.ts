@@ -1,7 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose, Transform } from 'class-transformer';
+import { TokenPair } from './token-pair.rdo';
 
-export class LoggedUserRdo {
+export class LoggedUserRdo extends TokenPair {
   @ApiProperty({
     description: 'User id',
     example: '3a324a11-de87-4e95-91be-98ecca5f5f86',
@@ -16,10 +17,4 @@ export class LoggedUserRdo {
   })
   @Expose()
   public email: string;
-
-  @ApiProperty({
-    description: 'JWT access token',
-  })
-  @Expose()
-  public accessToken: string;
 }

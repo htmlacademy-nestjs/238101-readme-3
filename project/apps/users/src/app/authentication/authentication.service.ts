@@ -1,6 +1,7 @@
 import {
   ConflictException,
   ForbiddenException,
+  Inject,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -11,15 +12,19 @@ import { BlogUserRepository } from '../blog-user/repositories';
 import { AuthUserMessage } from './consts';
 import { ChangePasswordDto, CreateUserDto, LoginUserDto } from './dto';
 import { TokenPayload, User } from '@project/shared/shared-types';
-import { ConfigService } from '@nestjs/config';
+import { ConfigService, ConfigType } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
+import { jwtConfig } from '@project/config/config-users';
 
 @Injectable()
 export class AuthenticationService {
   constructor(
     private readonly blogUserRepository: BlogUserRepository,
     private readonly configService: ConfigService,
-    private readonly jwtService: JwtService
+    private readonly jwtService: JwtService,
+
+    @Inject(jwtConfig.KEY)
+    private readonly jwtOptions: ConfigType<typeof jwtConfig>
   ) {}
 
   public async changePassword(id: string, dto: ChangePasswordDto) {
@@ -112,6 +117,10 @@ export class AuthenticationService {
 
     return {
       accessToken: await this.jwtService.signAsync(payload),
+      refreshToken: await this.jwtService.signAsync(payload, {
+        secret: this.jwtOptions.refreshTokenSecret,
+        expiresIn: this.jwtOptions.refreshTokenExpiresIn,
+      }),
     };
   }
 }
