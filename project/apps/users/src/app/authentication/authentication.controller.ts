@@ -146,4 +146,10 @@ export class AuthenticationController {
 
     return fillObject(UserRdo, existUser);
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('check')
+  public async checkToken(@Req() { user: payload }: RequestWithTokenPayload) {
+    return payload;
+  }
 }

@@ -18,8 +18,8 @@ async function bootstrap() {
   app.useGlobalInterceptors(new RequestIdInterceptor());
 
   const config = new DocumentBuilder()
-    .setTitle('The «Users» service')
-    .setDescription('Users service API')
+    .setTitle('Readme app')
+    .setDescription('Readme BFF')
     .setVersion('1.0')
     .addBearerAuth()
     .build();
