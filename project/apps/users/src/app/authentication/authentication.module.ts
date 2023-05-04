@@ -11,6 +11,7 @@ import {
   JwtAccessStrategy,
   JwtRefreshStrategy,
 } from './strategies';
+import { RefreshTokenModule } from '../refresh-token/refresh-token.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import {
       inject: [ConfigService],
       useFactory: getJwtOptions,
     }),
+    RefreshTokenModule,
   ],
   controllers: [AuthenticationController],
   providers: [
