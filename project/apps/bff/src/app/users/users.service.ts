@@ -4,11 +4,47 @@ import { ApplicationServiceURL } from '../app.config';
 import { LoginUserDto, RegisterUserDto } from './dto';
 import FormData from 'form-data';
 import { RegisteredUserRdo } from './rdo';
-import { StoredFile, UserRdo } from '@project/shared/shared-types';
+import {
+  ChangePasswordDto,
+  StoredFile,
+  UserRdo,
+} from '@project/shared/shared-types';
 
 @Injectable()
 export class UsersService {
   constructor(private readonly httpService: HttpService) {}
+
+  private async uploadAvatarUser(
+    userId: string,
+    avatar: Express.Multer.File | undefined
+  ): Promise<StoredFile | null> {
+    if (!avatar) {
+      return null;
+    }
+
+    const formData = new FormData();
+    formData.append('file', avatar.buffer, { filename: avatar.originalname });
+
+    const { data: uploadedAvatarInfo } =
+      await this.httpService.axiosRef.post<StoredFile>(
+        `${ApplicationServiceURL.Uploader}/files/upload`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+
+    await this.httpService.axiosRef.patch<UserRdo>(
+      `${ApplicationServiceURL.Users}/users/${userId}/avatar`,
+      {
+        avatarId: uploadedAvatarInfo.id,
+      }
+    );
+
+    return uploadedAvatarInfo;
+  }
 
   public async register(
     registerUserDto: RegisterUserDto,
@@ -56,35 +92,20 @@ export class UsersService {
     return data;
   }
 
-  private async uploadAvatarUser(
-    userId: string,
-    avatar: Express.Multer.File | undefined
-  ): Promise<StoredFile | null> {
-    if (!avatar) {
-      return null;
-    }
-
-    const formData = new FormData();
-    formData.append('file', avatar.buffer, { filename: avatar.originalname });
-
-    const { data: uploadedAvatarInfo } =
-      await this.httpService.axiosRef.post<StoredFile>(
-        `${ApplicationServiceURL.Uploader}/files/upload`,
-        formData,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        }
-      );
-
-    await this.httpService.axiosRef.patch<UserRdo>(
-      `${ApplicationServiceURL.Users}/users/${userId}/avatar`,
+  public async changePassword(
+    changePasswordDto: ChangePasswordDto,
+    authorization: string
+  ) {
+    const { data } = await this.httpService.axiosRef.patch(
+      `${ApplicationServiceURL.Users}/auth/change-password`,
+      changePasswordDto,
       {
-        avatarId: uploadedAvatarInfo.id,
+        headers: {
+          Authorization: authorization,
+        },
       }
     );
 
-    return uploadedAvatarInfo;
+    return data;
   }
 }

@@ -19,7 +19,7 @@ import {
 import { fillObject } from '@project/util/util-core';
 
 import { AuthenticationService } from './authentication.service';
-import { ChangePasswordDto, RegisterUserDto, LoginUserDto } from './dto';
+import { RegisterUserDto, LoginUserDto } from './dto';
 import {
   ChangePasswordFailedRdo,
   ChangePasswordSuccessfullyRdo,
@@ -28,6 +28,7 @@ import {
 } from './rdo';
 import { JwtAuthGuard, JwtRefreshGuard, LocalAuthGuard } from './guards';
 import {
+  ChangePasswordDto,
   RequestWithTokenPayload,
   RequestWithUser,
   UserRdo,

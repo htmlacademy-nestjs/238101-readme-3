@@ -10,8 +10,12 @@ import {
 import { BlogUserEntity } from '../blog-user/entities';
 import { BlogUserRepository } from '../blog-user/repositories';
 import { AuthUserMessage } from './consts';
-import { ChangePasswordDto, RegisterUserDto, LoginUserDto } from './dto';
-import { RefreshTokenPayload, User } from '@project/shared/shared-types';
+import { RegisterUserDto, LoginUserDto } from './dto';
+import {
+  ChangePasswordDto,
+  RefreshTokenPayload,
+  User,
+} from '@project/shared/shared-types';
 import { ConfigType } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { jwtConfig } from '@project/config/config-users';

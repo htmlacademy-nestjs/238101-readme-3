@@ -4,7 +4,6 @@ import {
   HttpStatus,
   ParseFilePipeBuilder,
   Post,
-  Req,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
@@ -13,6 +12,8 @@ import { UsersService } from './users.service';
 import { LoginUserDto, RegisterUserDto } from './dto';
 import { ALLOWED_AVATAR_EXTENCION, MAX_AVATAR_BITE_SIZE } from './user.const';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { ChangePasswordDto } from '@project/shared/shared-types';
+import { AuthorizationHeader } from '@project/shared/shared-decorators';
 
 @Controller('users')
 @ApiTags('users')
@@ -49,7 +50,16 @@ export class UsersController {
 
   @Post('refresh')
   @ApiBearerAuth()
-  public async refreshToken(@Req() req: Request) {
-    return this.usersService.refreshToken(req.headers['authorization']);
+  public async refreshToken(@AuthorizationHeader() token: string) {
+    return this.usersService.refreshToken(token);
+  }
+
+  @Post('change-password')
+  @ApiBearerAuth()
+  public async changePassword(
+    @AuthorizationHeader() token: string,
+    @Body() changePasswordDto: ChangePasswordDto
+  ) {
+    return this.usersService.changePassword(changePasswordDto, token);
   }
 }

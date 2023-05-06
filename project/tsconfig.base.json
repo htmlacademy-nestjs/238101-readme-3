@@ -23,6 +23,9 @@
       ],
       "@project/config/config-users": ["libs/config/config-users/src/index.ts"],
       "@project/models/models-blog": ["libs/models/models-blog/src/index.ts"],
+      "@project/shared/shared-decorators": [
+        "libs/shared/shared-decorators/src/index.ts"
+      ],
       "@project/shared/shared-pipes": ["libs/shared/shared-pipes/src/index.ts"],
       "@project/shared/shared-types": ["libs/shared/shared-types/src/index.ts"],
       "@project/util/util-core": ["libs/util/util-core/src/index.ts"],

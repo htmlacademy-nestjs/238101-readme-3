@@ -15,3 +15,4 @@ export * from './lib/tag.type';
 export * from './lib/user.interface';
 
 export * from './lib/shared-rdos';
+export * from './lib/shared-dtos';
