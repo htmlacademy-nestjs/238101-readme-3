@@ -15,14 +15,14 @@ export class PublicationTextEntity implements PublicationEntity {
   public tags?: string[];
   public type: PublicationKind.Text = PublicationKind.Text;
 
-  public createdAt: string;
-  public updatedAt: string;
+  public createdAt: Date;
+  public updatedAt: Date;
 
-  constructor(publication: PublicationText) {
+  constructor(publication: Omit<PublicationText, 'type'>) {
     this.fillEntity(publication);
   }
 
-  fillEntity(entity: PublicationText) {
+  fillEntity(entity: Omit<PublicationText, 'type'>) {
     this.id = entity.id;
 
     this.announcement = entity.announcement;

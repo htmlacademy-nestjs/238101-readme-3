@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { IsString, IsUrl, MaxLength, MinLength } from 'class-validator';
 import { PublicationErrorMessage } from '../consts';
 import { PublicationBaseDto } from './publication-base.dto';
@@ -9,7 +9,7 @@ export class CreatePublicationVideoDto extends PublicationBaseDto {
     example: 'https://youtube.com',
   })
   @IsUrl(
-    { host_whitelist: ['https://youtube.com'] },
+    { host_whitelist: ['youtube.com'] },
     { message: PublicationErrorMessage.UrlNotValid }
   )
   link: string;
@@ -23,3 +23,7 @@ export class CreatePublicationVideoDto extends PublicationBaseDto {
   @MaxLength(50)
   name: string;
 }
+
+export class UpdatePublicationVideoDto extends PartialType(
+  CreatePublicationVideoDto
+) {}

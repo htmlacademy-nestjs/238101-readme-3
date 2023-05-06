@@ -5,7 +5,7 @@ import {
   PublicationStatus,
 } from '@project/shared/shared-types';
 
-export class CreatePublicationLinkRdo {
+export class PublicationLinkRdo {
   @ApiProperty({
     description: 'video publication id',
     example: '3a324a11-de87-4e95-91be-98ecca5f5f86',

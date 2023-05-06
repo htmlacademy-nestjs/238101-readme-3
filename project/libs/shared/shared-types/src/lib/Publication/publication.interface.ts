@@ -11,8 +11,8 @@ export interface Publication {
   tags?: Tag[];
   type: PublicationKind;
 
-  createdAt?: string;
-  updatedAt?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface PublicationLink extends Publication {

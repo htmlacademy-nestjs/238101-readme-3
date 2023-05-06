@@ -1,4 +1,4 @@
-export { CreatePublicationLinkRdo } from './create-publication-link.rdo';
+export { PublicationLinkRdo } from './publication-link.rdo';
 export { CreatePublicationPhotoRdo } from './create-publication-photo.rdo';
 export { CreatePublicationQuoteRdo } from './create-publication-quote.rdo';
 export { CreatePublicationTextRdo } from './create-publication-text.rdo';

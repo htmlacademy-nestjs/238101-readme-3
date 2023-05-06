@@ -1,6 +1,6 @@
 import { PublicationKind } from '@project/shared/shared-types';
 import { fillObject } from '@project/util/util-core';
-import { CreatePublicationLinkRdo } from './create-publication-link.rdo';
+import { PublicationLinkRdo } from './publication-link.rdo';
 import { CreatePublicationPhotoRdo } from './create-publication-photo.rdo';
 import { CreatePublicationQuoteRdo } from './create-publication-quote.rdo';
 import { CreatePublicationTextRdo } from './create-publication-text.rdo';
@@ -9,7 +9,7 @@ import { Publication } from '@prisma/client';
 
 export const transformPublicationToRdo = (publication: Publication) => {
   if (publication.type === PublicationKind.Link) {
-    return fillObject(CreatePublicationLinkRdo, publication);
+    return fillObject(PublicationLinkRdo, publication);
   }
 
   if (publication.type === PublicationKind.Photo) {

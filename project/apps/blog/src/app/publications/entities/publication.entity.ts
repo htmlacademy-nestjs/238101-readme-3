@@ -14,14 +14,14 @@ export abstract class PublicationEntity
   public tags?: string[];
   public type: PublicationKind;
 
-  public createdAt?: string;
-  public updatedAt?: string;
+  public createdAt?: Date;
+  public updatedAt?: Date;
 
-  constructor(publication: Publication) {
+  constructor(publication: Omit<Publication, 'type'>) {
     this.fillEntity(publication);
   }
 
-  abstract fillEntity(entity: Publication): void;
+  abstract fillEntity(entity: Omit<Publication, 'type'>): void;
 
   abstract toObject(): Publication;
 }

@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { PublicationBaseDto } from './publication-base.dto';
 import { IsString, MaxLength, MinLength } from 'class-validator';
 
@@ -27,3 +27,7 @@ export class CreatePublicationTextDto extends PublicationBaseDto {
   @MaxLength(50)
   name: string;
 }
+
+export class UpdatePublicationTextDto extends PartialType(
+  CreatePublicationTextDto
+) {}

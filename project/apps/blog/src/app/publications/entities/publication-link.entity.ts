@@ -14,14 +14,14 @@ export class PublicationLinkEntity implements PublicationEntity {
   public tags?: string[];
   public type: PublicationKind.Link = PublicationKind.Link;
 
-  public createdAt: string;
-  public updatedAt: string;
+  public createdAt: Date;
+  public updatedAt: Date;
 
-  constructor(publication: PublicationLink) {
+  constructor(publication: Omit<PublicationLink, 'type'>) {
     this.fillEntity(publication);
   }
 
-  fillEntity(entity: PublicationLink) {
+  fillEntity(entity: Omit<PublicationLink, 'type'>) {
     this.id = entity.id;
 
     this.description = entity.description;

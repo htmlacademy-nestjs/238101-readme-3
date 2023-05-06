@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { PublicationBaseDto } from './publication-base.dto';
 import { IsOptional, IsString, IsUrl, MaxLength } from 'class-validator';
 import { PublicationErrorMessage } from '../consts';
@@ -21,3 +21,7 @@ export class CreatePublicationLinkDto extends PublicationBaseDto {
   @IsUrl({}, { message: PublicationErrorMessage.UrlNotValid })
   link: string;
 }
+
+export class UpdatePublicationLinkDto extends PartialType(
+  CreatePublicationLinkDto
+) {}

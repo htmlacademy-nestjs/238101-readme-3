@@ -14,14 +14,14 @@ export class PublicationQuoteEntity implements PublicationEntity {
   public tags?: string[];
   public type: PublicationKind.Quote = PublicationKind.Quote;
 
-  public createdAt: string;
-  public updatedAt: string;
+  public createdAt: Date;
+  public updatedAt: Date;
 
-  constructor(publication: PublicationQuote) {
+  constructor(publication: Omit<PublicationQuote, 'type'>) {
     this.fillEntity(publication);
   }
 
-  fillEntity(entity: PublicationQuote) {
+  fillEntity(entity: Omit<PublicationQuote, 'type'>) {
     this.id = entity.id;
 
     this.authorQuote = entity.authorQuote;

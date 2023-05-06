@@ -14,14 +14,14 @@ export class PublicationVideoEntity implements PublicationEntity {
   public tags?: string[];
   public type: PublicationKind.Video = PublicationKind.Video;
 
-  public createdAt: string;
-  public updatedAt: string;
+  public createdAt: Date;
+  public updatedAt: Date;
 
-  constructor(publication: PublicationVideo) {
+  constructor(publication: Omit<PublicationVideo, 'type'>) {
     this.fillEntity(publication);
   }
 
-  fillEntity(entity: PublicationVideo) {
+  fillEntity(entity: Omit<PublicationVideo, 'type'>) {
     this.id = entity.id;
 
     this.link = entity.link;

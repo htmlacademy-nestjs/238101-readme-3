@@ -78,6 +78,7 @@ export class PublicationsRepository
     return this.prisma.publication.update({
       data: {
         ...item.toObject(),
+        updatedAt: undefined,
       },
       where: {
         id,

@@ -1,9 +1,12 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
+  HttpCode,
   HttpStatus,
   Param,
+  Patch,
   Post,
   Query,
 } from '@nestjs/common';
@@ -17,12 +20,17 @@ import {
   CreatePublicationQuoteDto,
   CreatePublicationTextDto,
   CreatePublicationVideoDto,
+  UpdatePublicationLinkDto,
+  UpdatePublicationPhotoDto,
+  UpdatePublicationQuoteDto,
+  UpdatePublicationTextDto,
+  UpdatePublicationVideoDto,
 } from './dto';
 
 import { PublicationsService } from './publications.service';
 
 import {
-  CreatePublicationLinkRdo,
+  PublicationLinkRdo,
   CreatePublicationPhotoRdo,
   CreatePublicationQuoteRdo,
   CreatePublicationTextRdo,
@@ -39,13 +47,31 @@ export class PublicationsController {
   @ApiResponse({
     description: 'The new link publication has been successfully created.',
     status: HttpStatus.CREATED,
-    type: CreatePublicationLinkRdo,
+    type: PublicationLinkRdo,
   })
   @Post('link')
   async createLink(@Body() dto: CreatePublicationLinkDto) {
     const newPublicationLink = await this.publicationsService.createLink(dto);
 
-    return fillObject(CreatePublicationLinkRdo, newPublicationLink);
+    return fillObject(PublicationLinkRdo, newPublicationLink);
+  }
+
+  @ApiResponse({
+    description: 'Updated link publication',
+    status: HttpStatus.OK,
+    type: PublicationLinkRdo,
+  })
+  @Patch('link/:id')
+  async updateLink(
+    @Param('id') id: number,
+    @Body() dto: UpdatePublicationLinkDto
+  ) {
+    const updatedPublication = await this.publicationsService.updateLink(
+      id,
+      dto
+    );
+
+    return fillObject(PublicationLinkRdo, updatedPublication);
   }
 
   @ApiResponse({
@@ -61,6 +87,24 @@ export class PublicationsController {
   }
 
   @ApiResponse({
+    description: 'Updated photo publication',
+    status: HttpStatus.OK,
+    type: CreatePublicationPhotoRdo,
+  })
+  @Patch('photo/:id')
+  async updatePhoto(
+    @Param('id') id: number,
+    @Body() dto: UpdatePublicationPhotoDto
+  ) {
+    const updatedPublication = await this.publicationsService.updatePhoto(
+      id,
+      dto
+    );
+
+    return fillObject(CreatePublicationPhotoRdo, updatedPublication);
+  }
+
+  @ApiResponse({
     description: 'The new quote publication has been successfully created.',
     status: HttpStatus.CREATED,
     type: CreatePublicationQuoteRdo,
@@ -70,6 +114,24 @@ export class PublicationsController {
     const newPublicationQuote = await this.publicationsService.createQuote(dto);
 
     return fillObject(CreatePublicationQuoteRdo, newPublicationQuote);
+  }
+
+  @ApiResponse({
+    description: 'Updated quote publication',
+    status: HttpStatus.OK,
+    type: CreatePublicationQuoteRdo,
+  })
+  @Patch('quote/:id')
+  async updateQuote(
+    @Param('id') id: number,
+    @Body() dto: UpdatePublicationQuoteDto
+  ) {
+    const updatedPublication = await this.publicationsService.updateQuote(
+      id,
+      dto
+    );
+
+    return fillObject(CreatePublicationQuoteRdo, updatedPublication);
   }
 
   @ApiResponse({
@@ -85,6 +147,24 @@ export class PublicationsController {
   }
 
   @ApiResponse({
+    description: 'Updated text publication',
+    status: HttpStatus.OK,
+    type: CreatePublicationTextRdo,
+  })
+  @Patch('text/:id')
+  async updateText(
+    @Param('id') id: number,
+    @Body() dto: UpdatePublicationTextDto
+  ) {
+    const updatedPublication = await this.publicationsService.updateText(
+      id,
+      dto
+    );
+
+    return fillObject(CreatePublicationTextRdo, updatedPublication);
+  }
+
+  @ApiResponse({
     description: 'The new video publication has been successfully created.',
     status: HttpStatus.CREATED,
     type: CreatePublicationVideoRdo,
@@ -97,6 +177,24 @@ export class PublicationsController {
   }
 
   @ApiResponse({
+    description: 'Updated video publication',
+    status: HttpStatus.OK,
+    type: CreatePublicationVideoRdo,
+  })
+  @Patch('video/:id')
+  async updateVideo(
+    @Param('id') id: number,
+    @Body() dto: UpdatePublicationVideoDto
+  ) {
+    const updatedPublication = await this.publicationsService.updateVideo(
+      id,
+      dto
+    );
+
+    return fillObject(CreatePublicationTextRdo, updatedPublication);
+  }
+
+  @ApiResponse({
     description: 'return all publications',
     status: HttpStatus.OK,
     isArray: true,
@@ -104,7 +202,7 @@ export class PublicationsController {
       type: 'array',
       items: {
         oneOf: [
-          { $ref: getSchemaPath(CreatePublicationLinkRdo) },
+          { $ref: getSchemaPath(PublicationLinkRdo) },
           { $ref: getSchemaPath(CreatePublicationPhotoRdo) },
           { $ref: getSchemaPath(CreatePublicationQuoteRdo) },
           { $ref: getSchemaPath(CreatePublicationTextRdo) },
@@ -129,7 +227,7 @@ export class PublicationsController {
     schema: {
       type: 'object',
       oneOf: [
-        { $ref: getSchemaPath(CreatePublicationLinkRdo) },
+        { $ref: getSchemaPath(PublicationLinkRdo) },
         { $ref: getSchemaPath(CreatePublicationPhotoRdo) },
         { $ref: getSchemaPath(CreatePublicationQuoteRdo) },
         { $ref: getSchemaPath(CreatePublicationTextRdo) },
@@ -141,6 +239,16 @@ export class PublicationsController {
   async findById(@Param('id') id: number) {
     const publication = await this.publicationsService.findById(id);
     return transformPublicationToRdo(publication);
+  }
+
+  @ApiResponse({
+    description: 'publication has been removed',
+    status: HttpStatus.NO_CONTENT,
+  })
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Delete(':id')
+  async delete(@Param('id') id: number) {
+    await this.publicationsService.delete(id);
   }
 
   @Get('count/:userId')

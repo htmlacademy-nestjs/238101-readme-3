@@ -1,8 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import {
-  PublicationKind,
-  PublicationStatus,
-} from '@project/shared/shared-types';
+import { PublicationStatus } from '@project/shared/shared-types';
 
 import { PublicationErrorMessage } from './consts';
 
@@ -12,6 +9,10 @@ import {
   CreatePublicationQuoteDto,
   CreatePublicationTextDto,
   CreatePublicationVideoDto,
+  UpdatePublicationPhotoDto,
+  UpdatePublicationQuoteDto,
+  UpdatePublicationTextDto,
+  UpdatePublicationVideoDto,
 } from './dto';
 
 import {
@@ -24,6 +25,8 @@ import {
 
 import { PublicationsRepository } from './repositories/publications.repository';
 import { PostQuery } from './query/publication.query';
+import { UpdatePublicationLinkDto } from './dto';
+import { Publication } from '@prisma/client';
 
 @Injectable()
 export class PublicationsService {
@@ -31,7 +34,7 @@ export class PublicationsService {
     private readonly publicationsRepository: PublicationsRepository
   ) {}
 
-  async createLink(dto: CreatePublicationLinkDto) {
+  public async createLink(dto: CreatePublicationLinkDto) {
     const { description, link, tags } = dto;
 
     const publicationLink = new PublicationLinkEntity({
@@ -39,23 +42,43 @@ export class PublicationsService {
       link,
       status: PublicationStatus.Published,
       tags,
-      type: PublicationKind.Link,
     });
 
     return this.publicationsRepository.create(publicationLink);
   }
 
+  public async updateLink(id: number, dto: UpdatePublicationLinkDto) {
+    const publicationLink = await this.findById(id);
+
+    const publicationEntity = new PublicationLinkEntity({
+      ...publicationLink,
+      ...dto,
+    });
+
+    return this.publicationsRepository.update(id, publicationEntity);
+  }
+
   public async createPhoto(dto: CreatePublicationPhotoDto) {
     const { photo, tags } = dto;
 
-    const publicationPhoto = new PublicationPhotoEntity({
+    const publication = new PublicationPhotoEntity({
       photo,
       status: PublicationStatus.Published,
       tags,
-      type: PublicationKind.Photo,
     });
 
-    return this.publicationsRepository.create(publicationPhoto);
+    return this.publicationsRepository.create(publication);
+  }
+
+  public async updatePhoto(id: number, dto: UpdatePublicationPhotoDto) {
+    const publication = await this.findById(id);
+
+    const publicationEntity = new PublicationPhotoEntity({
+      ...publication,
+      ...dto,
+    });
+
+    return this.publicationsRepository.update(id, publicationEntity);
   }
 
   public async createQuote(dto: CreatePublicationQuoteDto) {
@@ -66,10 +89,20 @@ export class PublicationsService {
       content,
       status: PublicationStatus.Published,
       tags,
-      type: PublicationKind.Quote,
     });
 
     return this.publicationsRepository.create(publicationQuote);
+  }
+
+  public async updateQuote(id: number, dto: UpdatePublicationQuoteDto) {
+    const publication = await this.findById(id);
+
+    const publicationEntity = new PublicationQuoteEntity({
+      ...publication,
+      ...dto,
+    });
+
+    return this.publicationsRepository.update(id, publicationEntity);
   }
 
   public async createText(dto: CreatePublicationTextDto) {
@@ -81,10 +114,20 @@ export class PublicationsService {
       name,
       status: PublicationStatus.Published,
       tags,
-      type: PublicationKind.Text,
     });
 
     return this.publicationsRepository.create(publicationText);
+  }
+
+  public async updateText(id: number, dto: UpdatePublicationTextDto) {
+    const publication = await this.findById(id);
+
+    const publicationEntity = new PublicationTextEntity({
+      ...publication,
+      ...dto,
+    });
+
+    return this.publicationsRepository.update(id, publicationEntity);
   }
 
   public async createVideo(dto: CreatePublicationVideoDto) {
@@ -95,17 +138,27 @@ export class PublicationsService {
       name,
       status: PublicationStatus.Published,
       tags,
-      type: PublicationKind.Video,
     });
 
     return this.publicationsRepository.create(publicationVideo);
+  }
+
+  public async updateVideo(id: number, dto: UpdatePublicationVideoDto) {
+    const publication = await this.findById(id);
+
+    const publicationEntity = new PublicationVideoEntity({
+      ...publication,
+      ...dto,
+    });
+
+    return this.publicationsRepository.update(id, publicationEntity);
   }
 
   public async findAll(query: PostQuery) {
     return await this.publicationsRepository.findAll(query);
   }
 
-  public async findById(id: number) {
+  public async findById(id: number): Promise<Publication> {
     const publication = await this.publicationsRepository.findById(id);
 
     if (!publication) {
@@ -113,6 +166,12 @@ export class PublicationsService {
     }
 
     return publication;
+  }
+
+  public async delete(id: number) {
+    await this.findById(id);
+
+    return this.publicationsRepository.destroy(id);
   }
 
   public async getCountPublicationByUser(userId: string) {

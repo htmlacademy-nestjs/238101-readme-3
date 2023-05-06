@@ -13,22 +13,16 @@ export class PublicationPhotoEntity implements PublicationEntity {
   public tags?: string[];
   public type: PublicationKind.Photo = PublicationKind.Photo;
 
-  public createdAt: string;
-  public updatedAt: string;
-
-  constructor(publication: PublicationPhoto) {
+  constructor(publication: Omit<PublicationPhoto, 'type'>) {
     this.fillEntity(publication);
   }
 
-  fillEntity(entity: PublicationPhoto) {
+  fillEntity(entity: Omit<PublicationPhoto, 'type'>) {
     this.id = entity.id;
 
     this.photo = entity.photo;
     this.status = entity.status;
     this.tags = entity.tags;
-
-    this.createdAt = entity.createdAt;
-    this.updatedAt = entity.updatedAt;
   }
 
   public toObject(): PublicationPhoto {
