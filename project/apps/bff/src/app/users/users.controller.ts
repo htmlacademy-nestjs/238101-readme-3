@@ -1,7 +1,9 @@
 import {
   Body,
   Controller,
+  Get,
   HttpStatus,
+  Param,
   ParseFilePipeBuilder,
   Post,
   UploadedFile,
@@ -61,5 +63,10 @@ export class UsersController {
     @Body() changePasswordDto: ChangePasswordDto
   ) {
     return this.usersService.changePassword(changePasswordDto, token);
+  }
+
+  @Get(':id')
+  public async getUserInfo(@Param('id') id: string) {
+    return this.usersService.getUserInfo(id);
   }
 }

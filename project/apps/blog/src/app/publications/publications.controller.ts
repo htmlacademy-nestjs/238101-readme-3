@@ -142,4 +142,9 @@ export class PublicationsController {
     const publication = await this.publicationsService.findById(id);
     return transformPublicationToRdo(publication);
   }
+
+  @Get('count/:userId')
+  public async getCountPublicationByUser(@Param('userId') userId: string) {
+    return this.publicationsService.getCountPublicationByUser(userId);
+  }
 }

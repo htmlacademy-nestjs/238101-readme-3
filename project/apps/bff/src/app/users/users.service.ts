@@ -3,7 +3,7 @@ import { HttpService } from '@nestjs/axios';
 import { ApplicationServiceURL } from '../app.config';
 import { LoginUserDto, RegisterUserDto } from './dto';
 import FormData from 'form-data';
-import { RegisteredUserRdo } from './rdo';
+import { RegisteredUserRdo, UserInfoRdo } from './rdo';
 import {
   ChangePasswordDto,
   StoredFile,
@@ -107,5 +107,22 @@ export class UsersService {
     );
 
     return data;
+  }
+
+  public async getUserInfo(userId: string): Promise<UserInfoRdo> {
+    const { data: userInfo } = await this.httpService.axiosRef.get<UserRdo>(
+      `${ApplicationServiceURL.Users}/users/${userId}`
+    );
+
+    const { data: countPublications } =
+      await this.httpService.axiosRef.get<number>(
+        `${ApplicationServiceURL.Blog}/publications/count/${userId}`
+      );
+
+    return {
+      id: userInfo.id,
+      registrationDate: userInfo.createdAt,
+      countPublications: countPublications,
+    };
   }
 }

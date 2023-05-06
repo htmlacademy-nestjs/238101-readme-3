@@ -45,7 +45,7 @@ export class PublicationsService {
     return this.publicationsRepository.create(publicationLink);
   }
 
-  async createPhoto(dto: CreatePublicationPhotoDto) {
+  public async createPhoto(dto: CreatePublicationPhotoDto) {
     const { photo, tags } = dto;
 
     const publicationPhoto = new PublicationPhotoEntity({
@@ -58,7 +58,7 @@ export class PublicationsService {
     return this.publicationsRepository.create(publicationPhoto);
   }
 
-  async createQuote(dto: CreatePublicationQuoteDto) {
+  public async createQuote(dto: CreatePublicationQuoteDto) {
     const { authorQuote, content, tags } = dto;
 
     const publicationQuote = new PublicationQuoteEntity({
@@ -72,7 +72,7 @@ export class PublicationsService {
     return this.publicationsRepository.create(publicationQuote);
   }
 
-  async createText(dto: CreatePublicationTextDto) {
+  public async createText(dto: CreatePublicationTextDto) {
     const { announcement, content, name, tags } = dto;
 
     const publicationText = new PublicationTextEntity({
@@ -87,7 +87,7 @@ export class PublicationsService {
     return this.publicationsRepository.create(publicationText);
   }
 
-  async createVideo(dto: CreatePublicationVideoDto) {
+  public async createVideo(dto: CreatePublicationVideoDto) {
     const { link, name, tags } = dto;
 
     const publicationVideo = new PublicationVideoEntity({
@@ -101,11 +101,11 @@ export class PublicationsService {
     return this.publicationsRepository.create(publicationVideo);
   }
 
-  async findAll(query: PostQuery) {
+  public async findAll(query: PostQuery) {
     return await this.publicationsRepository.findAll(query);
   }
 
-  async findById(id: number) {
+  public async findById(id: number) {
     const publication = await this.publicationsRepository.findById(id);
 
     if (!publication) {
@@ -113,5 +113,9 @@ export class PublicationsService {
     }
 
     return publication;
+  }
+
+  public async getCountPublicationByUser(userId: string) {
+    return this.publicationsRepository.getCountPublicationByUser(userId);
   }
 }

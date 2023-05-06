@@ -51,7 +51,7 @@ export class PublicationsRepository
     });
   }
 
-  public findAll({
+  public async findAll({
     limit,
     page,
     sortDirection,
@@ -71,13 +71,24 @@ export class PublicationsRepository
     });
   }
 
-  public update(id: number, item: PublicationEntities): Promise<Publication> {
+  public async update(
+    id: number,
+    item: PublicationEntities
+  ): Promise<Publication> {
     return this.prisma.publication.update({
       data: {
         ...item.toObject(),
       },
       where: {
         id,
+      },
+    });
+  }
+
+  public async getCountPublicationByUser(userId: string): Promise<number> {
+    return this.prisma.publication.count({
+      where: {
+        authorId: userId,
       },
     });
   }
