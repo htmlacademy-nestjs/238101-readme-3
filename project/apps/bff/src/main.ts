@@ -3,18 +3,21 @@
  * This is only a minimal backend to get started.
  */
 
-import { Logger } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 
 import { AppModule } from './app/app.module';
 import { RequestIdInterceptor } from './app/interceptors';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { AxiosExceptionFilter } from './app/filters';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const globalPrefix = 'api';
-
   app.setGlobalPrefix(globalPrefix);
+
+  app.useGlobalFilters(new AxiosExceptionFilter());
+  app.useGlobalPipes(new ValidationPipe());
   app.useGlobalInterceptors(new RequestIdInterceptor());
 
   const config = new DocumentBuilder()

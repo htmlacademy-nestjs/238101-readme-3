@@ -1,4 +1,4 @@
-import { File } from '@project/shared/shared-types';
+import { StoredFile } from '@project/shared/shared-types';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
@@ -6,7 +6,7 @@ import { Document } from 'mongoose';
   collection: 'files',
   timestamps: true,
 })
-export class FileModel extends Document implements File {
+export class FileModel extends Document implements StoredFile {
   @Prop({
     required: true,
   })

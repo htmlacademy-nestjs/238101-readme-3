@@ -1,4 +1,4 @@
-import { User } from './User';
+import { User } from './user.interface';
 import { TokenPayload } from './token-payload.interface';
 
 export interface RequestWithUser {

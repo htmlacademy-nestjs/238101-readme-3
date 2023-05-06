@@ -3,6 +3,7 @@ import {
   Catch,
   ExceptionFilter,
   HttpStatus,
+  Logger,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { AxiosError } from 'axios';
@@ -14,6 +15,7 @@ export class AxiosExceptionFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
     const status = error.response?.status || HttpStatus.INTERNAL_SERVER_ERROR;
 
+    Logger.error(error.response.data);
     response.status(status).json(error.response?.data);
   }
 }

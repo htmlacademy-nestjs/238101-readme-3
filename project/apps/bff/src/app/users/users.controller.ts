@@ -1,18 +1,45 @@
-import { Body, Controller, Post, Req, UseFilters } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import {
+  Body,
+  Controller,
+  HttpStatus,
+  ParseFilePipeBuilder,
+  Post,
+  Req,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
+import { ApiBearerAuth, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { UsersService } from './users.service';
-import { AxiosExceptionFilter } from '../filters';
-import { LoginUserDto } from './dto';
+import { LoginUserDto, RegisterUserDto } from './dto';
+import { ALLOWED_AVATAR_EXTENCION, MAX_AVATAR_BITE_SIZE } from './user.const';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('users')
 @ApiTags('users')
-@UseFilters(AxiosExceptionFilter)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post('/register')
-  public async register() {
-    return this.usersService.register();
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(FileInterceptor('avatar'))
+  public async register(
+    @Body() registerUserDto: RegisterUserDto,
+    @UploadedFile(
+      new ParseFilePipeBuilder()
+        .addFileTypeValidator({
+          fileType: ALLOWED_AVATAR_EXTENCION,
+        })
+        .addMaxSizeValidator({
+          maxSize: MAX_AVATAR_BITE_SIZE,
+        })
+        .build({
+          errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
+          fileIsRequired: false,
+        })
+    )
+    avatar: Express.Multer.File | undefined
+  ) {
+    return await this.usersService.register(registerUserDto, avatar);
   }
 
   @Post('login')

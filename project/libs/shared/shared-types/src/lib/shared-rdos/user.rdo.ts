@@ -25,6 +25,13 @@ export class UserRdo {
   public name: string;
 
   @ApiProperty({
+    description: 'User avatar path',
+    example: 'static/123.png',
+  })
+  @Expose()
+  public avatarId: string;
+
+  @ApiProperty({
     description: 'registration date',
     example: '2023-04-04T18:44:42.931Z',
   })

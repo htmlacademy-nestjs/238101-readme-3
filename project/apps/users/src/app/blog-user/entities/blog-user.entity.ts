@@ -5,7 +5,7 @@ const SALT_ROUNDS = 10;
 
 export class BlogUserEntity implements User, Entity<User> {
   public _id: string;
-  public avatar?: string;
+  public avatarId?: string;
   public email: string;
   public name: string;
   public passwordHash: string;
@@ -20,7 +20,7 @@ export class BlogUserEntity implements User, Entity<User> {
 
   public fillEntity(blogUser: User) {
     this._id = blogUser._id;
-    this.avatar = blogUser.avatar;
+    this.avatarId = blogUser.avatarId;
     this.email = blogUser.email;
     this.name = blogUser.name;
     this.passwordHash = blogUser.passwordHash;

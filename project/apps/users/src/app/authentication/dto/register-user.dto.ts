@@ -1,14 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsEmail,
-  IsOptional,
-  IsString,
-  MaxLength,
-  MinLength,
-} from 'class-validator';
+import { IsEmail, IsString, MaxLength, MinLength } from 'class-validator';
 import { AuthUserMessage } from '../consts';
 
-export class CreateUserDto {
+export class RegisterUserDto {
   @ApiProperty({
     description: 'User unique address',
     example: 'user@user.ru',
@@ -33,13 +27,4 @@ export class CreateUserDto {
   @MinLength(6)
   @MaxLength(12)
   public password: string;
-
-  @ApiProperty({
-    description: `user's avatar (500kb, jpeg/png)`,
-    required: false,
-    type: 'string',
-    format: 'binary',
-  })
-  @IsOptional()
-  public avatar?: File;
 }

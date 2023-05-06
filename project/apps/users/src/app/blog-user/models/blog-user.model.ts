@@ -7,9 +7,6 @@ import { Document } from 'mongoose';
   timestamps: true,
 })
 export class BlogUserModel extends Document implements User {
-  @Prop()
-  public avatar: string;
-
   @Prop({
     required: true,
     unique: true,
@@ -27,6 +24,11 @@ export class BlogUserModel extends Document implements User {
     required: true,
   })
   public passwordHash: string;
+
+  @Prop({
+    required: false,
+  })
+  public avatarId: string;
 }
 
 export const BlogUserSchema = SchemaFactory.createForClass(BlogUserModel);

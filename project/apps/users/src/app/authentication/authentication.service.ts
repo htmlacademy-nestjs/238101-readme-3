@@ -10,9 +10,9 @@ import {
 import { BlogUserEntity } from '../blog-user/entities';
 import { BlogUserRepository } from '../blog-user/repositories';
 import { AuthUserMessage } from './consts';
-import { ChangePasswordDto, CreateUserDto, LoginUserDto } from './dto';
+import { ChangePasswordDto, RegisterUserDto, LoginUserDto } from './dto';
 import { RefreshTokenPayload, User } from '@project/shared/shared-types';
-import { ConfigService, ConfigType } from '@nestjs/config';
+import { ConfigType } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { jwtConfig } from '@project/config/config-users';
 import { RefreshTokenService } from '../refresh-token/refresh-token.service';
@@ -23,7 +23,6 @@ import { randomUUID } from 'crypto';
 export class AuthenticationService {
   constructor(
     private readonly blogUserRepository: BlogUserRepository,
-    private readonly configService: ConfigService,
     private readonly jwtService: JwtService,
     private readonly refreshTokenService: RefreshTokenService,
 
@@ -60,7 +59,7 @@ export class AuthenticationService {
     return updatedBlogUser;
   }
 
-  public async register(dto: CreateUserDto) {
+  public async register(dto: RegisterUserDto) {
     const { email, name, password } = dto;
 
     const existUser = await this.blogUserRepository.findByEmail(email);
@@ -70,6 +69,7 @@ export class AuthenticationService {
     }
 
     const userEntity = new BlogUserEntity({
+      avatarId: '',
       email,
       name,
       passwordHash: '',
@@ -98,16 +98,6 @@ export class AuthenticationService {
     }
 
     return blogUserEntity.toObject();
-  }
-
-  public async getUser(id: string) {
-    const existUser = await this.blogUserRepository.findById(id);
-
-    if (!existUser) {
-      throw new NotFoundException(AuthUserMessage.NotFound);
-    }
-
-    return existUser;
   }
 
   public async createUserToken(user: User) {

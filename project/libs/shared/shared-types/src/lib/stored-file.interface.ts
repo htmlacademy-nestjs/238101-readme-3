@@ -1,4 +1,4 @@
-export interface File {
+export interface StoredFile {
   id?: string;
   originalName: string;
   size: number;

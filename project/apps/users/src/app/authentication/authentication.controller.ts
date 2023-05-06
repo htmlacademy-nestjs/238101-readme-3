@@ -1,14 +1,10 @@
 import {
   Body,
   Controller,
-  Get,
   HttpStatus,
-  Param,
-  ParseFilePipeBuilder,
   Patch,
   Post,
   Req,
-  UploadedFile,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
@@ -23,26 +19,20 @@ import {
 import { fillObject } from '@project/util/util-core';
 
 import { AuthenticationService } from './authentication.service';
-import { ChangePasswordDto, CreateUserDto, LoginUserDto } from './dto';
+import { ChangePasswordDto, RegisterUserDto, LoginUserDto } from './dto';
 import {
   ChangePasswordFailedRdo,
   ChangePasswordSuccessfullyRdo,
-  CreatedUserRdo,
   LoggedUserRdo,
   TokenPair,
-  UserRdo,
 } from './rdo';
-import { MongoidValidationPipe } from '@project/shared/shared-pipes';
 import { JwtAuthGuard, JwtRefreshGuard, LocalAuthGuard } from './guards';
 import {
   RequestWithTokenPayload,
   RequestWithUser,
+  UserRdo,
 } from '@project/shared/shared-types';
-import {
-  ALLOWED_AVATAR_EXTENCION,
-  AuthUserMessage,
-  MAX_AVATAR_BITE_SIZE,
-} from './consts';
+import { AuthUserMessage } from './consts';
 import { FileInterceptor } from '@nestjs/platform-express';
 
 @ApiTags('authentication')
@@ -53,27 +43,12 @@ export class AuthenticationController {
   @ApiResponse({
     description: 'The new user has been successfully created.',
     status: HttpStatus.CREATED,
-    type: CreatedUserRdo,
+    type: UserRdo,
   })
   @ApiConsumes('multipart/form-data')
   @Post('register')
   @UseInterceptors(FileInterceptor('avatar'))
-  public async create(
-    @Body() dto: CreateUserDto,
-    @UploadedFile(
-      new ParseFilePipeBuilder()
-        .addFileTypeValidator({
-          fileType: ALLOWED_AVATAR_EXTENCION,
-        })
-        .addMaxSizeValidator({
-          maxSize: MAX_AVATAR_BITE_SIZE,
-        })
-        .build({
-          errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
-        })
-    )
-    avatar: Express.Multer.File
-  ) {
+  public async register(@Body() dto: RegisterUserDto) {
     const newUser = await this.authService.register(dto);
     return fillObject(UserRdo, newUser);
   }
@@ -131,20 +106,6 @@ export class AuthenticationController {
     return fillObject(ChangePasswordSuccessfullyRdo, {
       message: AuthUserMessage.PasswordChanged,
     });
-  }
-
-  @ApiResponse({
-    description: 'User found',
-    status: HttpStatus.OK,
-    type: UserRdo,
-  })
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
-  @Get(':id')
-  public async show(@Param('id', MongoidValidationPipe) id: string) {
-    const existUser = await this.authService.getUser(id);
-
-    return fillObject(UserRdo, existUser);
   }
 
   @UseGuards(JwtAuthGuard)
