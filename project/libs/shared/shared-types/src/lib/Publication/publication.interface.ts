@@ -12,6 +12,7 @@ export interface Publication {
   type: PublicationKind;
 
   createdAt?: Date;
+  publishedAt?: Date;
   updatedAt?: Date;
 }
 

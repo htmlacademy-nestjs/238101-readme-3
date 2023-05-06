@@ -13,6 +13,8 @@ export class PublicationPhotoEntity implements PublicationEntity {
   public tags?: string[];
   public type: PublicationKind.Photo = PublicationKind.Photo;
 
+  public publishedAt: Date;
+
   constructor(publication: Omit<PublicationPhoto, 'type'>) {
     this.fillEntity(publication);
   }
@@ -23,6 +25,8 @@ export class PublicationPhotoEntity implements PublicationEntity {
     this.photo = entity.photo;
     this.status = entity.status;
     this.tags = entity.tags;
+
+    this.publishedAt = new Date(entity.publishedAt);
   }
 
   public toObject(): PublicationPhoto {

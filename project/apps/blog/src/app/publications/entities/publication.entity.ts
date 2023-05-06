@@ -15,6 +15,7 @@ export abstract class PublicationEntity
   public type: PublicationKind;
 
   public createdAt?: Date;
+  public publishedAt: Date;
   public updatedAt?: Date;
 
   constructor(publication: Omit<Publication, 'type'>) {

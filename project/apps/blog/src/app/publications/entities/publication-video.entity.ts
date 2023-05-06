@@ -14,8 +14,7 @@ export class PublicationVideoEntity implements PublicationEntity {
   public tags?: string[];
   public type: PublicationKind.Video = PublicationKind.Video;
 
-  public createdAt: Date;
-  public updatedAt: Date;
+  public publishedAt: Date;
 
   constructor(publication: Omit<PublicationVideo, 'type'>) {
     this.fillEntity(publication);
@@ -29,8 +28,7 @@ export class PublicationVideoEntity implements PublicationEntity {
     this.status = entity.status;
     this.tags = entity.tags;
 
-    this.createdAt = entity.createdAt;
-    this.updatedAt = entity.updatedAt;
+    this.publishedAt = new Date(entity.publishedAt);
   }
 
   public toObject(): PublicationVideo {

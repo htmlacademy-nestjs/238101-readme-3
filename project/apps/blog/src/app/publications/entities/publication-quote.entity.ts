@@ -14,7 +14,7 @@ export class PublicationQuoteEntity implements PublicationEntity {
   public tags?: string[];
   public type: PublicationKind.Quote = PublicationKind.Quote;
 
-  public createdAt: Date;
+  public publishedAt: Date;
   public updatedAt: Date;
 
   constructor(publication: Omit<PublicationQuote, 'type'>) {
@@ -29,8 +29,7 @@ export class PublicationQuoteEntity implements PublicationEntity {
     this.status = entity.status;
     this.tags = entity.tags;
 
-    this.createdAt = entity.createdAt;
-    this.updatedAt = entity.updatedAt;
+    this.publishedAt = new Date(entity.publishedAt);
   }
 
   public toObject(): PublicationQuote {

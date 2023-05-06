@@ -10,21 +10,13 @@ import {
   MinLength,
   Validate,
 } from 'class-validator';
-import { IsTagOneWord, IsTagStartsWithLetter } from '../validation';
+import {
+  IsTagOneWord,
+  IsTagStartsWithLetter,
+  transformTags,
+} from '../validation';
 
 export class PublicationBaseDto {
-  // @ApiProperty({
-  //   description: 'tags for video',
-  //   example: ['cats'],
-  //   required: false,
-  //   isArray: true,
-  // })
-  // @IsArray()
-  // @ArrayMaxSize(8)
-  // @IsString({ each: true })
-  // @IsOptional()
-  // tags: string[];
-
   @ApiProperty({
     description: 'tags for video',
     example: ['cats'],
@@ -48,9 +40,11 @@ export class PublicationBaseDto {
     required: false,
   })
   status: PublicationStatus;
-}
 
-const transformTags = (tags: string[]) => {
-  const uniqueTags = Array.from(new Set<string>(tags));
-  return uniqueTags.map((tag) => tag.toLowerCase());
-};
+  @ApiProperty({
+    description: 'publication date',
+    required: false,
+    example: '2023-01-01 15:38:16.111',
+  })
+  publishedAt: Date;
+}

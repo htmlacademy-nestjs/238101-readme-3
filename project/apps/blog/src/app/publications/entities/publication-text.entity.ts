@@ -15,8 +15,7 @@ export class PublicationTextEntity implements PublicationEntity {
   public tags?: string[];
   public type: PublicationKind.Text = PublicationKind.Text;
 
-  public createdAt: Date;
-  public updatedAt: Date;
+  public publishedAt: Date;
 
   constructor(publication: Omit<PublicationText, 'type'>) {
     this.fillEntity(publication);
@@ -31,8 +30,7 @@ export class PublicationTextEntity implements PublicationEntity {
     this.status = entity.status;
     this.tags = entity.tags;
 
-    this.createdAt = entity.createdAt;
-    this.updatedAt = entity.updatedAt;
+    this.publishedAt = new Date(entity.publishedAt);
   }
 
   public toObject(): PublicationText {

@@ -4,8 +4,9 @@ import {
   PublicationKind,
   PublicationStatus,
 } from '@project/shared/shared-types';
+import { PublicationBaseRdo } from './publication-base.rdo';
 
-export class CreatePublicationVideoRdo {
+export class PublicationVideoRdo extends PublicationBaseRdo {
   @ApiProperty({
     description: 'video publication id',
     example: '3a324a11-de87-4e95-91be-98ecca5f5f86',
@@ -48,16 +49,4 @@ export class CreatePublicationVideoRdo {
   })
   @Expose()
   type: PublicationKind.Video;
-
-  @ApiProperty({
-    description: 'create date',
-  })
-  @Expose()
-  createdAt: string;
-
-  @ApiProperty({
-    description: 'last update date',
-  })
-  @Expose()
-  updatedAt: string;
 }

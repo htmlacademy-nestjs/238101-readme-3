@@ -14,8 +14,7 @@ export class PublicationLinkEntity implements PublicationEntity {
   public tags?: string[];
   public type: PublicationKind.Link = PublicationKind.Link;
 
-  public createdAt: Date;
-  public updatedAt: Date;
+  public publishedAt: Date;
 
   constructor(publication: Omit<PublicationLink, 'type'>) {
     this.fillEntity(publication);
@@ -29,8 +28,7 @@ export class PublicationLinkEntity implements PublicationEntity {
     this.status = entity.status;
     this.tags = entity.tags;
 
-    this.createdAt = entity.createdAt;
-    this.updatedAt = entity.updatedAt;
+    this.publishedAt = new Date(entity.publishedAt);
   }
 
   public toObject(): PublicationLink {

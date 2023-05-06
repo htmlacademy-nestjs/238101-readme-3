@@ -4,8 +4,9 @@ import {
   PublicationKind,
   PublicationStatus,
 } from '@project/shared/shared-types';
+import { PublicationBaseRdo } from './publication-base.rdo';
 
-export class CreatePublicationPhotoRdo {
+export class PublicationPhotoRdo extends PublicationBaseRdo {
   @ApiProperty({
     description: 'photo publication id',
     example: '3a324a11-de87-4e95-91be-98ecca5f5f86',
@@ -41,16 +42,4 @@ export class CreatePublicationPhotoRdo {
   })
   @Expose()
   type: PublicationKind.Photo;
-
-  @ApiProperty({
-    description: 'create date',
-  })
-  @Expose()
-  createdAt: string;
-
-  @ApiProperty({
-    description: 'last update date',
-  })
-  @Expose()
-  updatedAt: string;
 }

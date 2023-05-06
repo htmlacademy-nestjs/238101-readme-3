@@ -1,10 +1,12 @@
 import { PublicationKind } from '@project/shared/shared-types';
 import { fillObject } from '@project/util/util-core';
-import { PublicationLinkRdo } from './publication-link.rdo';
-import { CreatePublicationPhotoRdo } from './create-publication-photo.rdo';
-import { CreatePublicationQuoteRdo } from './create-publication-quote.rdo';
-import { CreatePublicationTextRdo } from './create-publication-text.rdo';
-import { CreatePublicationVideoRdo } from './create-publication-video.rdo';
+import {
+  PublicationLinkRdo,
+  PublicationPhotoRdo,
+  PublicationQuoteRdo,
+  PublicationTextRdo,
+  PublicationVideoRdo,
+} from './';
 import { Publication } from '@prisma/client';
 
 export const transformPublicationToRdo = (publication: Publication) => {
@@ -13,19 +15,19 @@ export const transformPublicationToRdo = (publication: Publication) => {
   }
 
   if (publication.type === PublicationKind.Photo) {
-    return fillObject(CreatePublicationPhotoRdo, publication);
+    return fillObject(PublicationPhotoRdo, publication);
   }
 
   if (publication.type === PublicationKind.Quote) {
-    return fillObject(CreatePublicationQuoteRdo, publication);
+    return fillObject(PublicationQuoteRdo, publication);
   }
 
   if (publication.type === PublicationKind.Text) {
-    return fillObject(CreatePublicationTextRdo, publication);
+    return fillObject(PublicationTextRdo, publication);
   }
 
   if (publication.type === PublicationKind.Video) {
-    return fillObject(CreatePublicationVideoRdo, publication);
+    return fillObject(PublicationVideoRdo, publication);
   }
 
   return publication;

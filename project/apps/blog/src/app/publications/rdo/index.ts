@@ -1,7 +1,7 @@
-export { PublicationLinkRdo } from './publication-link.rdo';
-export { CreatePublicationPhotoRdo } from './create-publication-photo.rdo';
-export { CreatePublicationQuoteRdo } from './create-publication-quote.rdo';
-export { CreatePublicationTextRdo } from './create-publication-text.rdo';
-export { CreatePublicationVideoRdo } from './create-publication-video.rdo';
-
-export { transformPublicationToRdo } from './transform-publication-rdo.helper';
+export * from './publication-base.rdo';
+export * from './publication-link.rdo';
+export * from './publication-photo.rdo';
+export * from './publication-quote.rdo';
+export * from './publication-text.rdo';
+export * from './publication-video.rdo';
+export * from './transform-publication-rdo.helper';

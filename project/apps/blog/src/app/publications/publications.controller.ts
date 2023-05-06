@@ -31,10 +31,10 @@ import { PublicationsService } from './publications.service';
 
 import {
   PublicationLinkRdo,
-  CreatePublicationPhotoRdo,
-  CreatePublicationQuoteRdo,
-  CreatePublicationTextRdo,
-  CreatePublicationVideoRdo,
+  PublicationPhotoRdo,
+  PublicationQuoteRdo,
+  PublicationTextRdo,
+  PublicationVideoRdo,
   transformPublicationToRdo,
 } from './rdo';
 import { PostQuery } from './query/publication.query';
@@ -77,19 +77,19 @@ export class PublicationsController {
   @ApiResponse({
     description: 'The new photo publication has been successfully created.',
     status: HttpStatus.CREATED,
-    type: CreatePublicationPhotoRdo,
+    type: PublicationPhotoRdo,
   })
   @Post('photo')
   async createPhoto(@Body() dto: CreatePublicationPhotoDto) {
     const newPublicationPhoto = await this.publicationsService.createPhoto(dto);
 
-    return fillObject(CreatePublicationPhotoRdo, newPublicationPhoto);
+    return fillObject(PublicationPhotoRdo, newPublicationPhoto);
   }
 
   @ApiResponse({
     description: 'Updated photo publication',
     status: HttpStatus.OK,
-    type: CreatePublicationPhotoRdo,
+    type: PublicationPhotoRdo,
   })
   @Patch('photo/:id')
   async updatePhoto(
@@ -101,25 +101,25 @@ export class PublicationsController {
       dto
     );
 
-    return fillObject(CreatePublicationPhotoRdo, updatedPublication);
+    return fillObject(PublicationPhotoRdo, updatedPublication);
   }
 
   @ApiResponse({
     description: 'The new quote publication has been successfully created.',
     status: HttpStatus.CREATED,
-    type: CreatePublicationQuoteRdo,
+    type: PublicationQuoteRdo,
   })
   @Post('quote')
   async createQuote(@Body() dto: CreatePublicationQuoteDto) {
     const newPublicationQuote = await this.publicationsService.createQuote(dto);
 
-    return fillObject(CreatePublicationQuoteRdo, newPublicationQuote);
+    return fillObject(PublicationQuoteRdo, newPublicationQuote);
   }
 
   @ApiResponse({
     description: 'Updated quote publication',
     status: HttpStatus.OK,
-    type: CreatePublicationQuoteRdo,
+    type: PublicationQuoteRdo,
   })
   @Patch('quote/:id')
   async updateQuote(
@@ -131,25 +131,25 @@ export class PublicationsController {
       dto
     );
 
-    return fillObject(CreatePublicationQuoteRdo, updatedPublication);
+    return fillObject(PublicationQuoteRdo, updatedPublication);
   }
 
   @ApiResponse({
     description: 'The new text publication has been successfully created.',
     status: HttpStatus.CREATED,
-    type: CreatePublicationTextRdo,
+    type: PublicationTextRdo,
   })
   @Post('text')
   async createText(@Body() dto: CreatePublicationTextDto) {
     const newPublicationText = await this.publicationsService.createText(dto);
 
-    return fillObject(CreatePublicationTextRdo, newPublicationText);
+    return fillObject(PublicationTextRdo, newPublicationText);
   }
 
   @ApiResponse({
     description: 'Updated text publication',
     status: HttpStatus.OK,
-    type: CreatePublicationTextRdo,
+    type: PublicationTextRdo,
   })
   @Patch('text/:id')
   async updateText(
@@ -161,25 +161,25 @@ export class PublicationsController {
       dto
     );
 
-    return fillObject(CreatePublicationTextRdo, updatedPublication);
+    return fillObject(PublicationTextRdo, updatedPublication);
   }
 
   @ApiResponse({
     description: 'The new video publication has been successfully created.',
     status: HttpStatus.CREATED,
-    type: CreatePublicationVideoRdo,
+    type: PublicationVideoRdo,
   })
   @Post('video')
   async createVideo(@Body() dto: CreatePublicationVideoDto) {
     const newPublicationVideo = await this.publicationsService.createVideo(dto);
 
-    return fillObject(CreatePublicationVideoRdo, newPublicationVideo);
+    return fillObject(PublicationVideoRdo, newPublicationVideo);
   }
 
   @ApiResponse({
     description: 'Updated video publication',
     status: HttpStatus.OK,
-    type: CreatePublicationVideoRdo,
+    type: PublicationVideoRdo,
   })
   @Patch('video/:id')
   async updateVideo(
@@ -191,7 +191,7 @@ export class PublicationsController {
       dto
     );
 
-    return fillObject(CreatePublicationTextRdo, updatedPublication);
+    return fillObject(PublicationTextRdo, updatedPublication);
   }
 
   @ApiResponse({
@@ -203,10 +203,10 @@ export class PublicationsController {
       items: {
         oneOf: [
           { $ref: getSchemaPath(PublicationLinkRdo) },
-          { $ref: getSchemaPath(CreatePublicationPhotoRdo) },
-          { $ref: getSchemaPath(CreatePublicationQuoteRdo) },
-          { $ref: getSchemaPath(CreatePublicationTextRdo) },
-          { $ref: getSchemaPath(CreatePublicationVideoRdo) },
+          { $ref: getSchemaPath(PublicationPhotoRdo) },
+          { $ref: getSchemaPath(PublicationQuoteRdo) },
+          { $ref: getSchemaPath(PublicationTextRdo) },
+          { $ref: getSchemaPath(PublicationVideoRdo) },
         ],
       },
     },
@@ -228,10 +228,10 @@ export class PublicationsController {
       type: 'object',
       oneOf: [
         { $ref: getSchemaPath(PublicationLinkRdo) },
-        { $ref: getSchemaPath(CreatePublicationPhotoRdo) },
-        { $ref: getSchemaPath(CreatePublicationQuoteRdo) },
-        { $ref: getSchemaPath(CreatePublicationTextRdo) },
-        { $ref: getSchemaPath(CreatePublicationVideoRdo) },
+        { $ref: getSchemaPath(PublicationPhotoRdo) },
+        { $ref: getSchemaPath(PublicationQuoteRdo) },
+        { $ref: getSchemaPath(PublicationTextRdo) },
+        { $ref: getSchemaPath(PublicationVideoRdo) },
       ],
     },
   })
