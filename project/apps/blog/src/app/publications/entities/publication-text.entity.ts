@@ -34,7 +34,9 @@ export class PublicationTextEntity implements PublicationEntity {
     this.status = entity.status;
     this.tags = entity.tags;
 
-    this.publishedAt = new Date(entity.publishedAt);
+    this.publishedAt = entity.publishedAt
+      ? new Date(entity.publishedAt)
+      : new Date();
   }
 
   public toObject(): PublicationText {
