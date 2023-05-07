@@ -8,7 +8,6 @@ import {
   Patch,
   Post,
   UploadedFile,
-  UseFilters,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
@@ -19,7 +18,6 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { BlogService } from './blog.service';
-import { AxiosExceptionFilter } from '../filters';
 import { CheckAuthGuard } from '../guards';
 import { UseridInterceptor } from '../interceptors';
 import {
@@ -49,10 +47,10 @@ import { fillObject } from '@project/util/util-core';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ALLOWED_PHOTO_EXTENCION, MAX_PHOTO_BITE_SIZE } from './consts';
 import { BffPublicationPhotoDto } from './dto';
+import { UserId } from '@project/shared/shared-decorators';
 
 @Controller('blog')
 @ApiTags('blog')
-@UseFilters(AxiosExceptionFilter)
 export class BlogController {
   constructor(private readonly blogService: BlogService) {}
 
@@ -298,7 +296,11 @@ export class BlogController {
   @ApiBearerAuth()
   @UseGuards(CheckAuthGuard)
   @UseInterceptors(UseridInterceptor)
-  public async deletePublication(@Param('id') id: number) {
-    this.blogService.deletePublication(id);
+  public async deletePublication(
+    @Param('id') id: number,
+    @UserId() userId: string
+  ) {
+    await this.blogService.deletePublication(id, userId);
+    return;
   }
 }

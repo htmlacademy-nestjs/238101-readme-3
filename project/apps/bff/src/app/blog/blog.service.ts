@@ -251,9 +251,14 @@ export class BlogService {
     };
   }
 
-  public async deletePublication(id: number) {
+  public async deletePublication(id: number, userId: string) {
     return this.httpService.axiosRef.delete(
-      `${ApplicationServiceURL.Blog}/publications/${id}`
+      `${ApplicationServiceURL.Blog}/publications/${id}`,
+      {
+        headers: {
+          userId,
+        },
+      }
     );
   }
 }

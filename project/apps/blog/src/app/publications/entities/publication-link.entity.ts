@@ -23,7 +23,6 @@ export class PublicationLinkEntity implements PublicationEntity {
   }
 
   fillEntity(entity: Omit<PublicationLink, 'type'>) {
-    console.log(this.publishedAt);
     this.id = entity.id;
 
     this.authorId = entity.authorId;
