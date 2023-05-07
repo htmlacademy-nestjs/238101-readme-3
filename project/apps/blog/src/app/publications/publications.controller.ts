@@ -35,9 +35,9 @@ import {
   PublicationQuoteRdo,
   PublicationTextRdo,
   PublicationVideoRdo,
-  transformPublicationToRdo,
-} from './rdo';
+} from '@project/shared/shared-types';
 import { PostQuery } from './query/publication.query';
+import { transformPublicationToRdo } from './helpers';
 
 @ApiTags('Publications')
 @Controller('publications')

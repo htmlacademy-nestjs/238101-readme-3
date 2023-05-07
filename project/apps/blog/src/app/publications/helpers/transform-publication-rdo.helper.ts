@@ -1,12 +1,12 @@
-import { PublicationKind } from '@project/shared/shared-types';
-import { fillObject } from '@project/util/util-core';
 import {
+  PublicationKind,
   PublicationLinkRdo,
   PublicationPhotoRdo,
   PublicationQuoteRdo,
   PublicationTextRdo,
   PublicationVideoRdo,
-} from './';
+} from '@project/shared/shared-types';
+import { fillObject } from '@project/util/util-core';
 import { Publication } from '@prisma/client';
 
 export const transformPublicationToRdo = (publication: Publication) => {
