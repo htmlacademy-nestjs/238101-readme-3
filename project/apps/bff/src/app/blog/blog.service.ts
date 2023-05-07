@@ -11,6 +11,7 @@ import {
   PublicationQuoteRdo,
   PublicationTextRdo,
   PublicationVideoRdo,
+  Publications,
   StoredFile,
   UpdatePublicationBaseLinkDto,
   UpdatePublicationBaseQuoteDto,
@@ -20,6 +21,7 @@ import {
 } from '@project/shared/shared-types';
 import { BffPublicationPhotoDto } from './dto';
 import FormData from 'form-data';
+import { BffPublcationRepost } from './dto/publication-repost.dto';
 
 @Injectable()
 export class BlogService {
@@ -260,5 +262,17 @@ export class BlogService {
         },
       }
     );
+  }
+
+  public async repostPublication(dto: BffPublcationRepost) {
+    const { data: repostedPublication } =
+      await this.httpService.axiosRef.post<Publications>(
+        `${ApplicationServiceURL.Blog}/publications/repost`,
+        {
+          ...dto,
+        }
+      );
+
+    return repostedPublication;
   }
 }

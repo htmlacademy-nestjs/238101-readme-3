@@ -48,6 +48,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { ALLOWED_PHOTO_EXTENCION, MAX_PHOTO_BITE_SIZE } from './consts';
 import { BffPublicationPhotoDto } from './dto';
 import { UserId } from '@project/shared/shared-decorators';
+import { BffPublcationRepost } from './dto/publication-repost.dto';
 
 @Controller('blog')
 @ApiTags('blog')
@@ -302,5 +303,16 @@ export class BlogController {
   ) {
     await this.blogService.deletePublication(id, userId);
     return;
+  }
+
+  @Post('repost/:id')
+  @ApiResponse({
+    status: HttpStatus.OK,
+  })
+  @ApiBearerAuth()
+  @UseGuards(CheckAuthGuard)
+  @UseInterceptors(UseridInterceptor)
+  public async repostPublication(@Body() dto: BffPublcationRepost) {
+    return this.blogService.repostPublication(dto);
   }
 }
