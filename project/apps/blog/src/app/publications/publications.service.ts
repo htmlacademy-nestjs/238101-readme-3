@@ -1,5 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { PublicationStatus } from '@project/shared/shared-types';
+import {
+  PublicationRepostDto,
+  PublicationStatus,
+} from '@project/shared/shared-types';
 
 import { PublicationErrorMessage } from './consts';
 
@@ -173,10 +176,33 @@ export class PublicationsService {
     return publication;
   }
 
+  public async findAllPublicationsByAuthor(authorId: string) {
+    return await this.publicationsRepository.findAllPublicationsByAuthor(
+      authorId
+    );
+  }
+
   public async delete(id: number) {
     await this.findById(id);
 
     return this.publicationsRepository.destroy(id);
+  }
+
+  public async repostPublication(repostDto: PublicationRepostDto) {
+    const { userId } = repostDto;
+
+    const originalPublication = await this.findById(repostDto.publicationId);
+
+    const linkPublication = new PublicationLinkEntity({
+      ...originalPublication,
+      id: undefined,
+      isReposted: true,
+      authorId: userId,
+      originalAuthorId: originalPublication.authorId,
+      originalPublicationId: originalPublication.id,
+    });
+
+    return this.publicationsRepository.create(linkPublication);
   }
 
   public async getCountPublicationByUser(userId: string) {

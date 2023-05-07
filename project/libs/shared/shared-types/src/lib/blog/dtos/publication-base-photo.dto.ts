@@ -1,9 +1,8 @@
-import { ApiProperty, IntersectionType } from '@nestjs/swagger';
+import { ApiProperty, IntersectionType, PartialType } from '@nestjs/swagger';
 import {
   CreatePublicationBaseDto,
   PublicationBaseDto,
 } from './publication-base.dto';
-import { PartialType } from '@nestjs/mapped-types';
 
 class PublicationBasePhotoDto {
   @ApiProperty({

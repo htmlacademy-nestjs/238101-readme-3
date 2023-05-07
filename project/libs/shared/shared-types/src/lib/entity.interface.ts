@@ -1,4 +1,4 @@
 export interface Entity<TEntityBase> {
-  toObject(): TEntityBase;
+  toObject();
   fillEntity(entity: TEntityBase): void;
 }

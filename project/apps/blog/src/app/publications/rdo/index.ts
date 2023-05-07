@@ -1,1 +1,1 @@
-export {};
+export * from './publication.swagger';

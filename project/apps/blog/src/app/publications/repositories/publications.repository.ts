@@ -71,6 +71,18 @@ export class PublicationsRepository
     });
   }
 
+  public async findAllPublicationsByAuthor(authorId: string) {
+    return this.prisma.publication.findMany({
+      where: {
+        authorId,
+      },
+      include: {
+        comments: true,
+        likes: true,
+      },
+    });
+  }
+
   public async update(
     id: number,
     item: PublicationEntities

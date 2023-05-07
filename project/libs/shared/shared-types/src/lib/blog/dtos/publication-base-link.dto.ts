@@ -1,10 +1,9 @@
-import { ApiProperty, IntersectionType } from '@nestjs/swagger';
+import { ApiProperty, IntersectionType, PartialType } from '@nestjs/swagger';
 import {
   CreatePublicationBaseDto,
   PublicationBaseDto,
 } from './publication-base.dto';
 import { IsOptional, IsString, IsUrl, MaxLength } from 'class-validator';
-import { PartialType } from '@nestjs/mapped-types';
 
 class PublicationBaseLinkDto {
   @ApiProperty({

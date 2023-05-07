@@ -1,41 +1,27 @@
 import {
   PublicationKind,
   PublicationQuote,
-  PublicationStatus,
 } from '@project/shared/shared-types';
-import { PublicationEntity } from './publication.entity';
+import {
+  PublicationEntity,
+  PublicationEntityConstructor,
+} from './publication.entity';
 
-export class PublicationQuoteEntity implements PublicationEntity {
-  public id?: number;
-
-  public authorId: string;
+export class PublicationQuoteEntity extends PublicationEntity {
+  public type: (typeof PublicationKind)['Quote'] = PublicationKind.Quote;
 
   public authorQuote: string;
   public content: string;
-  public status: PublicationStatus;
-  public tags?: string[];
-  public type: PublicationKind.Quote = PublicationKind.Quote;
 
-  public publishedAt: Date;
-  public updatedAt: Date;
-
-  constructor(publication: Omit<PublicationQuote, 'type'>) {
-    this.fillEntity(publication);
+  constructor(publication: PublicationEntityConstructor<PublicationQuote>) {
+    super(publication);
   }
 
   fillEntity(entity: Omit<PublicationQuote, 'type'>) {
-    this.id = entity.id;
-
-    this.authorId = entity.authorId;
+    super.fillEntity(entity);
 
     this.authorQuote = entity.authorQuote;
     this.content = entity.content;
-    this.status = entity.status;
-    this.tags = entity.tags;
-
-    this.publishedAt = entity.publishedAt
-      ? new Date(entity.publishedAt)
-      : new Date();
   }
 
   public toObject(): PublicationQuote {

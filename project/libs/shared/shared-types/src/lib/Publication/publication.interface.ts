@@ -13,6 +13,10 @@ export interface Publication {
   tags?: Tag[];
   type: PublicationKind;
 
+  originalAuthorId?: string;
+  originalPublicationId?: number;
+  isReposted?: boolean;
+
   createdAt?: Date;
   publishedAt?: Date;
   updatedAt?: Date;
