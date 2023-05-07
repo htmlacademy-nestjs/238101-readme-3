@@ -14,5 +14,5 @@ export * from './lib/publication';
 export * from './lib/tag.type';
 export * from './lib/user.interface';
 
-export * from './lib/shared-rdos';
-export * from './lib/shared-dtos';
+export * from './lib/blog';
+export * from './lib/users';

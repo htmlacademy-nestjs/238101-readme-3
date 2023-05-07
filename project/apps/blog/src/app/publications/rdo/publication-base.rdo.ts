@@ -3,6 +3,12 @@ import { Expose } from 'class-transformer';
 
 export class PublicationBaseRdo {
   @ApiProperty({
+    description: 'author id',
+  })
+  @Expose()
+  authorId: string;
+
+  @ApiProperty({
     description: 'create date',
   })
   @Expose()

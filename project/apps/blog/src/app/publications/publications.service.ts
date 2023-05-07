@@ -9,6 +9,7 @@ import {
   CreatePublicationQuoteDto,
   CreatePublicationTextDto,
   CreatePublicationVideoDto,
+  UpdatePublicationLinkDto,
   UpdatePublicationPhotoDto,
   UpdatePublicationQuoteDto,
   UpdatePublicationTextDto,
@@ -25,7 +26,6 @@ import {
 
 import { PublicationsRepository } from './repositories/publications.repository';
 import { PostQuery } from './query/publication.query';
-import { UpdatePublicationLinkDto } from './dto';
 import { Publication } from '@prisma/client';
 
 @Injectable()
@@ -35,9 +35,10 @@ export class PublicationsService {
   ) {}
 
   public async createLink(dto: CreatePublicationLinkDto) {
-    const { description, link, tags } = dto;
+    const { description, link, tags, userId } = dto;
 
     const publicationLink = new PublicationLinkEntity({
+      authorId: userId,
       description,
       link,
       status: PublicationStatus.Published,
@@ -59,9 +60,10 @@ export class PublicationsService {
   }
 
   public async createPhoto(dto: CreatePublicationPhotoDto) {
-    const { photo, tags } = dto;
+    const { photo, tags, userId } = dto;
 
     const publication = new PublicationPhotoEntity({
+      authorId: userId,
       photo,
       status: PublicationStatus.Published,
       tags,
@@ -82,9 +84,10 @@ export class PublicationsService {
   }
 
   public async createQuote(dto: CreatePublicationQuoteDto) {
-    const { authorQuote, content, tags } = dto;
+    const { authorQuote, content, tags, userId } = dto;
 
     const publicationQuote = new PublicationQuoteEntity({
+      authorId: userId,
       authorQuote,
       content,
       status: PublicationStatus.Published,
@@ -106,9 +109,10 @@ export class PublicationsService {
   }
 
   public async createText(dto: CreatePublicationTextDto) {
-    const { announcement, content, name, tags } = dto;
+    const { announcement, content, name, tags, userId } = dto;
 
     const publicationText = new PublicationTextEntity({
+      authorId: userId,
       announcement,
       content,
       name,
@@ -131,9 +135,10 @@ export class PublicationsService {
   }
 
   public async createVideo(dto: CreatePublicationVideoDto) {
-    const { link, name, tags } = dto;
+    const { link, name, tags, userId } = dto;
 
     const publicationVideo = new PublicationVideoEntity({
+      authorId: userId,
       link,
       name,
       status: PublicationStatus.Published,

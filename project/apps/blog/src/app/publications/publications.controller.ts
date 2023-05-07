@@ -52,7 +52,6 @@ export class PublicationsController {
   @Post('link')
   async createLink(@Body() dto: CreatePublicationLinkDto) {
     const newPublicationLink = await this.publicationsService.createLink(dto);
-
     return fillObject(PublicationLinkRdo, newPublicationLink);
   }
 

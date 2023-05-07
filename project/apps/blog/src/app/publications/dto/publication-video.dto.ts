@@ -1,29 +1,16 @@
-import { ApiProperty, PartialType } from '@nestjs/swagger';
-import { IsString, IsUrl, MaxLength, MinLength } from 'class-validator';
-import { PublicationErrorMessage } from '../consts';
-import { PublicationBaseDto } from './publication-base.dto';
+import { IntersectionType } from '@nestjs/swagger';
+import {
+  CreatePublicationBaseVideoDto,
+  UpdatePublicationBaseVideoDto,
+} from '@project/shared/shared-types';
+import { PublicationBaseWithUserId } from './publication-base-with-user-id.dto';
 
-export class CreatePublicationVideoDto extends PublicationBaseDto {
-  @ApiProperty({
-    description: 'Video link on youtube',
-    example: 'https://youtube.com',
-  })
-  @IsUrl(
-    { host_whitelist: ['youtube.com'] },
-    { message: PublicationErrorMessage.UrlNotValid }
-  )
-  link: string;
+export class CreatePublicationVideoDto extends IntersectionType(
+  PublicationBaseWithUserId,
+  CreatePublicationBaseVideoDto
+) {}
 
-  @ApiProperty({
-    description: 'name of publication',
-    example: 'Funny video',
-  })
-  @IsString()
-  @MinLength(20)
-  @MaxLength(50)
-  name: string;
-}
-
-export class UpdatePublicationVideoDto extends PartialType(
-  CreatePublicationVideoDto
+export class UpdatePublicationVideoDto extends IntersectionType(
+  PublicationBaseWithUserId,
+  UpdatePublicationBaseVideoDto
 ) {}

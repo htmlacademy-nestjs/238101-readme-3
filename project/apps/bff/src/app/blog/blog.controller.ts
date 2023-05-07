@@ -11,7 +11,7 @@ import { BlogService } from './blog.service';
 import { AxiosExceptionFilter } from '../filters';
 import { CheckAuthGuard } from '../guards';
 import { UseridInterceptor } from '../interceptors';
-import { CreatePublicationLinkDto } from './dto';
+import { CreatePublicationBaseLinkDto } from '@project/shared/shared-types';
 
 @Controller('blog')
 @ApiTags('blog')
@@ -23,7 +23,9 @@ export class BlogController {
   @ApiBearerAuth()
   @UseGuards(CheckAuthGuard)
   @UseInterceptors(UseridInterceptor)
-  public async createPublicationLink(@Body() dto: CreatePublicationLinkDto) {
+  public async createPublicationLink(
+    @Body() dto: CreatePublicationBaseLinkDto
+  ) {
     return this.blogService.createPublicationLink(dto);
   }
 }

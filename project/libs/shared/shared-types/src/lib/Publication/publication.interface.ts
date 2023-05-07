@@ -7,6 +7,8 @@ import {
 export interface Publication {
   id?: number;
 
+  authorId: string;
+
   status: PublicationStatus;
   tags?: Tag[];
   type: PublicationKind;

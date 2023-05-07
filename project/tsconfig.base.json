@@ -28,6 +28,9 @@
       ],
       "@project/shared/shared-pipes": ["libs/shared/shared-pipes/src/index.ts"],
       "@project/shared/shared-types": ["libs/shared/shared-types/src/index.ts"],
+      "@project/shared/shared-validation": [
+        "libs/shared/shared-validation/src/index.ts"
+      ],
       "@project/util/util-core": ["libs/util/util-core/src/index.ts"],
       "@project/util/util-types": ["libs/util/util-types/src/index.ts"]
     }

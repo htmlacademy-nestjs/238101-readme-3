@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, OmitType } from '@nestjs/swagger';
 import { PublicationStatus } from '@project/shared/shared-types';
 import { Transform } from 'class-transformer';
 import {
@@ -11,10 +11,10 @@ import {
   Validate,
 } from 'class-validator';
 import {
+  transformTags,
   IsTagOneWord,
   IsTagStartsWithLetter,
-  transformTags,
-} from '../validation';
+} from '@project/shared/shared-validation';
 
 export class PublicationBaseDto {
   @ApiProperty({
@@ -44,7 +44,12 @@ export class PublicationBaseDto {
   @ApiProperty({
     description: 'publication date',
     required: false,
-    example: '2023-01-01 15:38:16.111',
+    example: '2023-05-07T08:00:29.719Z',
   })
   publishedAt: Date;
 }
+
+export class CreatePublicationBaseDto extends OmitType(PublicationBaseDto, [
+  'status',
+  'publishedAt',
+]) {}

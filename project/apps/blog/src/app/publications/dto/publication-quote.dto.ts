@@ -1,27 +1,16 @@
-import { ApiProperty, PartialType } from '@nestjs/swagger';
-import { PublicationBaseDto } from './publication-base.dto';
-import { IsString, MaxLength, MinLength } from 'class-validator';
+import { IntersectionType } from '@nestjs/swagger';
+import {
+  CreatePublicationBaseQuoteDto,
+  UpdatePublicationBaseQuoteDto,
+} from '@project/shared/shared-types';
+import { PublicationBaseWithUserId } from './publication-base-with-user-id.dto';
 
-export class CreatePublicationQuoteDto extends PublicationBaseDto {
-  @ApiProperty({
-    description: 'Author of quote',
-    example: 'Walter White',
-  })
-  @IsString()
-  @MinLength(3)
-  @MaxLength(50)
-  authorQuote: string;
+export class CreatePublicationQuoteDto extends IntersectionType(
+  PublicationBaseWithUserId,
+  CreatePublicationBaseQuoteDto
+) {}
 
-  @ApiProperty({
-    description: 'Quote content',
-    example: 'Say my name.',
-  })
-  @IsString()
-  @MinLength(20)
-  @MaxLength(300)
-  content: string;
-}
-
-export class UpdatePublicationQuoteDto extends PartialType(
-  CreatePublicationQuoteDto
+export class UpdatePublicationQuoteDto extends IntersectionType(
+  PublicationBaseWithUserId,
+  UpdatePublicationBaseQuoteDto
 ) {}

@@ -8,6 +8,8 @@ import { PublicationEntity } from './publication.entity';
 export class PublicationVideoEntity implements PublicationEntity {
   public id?: number;
 
+  public authorId: string;
+
   public link: string;
   public name: string;
   public status: PublicationStatus;
@@ -22,6 +24,8 @@ export class PublicationVideoEntity implements PublicationEntity {
 
   fillEntity(entity: Omit<PublicationVideo, 'type'>) {
     this.id = entity.id;
+
+    this.authorId = entity.authorId;
 
     this.link = entity.link;
     this.name = entity.name;

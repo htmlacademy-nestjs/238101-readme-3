@@ -8,6 +8,8 @@ import { PublicationEntity } from './publication.entity';
 export class PublicationLinkEntity implements PublicationEntity {
   public id?: number;
 
+  public authorId: string;
+
   public description?: string;
   public link: string;
   public status: PublicationStatus;
@@ -21,14 +23,19 @@ export class PublicationLinkEntity implements PublicationEntity {
   }
 
   fillEntity(entity: Omit<PublicationLink, 'type'>) {
+    console.log(this.publishedAt);
     this.id = entity.id;
+
+    this.authorId = entity.authorId;
 
     this.description = entity.description;
     this.link = entity.link;
     this.status = entity.status;
     this.tags = entity.tags;
 
-    this.publishedAt = new Date(entity.publishedAt);
+    this.publishedAt = entity.publishedAt
+      ? new Date(entity.publishedAt)
+      : new Date();
   }
 
   public toObject(): PublicationLink {

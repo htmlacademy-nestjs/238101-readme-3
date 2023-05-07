@@ -1,14 +1,16 @@
-import { ApiProperty, PartialType } from '@nestjs/swagger';
-import { PublicationBaseDto } from './publication-base.dto';
+import { IntersectionType } from '@nestjs/swagger';
+import {
+  CreatePublicationBasePhotoDto,
+  UpdatePublicationBasePhotoDto,
+} from '@project/shared/shared-types';
+import { PublicationBaseWithUserId } from './publication-base-with-user-id.dto';
 
-export class CreatePublicationPhotoDto extends PublicationBaseDto {
-  @ApiProperty({
-    description: 'photo id',
-    example: '64565883481fb09b062178a9',
-  })
-  photo: string;
-}
+export class CreatePublicationPhotoDto extends IntersectionType(
+  PublicationBaseWithUserId,
+  CreatePublicationBasePhotoDto
+) {}
 
-export class UpdatePublicationPhotoDto extends PartialType(
-  CreatePublicationPhotoDto
+export class UpdatePublicationPhotoDto extends IntersectionType(
+  PublicationBaseWithUserId,
+  UpdatePublicationBasePhotoDto
 ) {}

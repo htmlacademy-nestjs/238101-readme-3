@@ -9,6 +9,7 @@ export abstract class PublicationEntity
   implements Publication, Entity<Publication>
 {
   public id?: number;
+  public authorId: string;
 
   public status: PublicationStatus;
   public tags?: string[];

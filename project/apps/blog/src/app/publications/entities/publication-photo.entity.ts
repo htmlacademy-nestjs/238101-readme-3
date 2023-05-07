@@ -8,6 +8,8 @@ import { PublicationEntity } from './publication.entity';
 export class PublicationPhotoEntity implements PublicationEntity {
   public id?: number;
 
+  public authorId: string;
+
   public photo: string;
   public status: PublicationStatus;
   public tags?: string[];
@@ -21,6 +23,8 @@ export class PublicationPhotoEntity implements PublicationEntity {
 
   fillEntity(entity: Omit<PublicationPhoto, 'type'>) {
     this.id = entity.id;
+
+    this.authorId = entity.authorId;
 
     this.photo = entity.photo;
     this.status = entity.status;
