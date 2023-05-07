@@ -1,4 +1,4 @@
-import { ApiProperty, IntersectionType } from '@nestjs/swagger';
+import { ApiProperty, IntersectionType, PartialType } from '@nestjs/swagger';
 import { IsString, IsUrl, MaxLength, MinLength } from 'class-validator';
 import {
   CreatePublicationBaseDto,
@@ -28,7 +28,6 @@ export class CreatePublicationBaseVideoDto extends IntersectionType(
   CreatePublicationBaseDto
 ) {}
 
-export class UpdatePublicationBaseVideoDto extends IntersectionType(
-  PublicationBaseVideoDto,
-  PublicationBaseDto
+export class UpdatePublicationBaseVideoDto extends PartialType(
+  IntersectionType(PublicationBaseVideoDto, PublicationBaseDto)
 ) {}

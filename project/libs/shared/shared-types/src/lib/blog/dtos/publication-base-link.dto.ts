@@ -4,6 +4,7 @@ import {
   PublicationBaseDto,
 } from './publication-base.dto';
 import { IsOptional, IsString, IsUrl, MaxLength } from 'class-validator';
+import { PartialType } from '@nestjs/mapped-types';
 
 class PublicationBaseLinkDto {
   @ApiProperty({
@@ -29,7 +30,6 @@ export class CreatePublicationBaseLinkDto extends IntersectionType(
   CreatePublicationBaseDto
 ) {}
 
-export class UpdatePublicationBaseLinkDto extends IntersectionType(
-  PublicationBaseLinkDto,
-  PublicationBaseDto
+export class UpdatePublicationBaseLinkDto extends PartialType(
+  IntersectionType(PublicationBaseLinkDto, PublicationBaseDto)
 ) {}

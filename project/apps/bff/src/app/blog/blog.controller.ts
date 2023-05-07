@@ -5,6 +5,7 @@ import {
   HttpStatus,
   Param,
   ParseFilePipeBuilder,
+  Patch,
   Post,
   UploadedFile,
   UseFilters,
@@ -26,6 +27,10 @@ import {
   CreatePublicationBaseQuoteDto,
   CreatePublicationBaseTextDto,
   CreatePublicationBaseVideoDto,
+  UpdatePublicationBaseLinkDto,
+  UpdatePublicationBaseQuoteDto,
+  UpdatePublicationBaseTextDto,
+  UpdatePublicationBaseVideoDto,
 } from '@project/shared/shared-types';
 import {
   BffPublicationAuthorRdo,
@@ -71,6 +76,27 @@ export class BlogController {
     return { ...publicationRdo, user: userRdo };
   }
 
+  @Patch('/link/:id')
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: BffPublicationLinkFullInfoRdo,
+  })
+  @ApiBearerAuth()
+  @UseGuards(CheckAuthGuard)
+  @UseInterceptors(UseridInterceptor)
+  public async updatePublicationLink(
+    @Param('id') id: number,
+    @Body() dto: UpdatePublicationBaseLinkDto
+  ) {
+    const { publication, userInfo } =
+      await this.blogService.updatePublicationLink(id, dto);
+
+    const userRdo = fillObject(BffPublicationAuthorRdo, userInfo);
+    const publicationRdo = fillObject(BffPublicationLinkRdo, publication);
+
+    return { ...publicationRdo, user: userRdo };
+  }
+
   @Post('/photo')
   @ApiConsumes('multipart/form-data')
   @ApiResponse({
@@ -106,6 +132,42 @@ export class BlogController {
     return { ...publicationRdo, user: userRdo };
   }
 
+  @Patch('/photo/:id')
+  @ApiConsumes('multipart/form-data')
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: BffPublicationPhotoFullInfoRdo,
+  })
+  @ApiBearerAuth()
+  @UseGuards(CheckAuthGuard)
+  @UseInterceptors(UseridInterceptor)
+  @UseInterceptors(FileInterceptor('photo'))
+  public async updatePublicationPhoto(
+    @Param('id') id: number,
+    @Body() dto: BffPublicationPhotoDto,
+    @UploadedFile(
+      new ParseFilePipeBuilder()
+        .addFileTypeValidator({
+          fileType: ALLOWED_PHOTO_EXTENCION,
+        })
+        .addMaxSizeValidator({
+          maxSize: MAX_PHOTO_BITE_SIZE,
+        })
+        .build({
+          errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
+        })
+    )
+    photo: Express.Multer.File
+  ) {
+    const { publication, userInfo } =
+      await this.blogService.updatePublicationPhoto(id, dto, photo);
+
+    const userRdo = fillObject(BffPublicationAuthorRdo, userInfo);
+    const publicationRdo = fillObject(BffPublicationPhotoRdo, publication);
+
+    return { ...publicationRdo, user: userRdo };
+  }
+
   @Post('/quote')
   @ApiResponse({
     status: HttpStatus.CREATED,
@@ -114,11 +176,32 @@ export class BlogController {
   @ApiBearerAuth()
   @UseGuards(CheckAuthGuard)
   @UseInterceptors(UseridInterceptor)
-  public async createPublicationQuote(
+  public async updatePublicationQuote(
     @Body() dto: CreatePublicationBaseQuoteDto
   ) {
     const { publication, userInfo } =
       await this.blogService.createPublicationQuote(dto);
+
+    const userRdo = fillObject(BffPublicationAuthorRdo, userInfo);
+    const publicationRdo = fillObject(BffPublicationQuoteRdo, publication);
+
+    return { ...publicationRdo, user: userRdo };
+  }
+
+  @Patch('/quote/:id')
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: BffPublicationQuoteFullInfoRdo,
+  })
+  @ApiBearerAuth()
+  @UseGuards(CheckAuthGuard)
+  @UseInterceptors(UseridInterceptor)
+  public async createPublicationQuote(
+    @Param('id') id: number,
+    @Body() dto: UpdatePublicationBaseQuoteDto
+  ) {
+    const { publication, userInfo } =
+      await this.blogService.updatePublicationQuote(id, dto);
 
     const userRdo = fillObject(BffPublicationAuthorRdo, userInfo);
     const publicationRdo = fillObject(BffPublicationQuoteRdo, publication);
@@ -146,6 +229,27 @@ export class BlogController {
     return { ...publicationRdo, user: userRdo };
   }
 
+  @Patch('/text/:id')
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: BffPublicationTextFullInfoRdo,
+  })
+  @ApiBearerAuth()
+  @UseGuards(CheckAuthGuard)
+  @UseInterceptors(UseridInterceptor)
+  public async updatePublicationText(
+    @Param('id') id: number,
+    @Body() dto: UpdatePublicationBaseTextDto
+  ) {
+    const { publication, userInfo } =
+      await this.blogService.updatePublicationText(id, dto);
+
+    const userRdo = fillObject(BffPublicationAuthorRdo, userInfo);
+    const publicationRdo = fillObject(BffPublicationTextRdo, publication);
+
+    return { ...publicationRdo, user: userRdo };
+  }
+
   @Post('/video')
   @ApiResponse({
     status: HttpStatus.CREATED,
@@ -159,6 +263,27 @@ export class BlogController {
   ) {
     const { publication, userInfo } =
       await this.blogService.createPublicationVideo(dto);
+
+    const userRdo = fillObject(BffPublicationAuthorRdo, userInfo);
+    const publicationRdo = fillObject(BffPublicationVideoRdo, publication);
+
+    return { ...publicationRdo, user: userRdo };
+  }
+
+  @Patch('/video/:id')
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: BffPublicationVideoFullInfoRdo,
+  })
+  @ApiBearerAuth()
+  @UseGuards(CheckAuthGuard)
+  @UseInterceptors(UseridInterceptor)
+  public async updatePublicationVideo(
+    @Param('id') id: number,
+    @Body() dto: UpdatePublicationBaseVideoDto
+  ) {
+    const { publication, userInfo } =
+      await this.blogService.updatePublicationVideo(id, dto);
 
     const userRdo = fillObject(BffPublicationAuthorRdo, userInfo);
     const publicationRdo = fillObject(BffPublicationVideoRdo, publication);

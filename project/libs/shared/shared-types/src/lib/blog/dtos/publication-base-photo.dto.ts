@@ -3,6 +3,7 @@ import {
   CreatePublicationBaseDto,
   PublicationBaseDto,
 } from './publication-base.dto';
+import { PartialType } from '@nestjs/mapped-types';
 
 class PublicationBasePhotoDto {
   @ApiProperty({
@@ -17,7 +18,6 @@ export class CreatePublicationBasePhotoDto extends IntersectionType(
   CreatePublicationBaseDto
 ) {}
 
-export class UpdatePublicationBasePhotoDto extends IntersectionType(
-  PublicationBasePhotoDto,
-  PublicationBaseDto
+export class UpdatePublicationBasePhotoDto extends PartialType(
+  IntersectionType(PublicationBasePhotoDto, PublicationBaseDto)
 ) {}

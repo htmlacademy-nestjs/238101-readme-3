@@ -1,4 +1,4 @@
-import { ApiProperty, IntersectionType } from '@nestjs/swagger';
+import { ApiProperty, IntersectionType, PartialType } from '@nestjs/swagger';
 import {
   CreatePublicationBaseDto,
   PublicationBaseDto,
@@ -36,7 +36,6 @@ export class CreatePublicationBaseTextDto extends IntersectionType(
   CreatePublicationBaseDto
 ) {}
 
-export class UpdatePublicationBaseTextDto extends IntersectionType(
-  PublicationBaseTextDto,
-  PublicationBaseDto
+export class UpdatePublicationBaseTextDto extends PartialType(
+  IntersectionType(PublicationBaseTextDto, PublicationBaseDto)
 ) {}
