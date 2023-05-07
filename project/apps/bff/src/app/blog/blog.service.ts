@@ -149,4 +149,10 @@ export class BlogService {
       userInfo,
     };
   }
+
+  public async deletePublication(id: number) {
+    return this.httpService.axiosRef.delete(
+      `${ApplicationServiceURL.Blog}/publications/${id}`
+    );
+  }
 }

@@ -1,7 +1,9 @@
 import {
   Body,
   Controller,
+  Delete,
   HttpStatus,
+  Param,
   ParseFilePipeBuilder,
   Post,
   UploadedFile,
@@ -162,5 +164,16 @@ export class BlogController {
     const publicationRdo = fillObject(BffPublicationVideoRdo, publication);
 
     return { ...publicationRdo, user: userRdo };
+  }
+
+  @Delete(':id')
+  @ApiResponse({
+    status: HttpStatus.NO_CONTENT,
+  })
+  @ApiBearerAuth()
+  @UseGuards(CheckAuthGuard)
+  @UseInterceptors(UseridInterceptor)
+  public async deletePublication(@Param('id') id: number) {
+    this.blogService.deletePublication(id);
   }
 }
