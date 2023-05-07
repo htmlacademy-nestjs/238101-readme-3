@@ -2,19 +2,25 @@ import {
   Body,
   Controller,
   HttpStatus,
+  ParseFilePipeBuilder,
   Post,
+  UploadedFile,
   UseFilters,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiConsumes,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { BlogService } from './blog.service';
 import { AxiosExceptionFilter } from '../filters';
 import { CheckAuthGuard } from '../guards';
 import { UseridInterceptor } from '../interceptors';
 import {
   CreatePublicationBaseLinkDto,
-  CreatePublicationBasePhotoDto,
   CreatePublicationBaseQuoteDto,
   CreatePublicationBaseTextDto,
   CreatePublicationBaseVideoDto,
@@ -33,6 +39,9 @@ import {
   BffPublicationVideoRdo,
 } from './rdo';
 import { fillObject } from '@project/util/util-core';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { ALLOWED_PHOTO_EXTENCION, MAX_PHOTO_BITE_SIZE } from './consts';
+import { BffPublicationPhotoDto } from './dto';
 
 @Controller('blog')
 @ApiTags('blog')
@@ -61,6 +70,7 @@ export class BlogController {
   }
 
   @Post('/photo')
+  @ApiConsumes('multipart/form-data')
   @ApiResponse({
     status: HttpStatus.CREATED,
     type: BffPublicationPhotoFullInfoRdo,
@@ -68,11 +78,25 @@ export class BlogController {
   @ApiBearerAuth()
   @UseGuards(CheckAuthGuard)
   @UseInterceptors(UseridInterceptor)
+  @UseInterceptors(FileInterceptor('photo'))
   public async createPublicationPhoto(
-    @Body() dto: CreatePublicationBasePhotoDto
+    @Body() dto: BffPublicationPhotoDto,
+    @UploadedFile(
+      new ParseFilePipeBuilder()
+        .addFileTypeValidator({
+          fileType: ALLOWED_PHOTO_EXTENCION,
+        })
+        .addMaxSizeValidator({
+          maxSize: MAX_PHOTO_BITE_SIZE,
+        })
+        .build({
+          errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
+        })
+    )
+    photo: Express.Multer.File
   ) {
     const { publication, userInfo } =
-      await this.blogService.createPublicationPhoto(dto);
+      await this.blogService.createPublicationPhoto(dto, photo);
 
     const userRdo = fillObject(BffPublicationAuthorRdo, userInfo);
     const publicationRdo = fillObject(BffPublicationPhotoRdo, publication);

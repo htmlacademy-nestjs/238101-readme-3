@@ -3,7 +3,6 @@ import { Injectable } from '@nestjs/common';
 import { ApplicationServiceURL } from '../app.config';
 import {
   CreatePublicationBaseLinkDto,
-  CreatePublicationBasePhotoDto,
   CreatePublicationBaseQuoteDto,
   CreatePublicationBaseTextDto,
   CreatePublicationBaseVideoDto,
@@ -12,8 +11,11 @@ import {
   PublicationQuoteRdo,
   PublicationTextRdo,
   PublicationVideoRdo,
+  StoredFile,
   UserRdo,
 } from '@project/shared/shared-types';
+import { BffPublicationPhotoDto } from './dto';
+import FormData from 'form-data';
 
 @Injectable()
 export class BlogService {
@@ -25,6 +27,39 @@ export class BlogService {
     );
 
     return data;
+  }
+
+  private async uploadPublicationPhoto(
+    photo: Express.Multer.File
+  ): Promise<StoredFile | null> {
+    const formData = new FormData();
+    formData.append('file', photo.buffer, { filename: photo.originalname });
+
+    const { data: uploadedPublicationPhoto } =
+      await this.httpService.axiosRef.post<StoredFile>(
+        `${ApplicationServiceURL.Uploader}/files/upload`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+
+    return uploadedPublicationPhoto;
+  }
+
+  private async getUploadedPhoto(fileId: string): Promise<StoredFile | null> {
+    const { data: photoStoredFile } =
+      await this.httpService.axiosRef.get<StoredFile>(
+        `${ApplicationServiceURL.Uploader}/files/${fileId}`
+      );
+
+    if (!photoStoredFile) {
+      return null;
+    }
+
+    return photoStoredFile;
   }
 
   public async createPublicationLink(dto: CreatePublicationBaseLinkDto) {
@@ -42,17 +77,30 @@ export class BlogService {
     };
   }
 
-  public async createPublicationPhoto(dto: CreatePublicationBasePhotoDto) {
+  public async createPublicationPhoto(
+    dto: Omit<BffPublicationPhotoDto, 'photo'>,
+    photo: Express.Multer.File
+  ) {
+    const tags = dto?.tags ? JSON.parse(dto.tags) : [];
+
+    const uploadPublicationPhoto = await this.uploadPublicationPhoto(photo);
+
     const { data: publication } =
       await this.httpService.axiosRef.post<PublicationPhotoRdo>(
         `${ApplicationServiceURL.Blog}/publications/photo`,
-        dto
+        {
+          ...dto,
+          tags,
+          photo: uploadPublicationPhoto.id,
+        }
       );
 
     const userInfo = await this.getPublicationAuthor(publication.authorId);
 
+    const photoUploadedFile = await this.getUploadedPhoto(publication.photo);
+
     return {
-      publication,
+      publication: { ...publication, photo: photoUploadedFile?.path || '' },
       userInfo,
     };
   }
