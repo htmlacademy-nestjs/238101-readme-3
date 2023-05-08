@@ -388,4 +388,15 @@ export class BlogController {
       commentsQuery
     );
   }
+
+  @Delete('comments/:commentId')
+  @ApiBearerAuth()
+  @UseGuards(CheckAuthGuard)
+  @UseInterceptors(UseridInterceptor)
+  deleteComment(
+    @Param('commentId') commentId: number,
+    @UserId() userId: string
+  ) {
+    return this.blogService.deleteComment(commentId, userId);
+  }
 }

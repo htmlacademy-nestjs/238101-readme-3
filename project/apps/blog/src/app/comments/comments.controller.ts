@@ -18,6 +18,7 @@ import {
   DeleteCommentRdo,
 } from '@project/shared/shared-types';
 import { CreateCommentDto } from './dto/create-comment.dto';
+import { UserId } from '@project/shared/shared-decorators';
 
 @ApiTags('Comments')
 @Controller('comments')
@@ -73,8 +74,11 @@ export class CommentsController {
     type: DeleteCommentRdo,
   })
   @Delete(':id')
-  async deleteComment(@Param('id') commentId: number) {
-    await this.commentsService.deleteComment(commentId);
+  async deleteComment(
+    @Param('id') commentId: number,
+    @UserId() userId: string
+  ) {
+    await this.commentsService.deleteComment(commentId, userId);
 
     return fillObject(DeleteCommentRdo, {
       id: commentId,

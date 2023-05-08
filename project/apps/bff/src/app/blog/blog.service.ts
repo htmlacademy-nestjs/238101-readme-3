@@ -10,6 +10,7 @@ import {
   CreatePublicationBaseQuoteDto,
   CreatePublicationBaseTextDto,
   CreatePublicationBaseVideoDto,
+  DeleteCommentRdo,
   PublicationLinkRdo,
   PublicationPhotoRdo,
   PublicationQuery,
@@ -331,26 +332,27 @@ export class BlogService {
   }
 
   public async removeLike(publicationId: number, userId: string) {
-    const { data: like } = await this.httpService.axiosRef.delete<string>(
-      `${ApplicationServiceURL.Blog}/likes`,
-      {
-        headers: {
-          userId,
-        },
-        params: {
-          publicationId,
-        },
-      }
-    );
+    const { data: deletedLike } =
+      await this.httpService.axiosRef.delete<string>(
+        `${ApplicationServiceURL.Blog}/likes`,
+        {
+          headers: {
+            userId,
+          },
+          params: {
+            publicationId,
+          },
+        }
+      );
 
-    return like;
+    return deletedLike;
   }
 
   public async getCommentsByPublication(
     publicationId: number,
     commentsQuery: CommentsQuery
   ) {
-    const { data: comments } = await this.httpService.axiosRef.get<Comment>(
+    const { data: comments } = await this.httpService.axiosRef.get<Comment[]>(
       `${ApplicationServiceURL.Blog}/comments/${publicationId}`,
       {
         params: commentsQuery,
@@ -367,5 +369,19 @@ export class BlogService {
     );
 
     return like;
+  }
+
+  public async deleteComment(commentId: number, userId: string) {
+    const { data: deletedComment } =
+      await this.httpService.axiosRef.delete<DeleteCommentRdo>(
+        `${ApplicationServiceURL.Blog}/comments/${commentId}`,
+        {
+          headers: {
+            userId,
+          },
+        }
+      );
+
+    return deletedComment;
   }
 }
