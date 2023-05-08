@@ -3,9 +3,11 @@ import { CRUDRepository } from '@project/util/util-types';
 import { PublicationEntities } from '../entities';
 import { PrismaService } from '../../prisma/prisma.service';
 import { Publication } from '@prisma/client';
-import { PostQuery } from '../query/publication.query';
-import { PublicationStatus } from '@project/shared/shared-types';
-import { PublicationSortKind } from '../consts/publication.const';
+import {
+  PublicationQuery,
+  PublicationSortKind,
+  PublicationStatus,
+} from '@project/shared/shared-types';
 
 @Injectable()
 export class PublicationsRepository
@@ -62,7 +64,7 @@ export class PublicationsRepository
     page,
     publicationKind,
     tag,
-  }: PostQuery): Promise<Publication[]> {
+  }: PublicationQuery): Promise<Publication[]> {
     return this.prisma.publication.findMany({
       where: {
         authorId,

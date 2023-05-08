@@ -8,6 +8,7 @@ import {
   ParseFilePipeBuilder,
   Patch,
   Post,
+  Query,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -26,6 +27,7 @@ import {
   CreatePublicationBaseQuoteDto,
   CreatePublicationBaseTextDto,
   CreatePublicationBaseVideoDto,
+  PublicationQuery,
   UpdatePublicationBaseLinkDto,
   UpdatePublicationBaseQuoteDto,
   UpdatePublicationBaseTextDto,
@@ -315,6 +317,22 @@ export class BlogController {
   @UseInterceptors(UseridInterceptor)
   public async repostPublication(@Body() dto: BffPublcationRepost) {
     return this.blogService.repostPublication(dto);
+  }
+
+  @Get('publications')
+  @ApiResponse({
+    status: HttpStatus.OK,
+  })
+  public async getAllPublications(@Query() publicationQuery: PublicationQuery) {
+    return this.blogService.getPublications(publicationQuery);
+  }
+
+  @Get('publications/:id')
+  @ApiResponse({
+    status: HttpStatus.OK,
+  })
+  public async getPublicationById(@Param('id') id: number) {
+    return this.blogService.getPublicationById(id);
   }
 
   @Get('/draft')

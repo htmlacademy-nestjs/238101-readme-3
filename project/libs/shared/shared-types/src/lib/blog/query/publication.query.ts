@@ -4,11 +4,11 @@ import {
   PublicationQueryDefaultSettings,
   PublicationSortKind,
   Sorting,
-} from '../consts/publication.const';
+} from './publication.const';
 import { ApiProperty } from '@nestjs/swagger';
 import { PublicationKind } from '@project/shared/shared-types';
 
-export class PostQuery {
+export class PublicationQuery {
   @ApiProperty({
     required: false,
     default: PublicationQueryDefaultSettings.CountLimit,

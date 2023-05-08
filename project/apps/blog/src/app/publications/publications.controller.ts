@@ -33,12 +33,12 @@ import { PublicationsService } from './publications.service';
 import {
   PublicationLinkRdo,
   PublicationPhotoRdo,
+  PublicationQuery,
   PublicationQuoteRdo,
   PublicationRepostDto,
   PublicationTextRdo,
   PublicationVideoRdo,
 } from '@project/shared/shared-types';
-import { PostQuery } from './query/publication.query';
 import { transformPublicationToRdo } from './helpers';
 import { IsUserAuthor, IsRepostUnique } from './guards';
 import { AllPublicationsSchema } from './rdo';
@@ -215,7 +215,7 @@ export class PublicationsController {
       },
     },
   })
-  public async findAll(@Query() query: PostQuery) {
+  public async findAll(@Query() query: PublicationQuery) {
     const publications = await this.publicationsService.findAll(query);
 
     return publications.map((publication) =>

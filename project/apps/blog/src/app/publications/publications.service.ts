@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import {
+  PublicationQuery,
   PublicationRepostDto,
   PublicationStatus,
 } from '@project/shared/shared-types';
@@ -28,7 +29,6 @@ import {
 } from './entities';
 
 import { PublicationsRepository } from './repositories/publications.repository';
-import { PostQuery } from './query/publication.query';
 import { Publication } from '@prisma/client';
 
 @Injectable()
@@ -162,7 +162,7 @@ export class PublicationsService {
     return this.publicationsRepository.update(id, publicationEntity);
   }
 
-  public async findAll(query: PostQuery) {
+  public async findAll(query: PublicationQuery) {
     return await this.publicationsRepository.findAll(query);
   }
 

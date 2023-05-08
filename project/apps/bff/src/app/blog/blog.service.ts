@@ -8,6 +8,7 @@ import {
   CreatePublicationBaseVideoDto,
   PublicationLinkRdo,
   PublicationPhotoRdo,
+  PublicationQuery,
   PublicationQuoteRdo,
   PublicationTextRdo,
   PublicationVideoRdo,
@@ -274,6 +275,25 @@ export class BlogService {
       );
 
     return repostedPublication;
+  }
+
+  public async getPublications(params: PublicationQuery) {
+    const { data: publications } = await this.httpService.axiosRef.get<
+      Publications[]
+    >(`${ApplicationServiceURL.Blog}/publications`, {
+      params,
+    });
+
+    return publications;
+  }
+
+  public async getPublicationById(publicationId: number) {
+    const { data: publications } =
+      await this.httpService.axiosRef.get<Publications>(
+        `${ApplicationServiceURL.Blog}/publications/${publicationId}`
+      );
+
+    return publications;
   }
 
   public async getDrafts(userId: string) {
