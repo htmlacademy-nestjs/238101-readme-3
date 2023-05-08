@@ -345,4 +345,26 @@ export class BlogController {
   public async getDrafts(@UserId() userId: string) {
     return this.blogService.getDrafts(userId);
   }
+
+  @Post('like/:publicationId')
+  @UseGuards(CheckAuthGuard)
+  @UseInterceptors(UseridInterceptor)
+  @ApiBearerAuth()
+  addLike(
+    @Param('publicationId') publicationId: number,
+    @UserId() userId: string
+  ) {
+    return this.blogService.addLike(publicationId, userId);
+  }
+
+  @Delete('like/:publicationId')
+  @ApiBearerAuth()
+  @UseGuards(CheckAuthGuard)
+  @UseInterceptors(UseridInterceptor)
+  removeLike(
+    @Param('publicationId') publicationId: number,
+    @UserId() userId: string
+  ) {
+    return this.blogService.removeLike(publicationId, userId);
+  }
 }

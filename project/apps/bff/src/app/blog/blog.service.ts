@@ -309,4 +309,36 @@ export class BlogService {
 
     return publications;
   }
+
+  public async addLike(publicationId: number, userId: string) {
+    const { data: like } = await this.httpService.axiosRef.post<string>(
+      `${ApplicationServiceURL.Blog}/likes`,
+      {
+        userId,
+      },
+      {
+        params: {
+          publicationId,
+        },
+      }
+    );
+
+    return like;
+  }
+
+  public async removeLike(publicationId: number, userId: string) {
+    const { data: like } = await this.httpService.axiosRef.delete<string>(
+      `${ApplicationServiceURL.Blog}/likes`,
+      {
+        headers: {
+          userId,
+        },
+        params: {
+          publicationId,
+        },
+      }
+    );
+
+    return like;
+  }
 }
