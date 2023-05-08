@@ -35,4 +35,12 @@ export class PublicationBaseRdo {
   @ApiProperty({})
   @Expose()
   comments: Comment[];
+
+  @ApiProperty({})
+  @Expose()
+  isReposted: boolean;
+
+  @ApiProperty({})
+  @Expose()
+  originalAuthorId: string;
 }
