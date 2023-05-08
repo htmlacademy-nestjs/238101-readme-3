@@ -321,6 +321,11 @@ export class BlogController {
     return this.blogService.repostPublication(dto);
   }
 
+  @Get('publications/search')
+  public async getPublicationsBySearch(@Query('search') search: string) {
+    return this.blogService.getPublicationsBySearch(search);
+  }
+
   @Get('publications')
   @ApiResponse({
     status: HttpStatus.OK,

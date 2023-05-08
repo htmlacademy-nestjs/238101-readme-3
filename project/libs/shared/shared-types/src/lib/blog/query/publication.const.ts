@@ -15,3 +15,5 @@ export const PublicationQueryDefaultSettings = {
   Likes: Sorting.Desc,
   Comments: Sorting.Desc,
 } as const;
+
+export const SEARCH_LIMIT = 20;

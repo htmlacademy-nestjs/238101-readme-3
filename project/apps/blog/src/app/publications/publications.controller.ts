@@ -39,7 +39,10 @@ import {
   PublicationTextRdo,
   PublicationVideoRdo,
 } from '@project/shared/shared-types';
-import { transformPublicationToRdo } from './helpers';
+import {
+  transformPublicationToRdo,
+  transformPublicationsToRdo,
+} from './helpers';
 import { IsUserAuthor, IsRepostUnique } from './guards';
 import { AllPublicationsSchema } from './rdo';
 import { UserId } from '@project/shared/shared-decorators';
@@ -217,13 +220,10 @@ export class PublicationsController {
   })
   public async findAll(@Query() query: PublicationQuery) {
     const publications = await this.publicationsService.findAll(query);
-
-    return publications.map((publication) =>
-      transformPublicationToRdo(publication)
-    );
+    return transformPublicationsToRdo(publications);
   }
 
-  @Get('/draft')
+  @Get('draft')
   @ApiResponse({
     description: 'return all drafted publications',
     status: HttpStatus.OK,
@@ -237,6 +237,37 @@ export class PublicationsController {
   })
   public async findAllDrafts(@UserId() userId: string) {
     return this.publicationsService.findAllDrafts(userId);
+  }
+
+  @Post('repost')
+  @ApiResponse({
+    description: 'publication has been reposted',
+    status: HttpStatus.CREATED,
+    isArray: false,
+    schema: {
+      type: 'object',
+      oneOf: AllPublicationsSchema,
+    },
+  })
+  @UseGuards(IsRepostUnique)
+  public async repostPublication(@Body() dto: PublicationRepostDto) {
+    const repostedPublication =
+      await this.publicationsService.repostPublication(dto);
+    return transformPublicationToRdo(repostedPublication);
+  }
+
+  @Get('count/:userId')
+  public async getCountPublicationByUser(@Param('userId') userId: string) {
+    return this.publicationsService.getCountPublicationByUser(userId);
+  }
+
+  @Get('search')
+  public async getPublicationsBySearch(@Query('search') search: string) {
+    const publications = await this.publicationsService.getPublicationsBySearch(
+      search
+    );
+
+    return transformPublicationsToRdo(publications);
   }
 
   @Get(':id')
@@ -263,27 +294,5 @@ export class PublicationsController {
   @HttpCode(HttpStatus.NO_CONTENT)
   public async delete(@Param('id') id: number) {
     await this.publicationsService.delete(id);
-  }
-
-  @Post('repost')
-  @ApiResponse({
-    description: 'publication has been reposted',
-    status: HttpStatus.CREATED,
-    isArray: false,
-    schema: {
-      type: 'object',
-      oneOf: AllPublicationsSchema,
-    },
-  })
-  @UseGuards(IsRepostUnique)
-  public async repostPublication(@Body() dto: PublicationRepostDto) {
-    const repostedPublication =
-      await this.publicationsService.repostPublication(dto);
-    return transformPublicationToRdo(repostedPublication);
-  }
-
-  @Get('count/:userId')
-  public async getCountPublicationByUser(@Param('userId') userId: string) {
-    return this.publicationsService.getCountPublicationByUser(userId);
   }
 }

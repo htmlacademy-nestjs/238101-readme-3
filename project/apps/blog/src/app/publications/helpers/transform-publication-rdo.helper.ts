@@ -32,3 +32,9 @@ export const transformPublicationToRdo = (publication: Publication) => {
 
   return publication;
 };
+
+export const transformPublicationsToRdo = (publications: Publication[]) => {
+  return publications.map((publication) =>
+    transformPublicationToRdo(publication)
+  );
+};

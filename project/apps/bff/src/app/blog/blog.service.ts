@@ -282,6 +282,18 @@ export class BlogService {
     return repostedPublication;
   }
 
+  public async getPublicationsBySearch(search: string) {
+    const { data: publications } = await this.httpService.axiosRef.get<
+      Publications[]
+    >(`${ApplicationServiceURL.Blog}/publications/search`, {
+      params: {
+        search,
+      },
+    });
+
+    return publications;
+  }
+
   public async getPublications(params: PublicationQuery) {
     const { data: publications } = await this.httpService.axiosRef.get<
       Publications[]

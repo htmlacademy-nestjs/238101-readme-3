@@ -206,4 +206,8 @@ export class PublicationsService {
   public async findAllDrafts(userId: string) {
     return this.publicationsRepository.findAllDrafts(userId);
   }
+
+  public async getPublicationsBySearch(search: string) {
+    return this.publicationsRepository.findAllBySearch(search);
+  }
 }

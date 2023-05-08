@@ -7,6 +7,7 @@ import {
   PublicationQuery,
   PublicationSortKind,
   PublicationStatus,
+  SEARCH_LIMIT,
 } from '@project/shared/shared-types';
 
 @Injectable()
@@ -132,6 +133,18 @@ export class PublicationsRepository
         authorId: userId,
         status: PublicationStatus.Draft,
       },
+    });
+  }
+
+  public async findAllBySearch(search: string): Promise<Publication[]> {
+    return this.prisma.publication.findMany({
+      where: {
+        name: {
+          contains: search,
+        },
+        status: PublicationStatus.Published,
+      },
+      take: SEARCH_LIMIT,
     });
   }
 }
