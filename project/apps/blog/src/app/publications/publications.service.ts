@@ -202,4 +202,8 @@ export class PublicationsService {
   public async getCountPublicationByUser(userId: string) {
     return this.publicationsRepository.getCountPublicationByUser(userId);
   }
+
+  public async findAllDrafts(userId: string) {
+    return this.publicationsRepository.findAllDrafts(userId);
+  }
 }

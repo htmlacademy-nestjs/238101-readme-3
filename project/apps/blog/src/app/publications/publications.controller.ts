@@ -42,6 +42,7 @@ import { PostQuery } from './query/publication.query';
 import { transformPublicationToRdo } from './helpers';
 import { IsUserAuthor, IsRepostUnique } from './guards';
 import { AllPublicationsSchema } from './rdo';
+import { UserId } from '@project/shared/shared-decorators';
 
 @ApiTags('Publications')
 @Controller('publications')
@@ -220,6 +221,22 @@ export class PublicationsController {
     return publications.map((publication) =>
       transformPublicationToRdo(publication)
     );
+  }
+
+  @Get('/draft')
+  @ApiResponse({
+    description: 'return all drafted publications',
+    status: HttpStatus.OK,
+    isArray: true,
+    schema: {
+      type: 'array',
+      items: {
+        oneOf: AllPublicationsSchema,
+      },
+    },
+  })
+  public async findAllDrafts(@UserId() userId: string) {
+    return this.publicationsService.findAllDrafts(userId);
   }
 
   @Get(':id')

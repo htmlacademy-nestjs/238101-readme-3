@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   HttpStatus,
   Param,
   ParseFilePipeBuilder,
@@ -314,5 +315,16 @@ export class BlogController {
   @UseInterceptors(UseridInterceptor)
   public async repostPublication(@Body() dto: BffPublcationRepost) {
     return this.blogService.repostPublication(dto);
+  }
+
+  @Get('/draft')
+  @ApiResponse({
+    status: HttpStatus.OK,
+  })
+  @ApiBearerAuth()
+  @UseGuards(CheckAuthGuard)
+  @UseInterceptors(UseridInterceptor)
+  public async getDrafts(@UserId() userId: string) {
+    return this.blogService.getDrafts(userId);
   }
 }

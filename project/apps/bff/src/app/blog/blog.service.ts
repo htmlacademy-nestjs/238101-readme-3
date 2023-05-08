@@ -275,4 +275,18 @@ export class BlogService {
 
     return repostedPublication;
   }
+
+  public async getDrafts(userId: string) {
+    const { data: publications } =
+      await this.httpService.axiosRef.get<Publications>(
+        `${ApplicationServiceURL.Blog}/publications/draft`,
+        {
+          headers: {
+            userId,
+          },
+        }
+      );
+
+    return publications;
+  }
 }

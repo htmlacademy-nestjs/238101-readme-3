@@ -45,6 +45,7 @@ export class PublicationsRepository
     return this.prisma.publication.findFirst({
       where: {
         id: postId,
+        status: PublicationStatus.Published,
       },
       include: {
         comments: true,
@@ -62,19 +63,16 @@ export class PublicationsRepository
     publicationKind,
     tag,
   }: PostQuery): Promise<Publication[]> {
-    console.log(
-      sortingBy === PublicationSortKind.PublishedDate ? sortKind : undefined
-    );
-    console.log(sortingBy === PublicationSortKind.Likes ? sortKind : undefined);
-
     return this.prisma.publication.findMany({
       where: {
         authorId,
         status: PublicationStatus.Published,
         type: publicationKind,
-        tags: {
-          hasSome: tag,
-        },
+        tags: tag
+          ? {
+              hasSome: tag,
+            }
+          : undefined,
       },
       orderBy: {
         publishedAt:
@@ -122,6 +120,15 @@ export class PublicationsRepository
     return this.prisma.publication.count({
       where: {
         authorId: userId,
+      },
+    });
+  }
+
+  public async findAllDrafts(userId: string): Promise<Publication[]> {
+    return this.prisma.publication.findMany({
+      where: {
+        authorId: userId,
+        status: PublicationStatus.Draft,
       },
     });
   }
