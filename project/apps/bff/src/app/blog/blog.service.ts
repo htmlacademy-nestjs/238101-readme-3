@@ -2,6 +2,8 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { ApplicationServiceURL } from '../app.config';
 import {
+  Comment,
+  CommentsQuery,
   CreatePublicationBaseLinkDto,
   CreatePublicationBaseQuoteDto,
   CreatePublicationBaseTextDto,
@@ -340,5 +342,21 @@ export class BlogService {
     );
 
     return like;
+  }
+
+  public async getCommentsByPublication(
+    publicationId: number,
+    commentsQuery: CommentsQuery
+  ) {
+    const { data: comments } = await this.httpService.axiosRef.get<Comment>(
+      `${ApplicationServiceURL.Blog}/comments/${publicationId}`,
+      {
+        params: {
+          ...commentsQuery,
+        },
+      }
+    );
+
+    return comments;
   }
 }

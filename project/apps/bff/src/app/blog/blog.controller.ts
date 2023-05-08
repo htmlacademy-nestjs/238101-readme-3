@@ -23,6 +23,7 @@ import { BlogService } from './blog.service';
 import { CheckAuthGuard } from '../guards';
 import { UseridInterceptor } from '../interceptors';
 import {
+  CommentsQuery,
   CreatePublicationBaseLinkDto,
   CreatePublicationBaseQuoteDto,
   CreatePublicationBaseTextDto,
@@ -366,5 +367,16 @@ export class BlogController {
     @UserId() userId: string
   ) {
     return this.blogService.removeLike(publicationId, userId);
+  }
+
+  @Get('comments/:publicationId')
+  getCommentsByPublication(
+    @Param('publicationId') publicationId: number,
+    @Query('commentsQuery') commentsQuery: CommentsQuery
+  ) {
+    return this.blogService.getCommentsByPublication(
+      publicationId,
+      commentsQuery
+    );
   }
 }

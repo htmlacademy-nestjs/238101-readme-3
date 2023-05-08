@@ -3,6 +3,7 @@ import { CreateCommentDto } from './dto';
 import { CommentsRepository } from './repositories';
 import { CommentEntity } from './entities';
 import { CommentMessage } from './consts';
+import { CommentsQuery } from '@project/shared/shared-types';
 
 @Injectable()
 export class CommentsService {
@@ -13,8 +14,14 @@ export class CommentsService {
     return this.commentsRepository.create(commentEntity);
   }
 
-  async getAllComentsByPublication(publicationId: number) {
-    return this.commentsRepository.findByPublication(publicationId);
+  async getAllComentsByPublication(
+    publicationId: number,
+    commentsQuery: CommentsQuery
+  ) {
+    return this.commentsRepository.findByPublication(
+      publicationId,
+      commentsQuery
+    );
   }
 
   async getCommentById(commentId: number) {

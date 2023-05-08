@@ -14,6 +14,7 @@ import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CommentsService } from './comments.service';
 import { fillObject } from '@project/util/util-core';
 import { CommentMessage } from './consts';
+import { CommentsQuery } from '@project/shared/shared-types';
 
 @ApiTags('Comments')
 @Controller('comments')
@@ -38,12 +39,14 @@ export class CommentsController {
     type: CommentRdo,
     isArray: true,
   })
-  @Get()
+  @Get(':publicationId')
   async getAllCommentsByPublication(
-    @Query('publicationId') publicationId: number
+    @Param('publicationId') publicationId: number,
+    @Query('commentsQuery') commentsQuery: CommentsQuery
   ) {
     const comments = await this.commentsService.getAllComentsByPublication(
-      publicationId
+      publicationId,
+      commentsQuery
     );
 
     return comments.map((comment) => fillObject(CommentRdo, comment));
