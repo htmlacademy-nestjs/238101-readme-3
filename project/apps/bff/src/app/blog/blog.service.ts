@@ -3,6 +3,8 @@ import { Injectable } from '@nestjs/common';
 import { ApplicationServiceURL } from '../app.config';
 import {
   Comment,
+  CommentDto,
+  CommentRdo,
   CommentsQuery,
   CreatePublicationBaseLinkDto,
   CreatePublicationBaseQuoteDto,
@@ -351,12 +353,19 @@ export class BlogService {
     const { data: comments } = await this.httpService.axiosRef.get<Comment>(
       `${ApplicationServiceURL.Blog}/comments/${publicationId}`,
       {
-        params: {
-          ...commentsQuery,
-        },
+        params: commentsQuery,
       }
     );
 
     return comments;
+  }
+
+  public async addComment(dto: CommentDto) {
+    const { data: like } = await this.httpService.axiosRef.post<CommentRdo>(
+      `${ApplicationServiceURL.Blog}/comments`,
+      dto
+    );
+
+    return like;
   }
 }

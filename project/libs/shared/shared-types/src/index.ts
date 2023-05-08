@@ -14,5 +14,8 @@ export * from './lib/publication';
 export * from './lib/tag.type';
 export * from './lib/user.interface';
 
+export * from './lib/dto-with-user-id';
+
 export * from './lib/blog';
+export * from './lib/comments';
 export * from './lib/users';

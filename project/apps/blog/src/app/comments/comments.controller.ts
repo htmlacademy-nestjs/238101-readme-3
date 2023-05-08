@@ -8,13 +8,16 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { CreateCommentDto } from './dto';
-import { CommentRdo, DeleteCommentRdo } from './rdo';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CommentsService } from './comments.service';
 import { fillObject } from '@project/util/util-core';
 import { CommentMessage } from './consts';
-import { CommentsQuery } from '@project/shared/shared-types';
+import {
+  CommentRdo,
+  CommentsQuery,
+  DeleteCommentRdo,
+} from '@project/shared/shared-types';
+import { CreateCommentDto } from './dto/create-comment.dto';
 
 @ApiTags('Comments')
 @Controller('comments')
@@ -42,7 +45,7 @@ export class CommentsController {
   @Get(':publicationId')
   async getAllCommentsByPublication(
     @Param('publicationId') publicationId: number,
-    @Query('commentsQuery') commentsQuery: CommentsQuery
+    @Query() commentsQuery: CommentsQuery
   ) {
     const comments = await this.commentsService.getAllComentsByPublication(
       publicationId,

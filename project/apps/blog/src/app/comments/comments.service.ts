@@ -1,16 +1,16 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateCommentDto } from './dto';
 import { CommentsRepository } from './repositories';
 import { CommentEntity } from './entities';
 import { CommentMessage } from './consts';
 import { CommentsQuery } from '@project/shared/shared-types';
+import { CreateCommentDto } from './dto/create-comment.dto';
 
 @Injectable()
 export class CommentsService {
   constructor(private readonly commentsRepository: CommentsRepository) {}
 
   async createComment(dto: CreateCommentDto) {
-    const commentEntity = new CommentEntity({ ...dto, authorId: '123' });
+    const commentEntity = new CommentEntity({ ...dto, authorId: dto.userId });
     return this.commentsRepository.create(commentEntity);
   }
 

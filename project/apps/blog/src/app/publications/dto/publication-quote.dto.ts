@@ -1,16 +1,16 @@
 import { IntersectionType } from '@nestjs/swagger';
 import {
   CreatePublicationBaseQuoteDto,
+  DtoWithUserId,
   UpdatePublicationBaseQuoteDto,
 } from '@project/shared/shared-types';
-import { PublicationBaseWithUserId } from './publication-base-with-user-id.dto';
 
 export class CreatePublicationQuoteDto extends IntersectionType(
-  PublicationBaseWithUserId,
+  DtoWithUserId,
   CreatePublicationBaseQuoteDto
 ) {}
 
 export class UpdatePublicationQuoteDto extends IntersectionType(
-  PublicationBaseWithUserId,
+  DtoWithUserId,
   UpdatePublicationBaseQuoteDto
 ) {}
