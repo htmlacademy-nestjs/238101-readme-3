@@ -14,7 +14,7 @@ export class IsRepostUnique implements CanActivate {
     const request = context.switchToHttp().getRequest();
 
     const publicationId = parseInt(request.body['publicationId'], 10);
-    const userId = request.headers['userid'] || request.body['userId'];
+    const userId: string = request.headers['userid'] || request.body['userId'];
 
     const targetPublication = await this.publicationsService.findById(
       publicationId
@@ -24,8 +24,9 @@ export class IsRepostUnique implements CanActivate {
       throw new ForbiddenException('author cant repost his publication');
     }
 
-    const allUsersPublications =
-      await this.publicationsService.findAllPublicationsByAuthor(userId);
+    const allUsersPublications = await this.publicationsService.findAll({
+      authorId: userId,
+    });
 
     const isAlreadyReposted = allUsersPublications.find(
       (publication) =>

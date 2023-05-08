@@ -1,10 +1,12 @@
-import { IsEnum, IsNumber, IsOptional } from 'class-validator';
+import { IsEnum, IsMongoId, IsNumber, IsOptional } from 'class-validator';
 import { Transform } from 'class-transformer';
 import {
   PublicationQueryDefaultSettings,
-  PublicationSorting,
+  PublicationSortKind,
+  Sorting,
 } from '../consts/publication.const';
 import { ApiProperty } from '@nestjs/swagger';
+import { PublicationKind } from '@project/shared/shared-types';
 
 export class PostQuery {
   @ApiProperty({
@@ -16,22 +18,51 @@ export class PostQuery {
   @Transform(
     ({ value }) => Number(value) || PublicationQueryDefaultSettings.CountLimit
   )
-  public limit: number;
+  public limit?: number;
 
   @ApiProperty({
     required: false,
-    enum: PublicationSorting,
-    default: PublicationSorting.Desc,
+    enum: Sorting,
+    default: Sorting.Desc,
   })
-  @IsEnum(PublicationSorting)
-  @Transform(({ value }) => value || PublicationSorting.Desc)
+  @IsEnum(Sorting)
+  @Transform(({ value }) => value || Sorting.Desc)
   @IsOptional()
-  public sortDirection: PublicationSorting;
+  public sortKind?: Sorting;
+
+  @ApiProperty({
+    required: false,
+    enum: PublicationSortKind,
+    default: PublicationSortKind.PublishedDate,
+  })
+  @IsEnum(PublicationSortKind)
+  @Transform(({ value }) => value || PublicationSortKind.PublishedDate)
+  @IsOptional()
+  public sortingBy?: PublicationSortKind;
 
   @ApiProperty({
     required: false,
   })
   @Transform(({ value }) => Number(value))
   @IsOptional()
-  public page: number;
+  public page?: number;
+
+  @ApiProperty({
+    required: false,
+  })
+  @IsMongoId()
+  @IsOptional()
+  public authorId?: string;
+
+  @ApiProperty({
+    required: false,
+    enum: PublicationKind,
+    default: null,
+  })
+  public publicationKind?: PublicationKind;
+
+  @ApiProperty({
+    required: false,
+  })
+  tag?: string;
 }

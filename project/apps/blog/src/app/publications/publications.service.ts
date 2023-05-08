@@ -176,12 +176,6 @@ export class PublicationsService {
     return publication;
   }
 
-  public async findAllPublicationsByAuthor(authorId: string) {
-    return await this.publicationsRepository.findAllPublicationsByAuthor(
-      authorId
-    );
-  }
-
   public async delete(id: number) {
     await this.findById(id);
 

@@ -4,6 +4,8 @@ import { PublicationEntities } from '../entities';
 import { PrismaService } from '../../prisma/prisma.service';
 import { Publication } from '@prisma/client';
 import { PostQuery } from '../query/publication.query';
+import { PublicationStatus } from '@project/shared/shared-types';
+import { PublicationSortKind } from '../consts/publication.const';
 
 @Injectable()
 export class PublicationsRepository
@@ -52,30 +54,48 @@ export class PublicationsRepository
   }
 
   public async findAll({
+    authorId,
+    sortingBy,
+    sortKind,
     limit,
     page,
-    sortDirection,
+    publicationKind,
+    tag,
   }: PostQuery): Promise<Publication[]> {
-    return this.prisma.publication.findMany({
-      orderBy: [
-        {
-          createdAt: sortDirection,
-        },
-      ],
-      take: limit,
-      skip: page > 0 ? limit * (page - 1) : undefined,
-      include: {
-        comments: true,
-        likes: true,
-      },
-    });
-  }
+    console.log(
+      sortingBy === PublicationSortKind.PublishedDate ? sortKind : undefined
+    );
+    console.log(sortingBy === PublicationSortKind.Likes ? sortKind : undefined);
 
-  public async findAllPublicationsByAuthor(authorId: string) {
     return this.prisma.publication.findMany({
       where: {
         authorId,
+        status: PublicationStatus.Published,
+        type: publicationKind,
+        tags: {
+          hasSome: tag,
+        },
       },
+      orderBy: {
+        publishedAt:
+          sortingBy === PublicationSortKind.PublishedDate
+            ? sortKind
+            : undefined,
+        likes:
+          sortingBy === PublicationSortKind.Likes
+            ? {
+                _count: sortKind,
+              }
+            : undefined,
+        comments:
+          sortingBy === PublicationSortKind.Comments
+            ? {
+                _count: sortKind,
+              }
+            : undefined,
+      },
+      take: limit,
+      skip: page > 0 ? limit * (page - 1) : undefined,
       include: {
         comments: true,
         likes: true,

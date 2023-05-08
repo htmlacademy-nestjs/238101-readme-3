@@ -1,5 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
+import { Like } from '../../like.interface';
+import { Comment } from '../../comment.interface';
 
 export class PublicationBaseRdo {
   @ApiProperty({
@@ -25,4 +27,12 @@ export class PublicationBaseRdo {
   })
   @Expose()
   publishedAt: string;
+
+  @ApiProperty({})
+  @Expose()
+  likes: Like[];
+
+  @ApiProperty({})
+  @Expose()
+  comments: Comment[];
 }
