@@ -28,10 +28,15 @@ import {
 import { BffPublicationPhotoDto } from './dto';
 import FormData from 'form-data';
 import { BffPublcationRepost } from './dto/publication-repost.dto';
+import { UsersService } from '../users/users.service';
+import { MAILING_SENT_SUCCESS } from './consts/mailing.conts';
 
 @Injectable()
 export class BlogService {
-  constructor(private readonly httpService: HttpService) {}
+  constructor(
+    private readonly httpService: HttpService,
+    private readonly usersService: UsersService
+  ) {}
 
   private async getPublicationAuthor(authorId: string) {
     const { data } = await this.httpService.axiosRef.get<UserRdo>(
@@ -395,5 +400,29 @@ export class BlogService {
       );
 
     return deletedComment;
+  }
+
+  public async getAllPublicationsByStartWithDate(date: string) {
+    const { data: publications } = await this.httpService.axiosRef.get<
+      Publications[]
+    >(`${ApplicationServiceURL.Blog}/publications/new`, {
+      params: {
+        date,
+      },
+    });
+
+    return publications;
+  }
+
+  public async sendMailing() {
+    const prevMailingDate: string | null = '2023-05-08';
+
+    const users = await this.usersService.getAllUsers();
+
+    const newPublications = await this.getAllPublicationsByStartWithDate(
+      prevMailingDate
+    );
+
+    return MAILING_SENT_SUCCESS;
   }
 }

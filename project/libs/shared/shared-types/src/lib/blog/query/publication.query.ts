@@ -66,3 +66,10 @@ export class PublicationQuery {
   })
   tag?: string;
 }
+
+export class NewPublicationQuery {
+  @ApiProperty({
+    example: '2023-05-08',
+  })
+  public date?: string;
+}

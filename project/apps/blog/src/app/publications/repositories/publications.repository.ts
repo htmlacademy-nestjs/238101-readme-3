@@ -4,6 +4,7 @@ import { PublicationEntities } from '../entities';
 import { PrismaService } from '../../prisma/prisma.service';
 import { Publication } from '@prisma/client';
 import {
+  NewPublicationQuery,
   PublicationQuery,
   PublicationSortKind,
   PublicationStatus,
@@ -100,6 +101,19 @@ export class PublicationsRepository
       include: {
         comments: true,
         likes: true,
+      },
+    });
+  }
+
+  public async findAllPublishedPublicationFromDate({
+    date,
+  }: NewPublicationQuery) {
+    return this.prisma.publication.findMany({
+      where: {
+        publishedAt: {
+          gte: new Date(date),
+        },
+        status: PublicationStatus.Published,
       },
     });
   }

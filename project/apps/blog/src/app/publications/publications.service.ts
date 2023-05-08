@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import {
+  NewPublicationQuery,
   PublicationQuery,
   PublicationRepostDto,
   PublicationStatus,
@@ -164,6 +165,14 @@ export class PublicationsService {
 
   public async findAll(query: PublicationQuery) {
     return await this.publicationsRepository.findAll(query);
+  }
+
+  public async findAllPublishedPublicationFromDate(
+    newPublicationQuery: NewPublicationQuery
+  ) {
+    return await this.publicationsRepository.findAllPublishedPublicationFromDate(
+      newPublicationQuery
+    );
   }
 
   public async findById(id: number): Promise<Publication> {

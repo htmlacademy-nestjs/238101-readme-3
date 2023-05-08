@@ -8,6 +8,10 @@ import { User } from '@project/shared/shared-types';
 export class BlogUserService {
   constructor(private readonly blogUserRepository: BlogUserRepository) {}
 
+  public async getUsers(): Promise<User[]> {
+    return this.blogUserRepository.findAll();
+  }
+
   public async getUser(id: string): Promise<User> {
     const existUser = await this.blogUserRepository.findById(id);
 

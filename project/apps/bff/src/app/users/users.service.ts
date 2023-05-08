@@ -125,4 +125,12 @@ export class UsersService {
       countPublications: countPublications,
     };
   }
+
+  public async getAllUsers() {
+    const { data: users } = await this.httpService.axiosRef.get<UserRdo[]>(
+      `${ApplicationServiceURL.Users}/users`
+    );
+
+    return users;
+  }
 }

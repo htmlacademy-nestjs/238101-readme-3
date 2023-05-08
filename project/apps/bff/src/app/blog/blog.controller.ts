@@ -357,7 +357,7 @@ export class BlogController {
   @UseGuards(CheckAuthGuard)
   @UseInterceptors(UseridInterceptor)
   @ApiBearerAuth()
-  addLike(
+  public async addLike(
     @Param('publicationId') publicationId: number,
     @UserId() userId: string
   ) {
@@ -368,7 +368,7 @@ export class BlogController {
   @ApiBearerAuth()
   @UseGuards(CheckAuthGuard)
   @UseInterceptors(UseridInterceptor)
-  removeLike(
+  public async removeLike(
     @Param('publicationId') publicationId: number,
     @UserId() userId: string
   ) {
@@ -379,12 +379,12 @@ export class BlogController {
   @ApiBearerAuth()
   @UseGuards(CheckAuthGuard)
   @UseInterceptors(UseridInterceptor)
-  addComment(@Body() dto: CommentDto) {
+  public async addComment(@Body() dto: CommentDto) {
     return this.blogService.addComment(dto);
   }
 
   @Get('comments/:publicationId')
-  getCommentsByPublication(
+  public async getCommentsByPublication(
     @Param('publicationId') publicationId: number,
     @Query() commentsQuery: CommentsQuery
   ) {
@@ -398,10 +398,15 @@ export class BlogController {
   @ApiBearerAuth()
   @UseGuards(CheckAuthGuard)
   @UseInterceptors(UseridInterceptor)
-  deleteComment(
+  public async deleteComment(
     @Param('commentId') commentId: number,
     @UserId() userId: string
   ) {
     return this.blogService.deleteComment(commentId, userId);
+  }
+
+  @Post('send-mailing')
+  public async sendMailing() {
+    return this.blogService.sendMailing();
   }
 }

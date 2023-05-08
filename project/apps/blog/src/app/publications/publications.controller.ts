@@ -31,6 +31,7 @@ import {
 import { PublicationsService } from './publications.service';
 
 import {
+  NewPublicationQuery,
   PublicationLinkRdo,
   PublicationPhotoRdo,
   PublicationQuery,
@@ -220,6 +221,28 @@ export class PublicationsController {
   })
   public async findAll(@Query() query: PublicationQuery) {
     const publications = await this.publicationsService.findAll(query);
+    return transformPublicationsToRdo(publications);
+  }
+
+  @Get('new')
+  @ApiResponse({
+    description: 'return all new publications',
+    status: HttpStatus.OK,
+    isArray: true,
+    schema: {
+      type: 'array',
+      items: {
+        oneOf: AllPublicationsSchema,
+      },
+    },
+  })
+  public async findAllPublishedPublicationFromDate(
+    @Query() newPublicationQuery: NewPublicationQuery
+  ) {
+    const publications =
+      await this.publicationsService.findAllPublishedPublicationFromDate(
+        newPublicationQuery
+      );
     return transformPublicationsToRdo(publications);
   }
 

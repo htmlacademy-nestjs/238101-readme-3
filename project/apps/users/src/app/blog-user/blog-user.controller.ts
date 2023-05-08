@@ -18,12 +18,19 @@ import { UserRdo } from '@project/shared/shared-types';
 export class BlogUserController {
   constructor(private readonly blogUserService: BlogUserService) {}
 
+  @Get()
+  public async findAll() {
+    const users = await this.blogUserService.getUsers();
+
+    return users.map((user) => fillObject(UserRdo, user));
+  }
+
+  @Get(':id')
   @ApiResponse({
     description: 'User found',
     status: HttpStatus.OK,
     type: UserRdo,
   })
-  @Get(':id')
   public async findById(@Param('id', MongoidValidationPipe) id: string) {
     const existUser = await this.blogUserService.getUser(id);
 
