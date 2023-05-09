@@ -3,7 +3,13 @@ import { CRUDRepository } from '@project/util/util-types';
 import { PublicationEntities } from '../entities';
 import { PrismaService } from '../../prisma/prisma.service';
 import { Publication } from '@prisma/client';
-import { PostQuery } from '../query/publication.query';
+import {
+  NewPublicationQuery,
+  PublicationQuery,
+  PublicationSortKind,
+  PublicationStatus,
+  SEARCH_LIMIT,
+} from '@project/shared/shared-types';
 
 @Injectable()
 export class PublicationsRepository
@@ -43,6 +49,7 @@ export class PublicationsRepository
     return this.prisma.publication.findFirst({
       where: {
         id: postId,
+        status: PublicationStatus.Published,
       },
       include: {
         comments: true,
@@ -51,17 +58,44 @@ export class PublicationsRepository
     });
   }
 
-  public findAll({
+  public async findAll({
+    authorId,
+    sortingBy,
+    sortKind,
     limit,
     page,
-    sortDirection,
-  }: PostQuery): Promise<Publication[]> {
+    publicationKind,
+    tag,
+  }: PublicationQuery): Promise<Publication[]> {
     return this.prisma.publication.findMany({
-      orderBy: [
-        {
-          createdAt: sortDirection,
-        },
-      ],
+      where: {
+        authorId,
+        status: PublicationStatus.Published,
+        type: publicationKind,
+        tags: tag
+          ? {
+              hasSome: tag,
+            }
+          : undefined,
+      },
+      orderBy: {
+        publishedAt:
+          sortingBy === PublicationSortKind.PublishedDate
+            ? sortKind
+            : undefined,
+        likes:
+          sortingBy === PublicationSortKind.Likes
+            ? {
+                _count: sortKind,
+              }
+            : undefined,
+        comments:
+          sortingBy === PublicationSortKind.Comments
+            ? {
+                _count: sortKind,
+              }
+            : undefined,
+      },
       take: limit,
       skip: page > 0 ? limit * (page - 1) : undefined,
       include: {
@@ -71,14 +105,60 @@ export class PublicationsRepository
     });
   }
 
-  public update(id: number, item: PublicationEntities): Promise<Publication> {
+  public async findAllPublishedPublicationFromDate({
+    date,
+  }: NewPublicationQuery) {
+    return this.prisma.publication.findMany({
+      where: {
+        publishedAt: {
+          gte: new Date(date),
+        },
+        status: PublicationStatus.Published,
+      },
+    });
+  }
+
+  public async update(
+    id: number,
+    item: PublicationEntities
+  ): Promise<Publication> {
     return this.prisma.publication.update({
       data: {
         ...item.toObject(),
+        updatedAt: undefined,
       },
       where: {
         id,
       },
+    });
+  }
+
+  public async getCountPublicationByUser(userId: string): Promise<number> {
+    return this.prisma.publication.count({
+      where: {
+        authorId: userId,
+      },
+    });
+  }
+
+  public async findAllDrafts(userId: string): Promise<Publication[]> {
+    return this.prisma.publication.findMany({
+      where: {
+        authorId: userId,
+        status: PublicationStatus.Draft,
+      },
+    });
+  }
+
+  public async findAllBySearch(search: string): Promise<Publication[]> {
+    return this.prisma.publication.findMany({
+      where: {
+        name: {
+          contains: search,
+        },
+        status: PublicationStatus.Published,
+      },
+      take: SEARCH_LIMIT,
     });
   }
 }

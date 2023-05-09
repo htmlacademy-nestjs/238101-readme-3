@@ -1,4 +1,4 @@
 export * from './change-password.rdo';
-export { CreatedUserRdo } from './created-user.rdo';
-export { LoggedUserRdo } from './logged-user.rdo';
-export { UserRdo } from './user.rdo';
+export * from './created-user.rdo';
+export * from './logged-user.rdo';
+export * from './token-pair.rdo';

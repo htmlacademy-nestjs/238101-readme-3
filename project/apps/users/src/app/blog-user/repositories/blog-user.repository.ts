@@ -17,8 +17,12 @@ export class BlogUserRepository
     private readonly blogUserModel: Model<BlogUserModel>
   ) {}
 
+  public async findAll(): Promise<User[]> {
+    return this.blogUserModel.find();
+  }
+
   public async create(item: BlogUserEntity): Promise<User> {
-    const newBlogUser = new this.blogUserModel(item);
+    const newBlogUser = new this.blogUserModel(item.toObject());
     return newBlogUser.save();
   }
 

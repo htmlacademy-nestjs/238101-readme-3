@@ -3,6 +3,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 
 import { BlogUserModel, BlogUserSchema } from './models';
 import { BlogUserRepository } from './repositories';
+import { BlogUserController } from './blog-user.controller';
+import { BlogUserService } from './blog-user.service';
 
 @Module({
   imports: [
@@ -10,7 +12,8 @@ import { BlogUserRepository } from './repositories';
       { name: BlogUserModel.name, schema: BlogUserSchema },
     ]),
   ],
-  providers: [BlogUserRepository],
-  exports: [BlogUserRepository],
+  controllers: [BlogUserController],
+  providers: [BlogUserService, BlogUserRepository],
+  exports: [BlogUserService, BlogUserRepository],
 })
 export class BlogUserModule {}

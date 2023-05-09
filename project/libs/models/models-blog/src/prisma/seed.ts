@@ -3,6 +3,8 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 async function fillDB() {
+  const fakeAuthorId = '645658836c6966da062f5c16';
+
   await prisma.publication.upsert({
     create: {
       type: 'Link',
@@ -10,6 +12,7 @@ async function fillDB() {
       link: 'https://htmlacademy.ru',
       description: 'html academy',
       tags: ['it', 'online'],
+      authorId: fakeAuthorId,
     },
     update: {},
     where: {
@@ -22,6 +25,7 @@ async function fillDB() {
       type: 'Photo',
       status: 'Published',
       photo: 'path/to/photo',
+      authorId: fakeAuthorId,
     },
     update: {},
     where: {
@@ -35,6 +39,7 @@ async function fillDB() {
       status: 'Published',
       content: 'Say my name',
       authorQuote: 'Walter White',
+      authorId: fakeAuthorId,
     },
     update: {},
     where: {
@@ -49,6 +54,7 @@ async function fillDB() {
       announcement: 'announcement text',
       name: 'name of publication',
       content: 'text of publication',
+      authorId: fakeAuthorId,
     },
     update: {},
     where: {
@@ -63,6 +69,7 @@ async function fillDB() {
       name: 'name of video',
       link: 'youtube.com',
       tags: ['cats'],
+      authorId: fakeAuthorId,
     },
     update: {},
     where: {

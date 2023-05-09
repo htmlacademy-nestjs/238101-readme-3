@@ -1,19 +1,16 @@
 import {
   Body,
   Controller,
-  Get,
   HttpStatus,
-  Param,
-  ParseFilePipeBuilder,
   Patch,
   Post,
   Req,
-  UploadedFile,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
+  ApiBody,
   ApiConsumes,
   ApiResponse,
   ApiTags,
@@ -22,22 +19,21 @@ import {
 import { fillObject } from '@project/util/util-core';
 
 import { AuthenticationService } from './authentication.service';
-import { ChangePasswordDto, CreateUserDto, LoginUserDto } from './dto';
+import { RegisterUserDto, LoginUserDto } from './dto';
 import {
   ChangePasswordFailedRdo,
   ChangePasswordSuccessfullyRdo,
-  CreatedUserRdo,
   LoggedUserRdo,
-  UserRdo,
+  TokenPair,
 } from './rdo';
-import { MongoidValidationPipe } from '@project/shared/shared-pipes';
-import { JwtAuthGuard } from './guards';
-import { RequestWithUser } from '@project/shared/shared-types';
+import { JwtAuthGuard, JwtRefreshGuard, LocalAuthGuard } from './guards';
 import {
-  ALLOWED_AVATAR_EXTENCION,
-  AuthUserMessage,
-  MAX_AVATAR_BITE_SIZE,
-} from './consts';
+  ChangePasswordDto,
+  RequestWithTokenPayload,
+  RequestWithUser,
+  UserRdo,
+} from '@project/shared/shared-types';
+import { AuthUserMessage } from './consts';
 import { FileInterceptor } from '@nestjs/platform-express';
 
 @ApiTags('authentication')
@@ -45,34 +41,20 @@ import { FileInterceptor } from '@nestjs/platform-express';
 export class AuthenticationController {
   constructor(private readonly authService: AuthenticationService) {}
 
+  @Post('register')
   @ApiResponse({
     description: 'The new user has been successfully created.',
     status: HttpStatus.CREATED,
-    type: CreatedUserRdo,
+    type: UserRdo,
   })
   @ApiConsumes('multipart/form-data')
-  @Post('register')
   @UseInterceptors(FileInterceptor('avatar'))
-  public async create(
-    @Body() dto: CreateUserDto,
-    @UploadedFile(
-      new ParseFilePipeBuilder()
-        .addFileTypeValidator({
-          fileType: ALLOWED_AVATAR_EXTENCION,
-        })
-        .addMaxSizeValidator({
-          maxSize: MAX_AVATAR_BITE_SIZE,
-        })
-        .build({
-          errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
-        })
-    )
-    avatar: Express.Multer.File
-  ) {
+  public async register(@Body() dto: RegisterUserDto) {
     const newUser = await this.authService.register(dto);
     return fillObject(UserRdo, newUser);
   }
 
+  @Post('login')
   @ApiResponse({
     description: 'User has been successfully logged.',
     status: HttpStatus.OK,
@@ -82,14 +64,28 @@ export class AuthenticationController {
     status: HttpStatus.UNAUTHORIZED,
     description: 'Password or Login is wrong.',
   })
-  @Post('login')
-  public async login(@Body() dto: LoginUserDto) {
-    const verifiedUser = await this.authService.verifyUser(dto);
-    const loggedUser = await this.authService.createUserToken(verifiedUser);
-
-    return fillObject(LoggedUserRdo, Object.assign(verifiedUser, loggedUser));
+  @ApiBody({
+    type: LoginUserDto,
+  })
+  @UseGuards(LocalAuthGuard)
+  public async login(@Req() { user }: RequestWithUser) {
+    const loggedUser = await this.authService.createUserToken(user);
+    return fillObject(LoggedUserRdo, Object.assign(user, loggedUser));
   }
 
+  @Post('refresh')
+  @ApiResponse({
+    description: 'Get a new access/refresh tokens',
+    status: HttpStatus.OK,
+    type: TokenPair,
+  })
+  @ApiBearerAuth()
+  @UseGuards(JwtRefreshGuard)
+  public async refreshToken(@Req() { user }: RequestWithUser) {
+    return this.authService.createUserToken(user);
+  }
+
+  @Patch('change-password')
   @ApiResponse({
     status: HttpStatus.ACCEPTED,
     description: 'password changed successfully',
@@ -102,29 +98,20 @@ export class AuthenticationController {
   })
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
-  @Patch('change-password')
   public async changePassword(
-    @Req() req: RequestWithUser,
+    @Req() { user }: RequestWithTokenPayload,
     @Body() dto: ChangePasswordDto
   ) {
-    await this.authService.changePassword(req.user.id, dto);
+    await this.authService.changePassword(user.id, dto);
 
     return fillObject(ChangePasswordSuccessfullyRdo, {
       message: AuthUserMessage.PasswordChanged,
     });
   }
 
-  @ApiResponse({
-    description: 'User found',
-    status: HttpStatus.OK,
-    type: UserRdo,
-  })
-  @ApiBearerAuth()
+  @Post('check')
   @UseGuards(JwtAuthGuard)
-  @Get(':id')
-  public async show(@Param('id', MongoidValidationPipe) id: string) {
-    const existUser = await this.authService.getUser(id);
-
-    return fillObject(UserRdo, existUser);
+  public async checkToken(@Req() { user: payload }: RequestWithTokenPayload) {
+    return payload;
   }
 }

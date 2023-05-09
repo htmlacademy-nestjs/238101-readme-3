@@ -1,6 +1,6 @@
-import { Entity, File } from '@project/shared/shared-types';
+import { Entity, StoredFile } from '@project/shared/shared-types';
 
-export class FileEntity implements File, Entity<FileEntity> {
+export class FileEntity implements StoredFile, Entity<StoredFile> {
   public id: string;
   public hashName: string;
   public mimetype: string;
@@ -8,7 +8,7 @@ export class FileEntity implements File, Entity<FileEntity> {
   public path: string;
   public size: number;
 
-  constructor(file: File) {
+  constructor(file: StoredFile) {
     this.fillEntity(file);
   }
 

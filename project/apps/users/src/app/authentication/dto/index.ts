@@ -1,3 +1,2 @@
-export { ChangePasswordDto } from './change-password-dto';
-export { CreateUserDto } from './create-user-dto';
-export { LoginUserDto } from './login-user-dto';
+export * from './register-user.dto';
+export * from './login-user-dto';

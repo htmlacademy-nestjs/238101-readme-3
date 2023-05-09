@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 
-import { FileService } from './file/file.service';
 import { FileModule } from './file/file.module';
 import {
   ConfigUploaderModule,
@@ -15,6 +14,6 @@ import { MongooseModule } from '@nestjs/mongoose';
     MongooseModule.forRootAsync(getMongooseOptions()),
   ],
   controllers: [],
-  providers: [FileService],
+  providers: [],
 })
 export class AppModule {}

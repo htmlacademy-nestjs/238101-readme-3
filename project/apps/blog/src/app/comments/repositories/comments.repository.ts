@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CommentEntity } from '../entities';
 import { CRUDRepository } from '@project/util/util-types';
 import { PrismaService } from '../../prisma/prisma.service';
-import { Comment } from '@project/shared/shared-types';
+import { Comment, CommentsQuery } from '@project/shared/shared-types';
 
 @Injectable()
 export class CommentsRepository
@@ -28,11 +28,16 @@ export class CommentsRepository
     });
   }
 
-  public findByPublication(id: number): Promise<Comment[]> {
+  public findByPublication(
+    id: number,
+    { limit, page }: CommentsQuery
+  ): Promise<Comment[]> {
     return this.prisma.comment.findMany({
       where: {
         publicationId: id,
       },
+      take: limit,
+      skip: page > 0 ? limit * (page - 1) : undefined,
     });
   }
 

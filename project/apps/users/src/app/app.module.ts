@@ -8,6 +8,7 @@ import {
 
 import { AuthenticationModule } from './authentication/authentication.module';
 import { BlogUserModule } from './blog-user/blog-user.module';
+import { RefreshTokenModule } from './refresh-token/refresh-token.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { BlogUserModule } from './blog-user/blog-user.module';
     BlogUserModule,
     ConfigUsersModule,
     MongooseModule.forRootAsync(getMongooseOptions()),
+    RefreshTokenModule,
   ],
   controllers: [],
   providers: [],

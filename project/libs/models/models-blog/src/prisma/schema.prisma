@@ -25,10 +25,13 @@ model Publication {
   status       PublicationStatus
   tags         String[]
 
-  authorId    String?  @map("author_id")
-  publishedAt DateTime @updatedAt @map("published_at")
+  authorId        String   @map("author_id")
+  originalAuthorId String?  @map("original_author_id")
+  originalPublicationId Int? @map("original_publication_id")
+  isReposted      Boolean  @default(false) @map("is_reposted")
 
   createdAt DateTime @default(now()) @map("created_at")
+  publishedAt     DateTime @default(now()) @map("published_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   likes    Like[]

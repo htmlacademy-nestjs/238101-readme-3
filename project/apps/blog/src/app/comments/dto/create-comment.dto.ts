@@ -1,19 +1,7 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { IntersectionType } from '@nestjs/swagger';
+import { CommentDto, DtoWithUserId } from '@project/shared/shared-types';
 
-export class CreateCommentDto {
-  @ApiProperty({
-    minLength: 10,
-    maxLength: 100,
-    required: true,
-    description: 'comment message',
-    example: 'Example comment message',
-  })
-  text: string;
-
-  @ApiProperty({
-    required: true,
-    description: 'publication id',
-    example: '1',
-  })
-  publicationId: number;
-}
+export class CreateCommentDto extends IntersectionType(
+  DtoWithUserId,
+  CommentDto
+) {}

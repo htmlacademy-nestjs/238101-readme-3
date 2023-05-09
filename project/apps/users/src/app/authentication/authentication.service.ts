@@ -1,6 +1,7 @@
 import {
   ConflictException,
   ForbiddenException,
+  Inject,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -9,17 +10,28 @@ import {
 import { BlogUserEntity } from '../blog-user/entities';
 import { BlogUserRepository } from '../blog-user/repositories';
 import { AuthUserMessage } from './consts';
-import { ChangePasswordDto, CreateUserDto, LoginUserDto } from './dto';
-import { TokenPayload, User } from '@project/shared/shared-types';
-import { ConfigService } from '@nestjs/config';
+import { RegisterUserDto, LoginUserDto } from './dto';
+import {
+  ChangePasswordDto,
+  RefreshTokenPayload,
+  User,
+} from '@project/shared/shared-types';
+import { ConfigType } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
+import { jwtConfig } from '@project/config/config-users';
+import { RefreshTokenService } from '../refresh-token/refresh-token.service';
+import { createJWTPayload } from '@project/util/util-core';
+import { randomUUID } from 'crypto';
 
 @Injectable()
 export class AuthenticationService {
   constructor(
     private readonly blogUserRepository: BlogUserRepository,
-    private readonly configService: ConfigService,
-    private readonly jwtService: JwtService
+    private readonly jwtService: JwtService,
+    private readonly refreshTokenService: RefreshTokenService,
+
+    @Inject(jwtConfig.KEY)
+    private readonly jwtOptions: ConfigType<typeof jwtConfig>
   ) {}
 
   public async changePassword(id: string, dto: ChangePasswordDto) {
@@ -51,7 +63,7 @@ export class AuthenticationService {
     return updatedBlogUser;
   }
 
-  public async register(dto: CreateUserDto) {
+  public async register(dto: RegisterUserDto) {
     const { email, name, password } = dto;
 
     const existUser = await this.blogUserRepository.findByEmail(email);
@@ -61,6 +73,7 @@ export class AuthenticationService {
     }
 
     const userEntity = new BlogUserEntity({
+      avatarId: '',
       email,
       name,
       passwordHash: '',
@@ -91,27 +104,22 @@ export class AuthenticationService {
     return blogUserEntity.toObject();
   }
 
-  public async getUser(id: string) {
-    const existUser = await this.blogUserRepository.findById(id);
-
-    if (!existUser) {
-      throw new NotFoundException(AuthUserMessage.NotFound);
-    }
-
-    return existUser;
-  }
-
   public async createUserToken(user: User) {
-    const { _id, name, email } = user;
+    const accessTokenPayload = createJWTPayload(user);
 
-    const payload: TokenPayload = {
-      id: _id,
-      email,
-      name,
+    const refreshTokenPayload: RefreshTokenPayload = {
+      ...accessTokenPayload,
+      tokenId: randomUUID(),
     };
 
+    await this.refreshTokenService.createRefreshSession(refreshTokenPayload);
+
     return {
-      accessToken: await this.jwtService.signAsync(payload),
+      accessToken: await this.jwtService.signAsync(accessTokenPayload),
+      refreshToken: await this.jwtService.signAsync(refreshTokenPayload, {
+        secret: this.jwtOptions.refreshTokenSecret,
+        expiresIn: this.jwtOptions.refreshTokenExpiresIn,
+      }),
     };
   }
 }

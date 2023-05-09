@@ -1,16 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { AppErrors, Like } from '@project/shared/shared-types';
-import { CRUDRepository } from '@project/util/util-types';
+import { Like } from '@project/shared/shared-types';
 import { LikeEntity } from '../entites';
 import { PrismaService } from '../../prisma/prisma.service';
 
 @Injectable()
-export class LikesRepository
-  implements CRUDRepository<LikeEntity, number, Like>
-{
+export class LikesRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  public create(item: LikeEntity): Promise<Like> {
+  public async create(item: LikeEntity): Promise<Like> {
     return this.prisma.like.create({
       data: {
         ...item.toObject(),
@@ -18,7 +15,7 @@ export class LikesRepository
     });
   }
 
-  public findById(id: number): Promise<Like> {
+  public async findById(id: number): Promise<Like> {
     return this.prisma.like.findFirst({
       where: {
         id,
@@ -26,16 +23,12 @@ export class LikesRepository
     });
   }
 
-  public findByPublication(publicationId: number): Promise<Like> {
+  public async findByPublication(publicationId: number): Promise<Like> {
     return this.prisma.like.findFirst({
       where: {
         publicationId,
       },
     });
-  }
-
-  public update(): Promise<Like> {
-    throw new Error(AppErrors.MethodNotImplemented);
   }
 
   public async destroy(likeId: number): Promise<void> {

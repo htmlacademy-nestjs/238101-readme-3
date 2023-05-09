@@ -1,2 +1,33 @@
 <h2>Привет, {{user}}</h2>
 <p>Новые публикации!</p>
+
+{{#each publications}}
+  <div>
+    {{#if this.name}}
+      <p>{{this.name}}</p>
+    {{/if}}
+
+    {{#if this.announcement}}
+      <p>{{this.announcement}}</p>
+    {{/if}}
+
+    {{#if this.authorQuote}}
+      <p>{{this.authorQuote}}</p>
+    {{/if}}
+
+    {{#if this.content}}
+      <p>{{this.content}}</p>
+    {{/if}}
+
+    {{#if this.description}}
+      <p>{{this.description}}</p>
+    {{/if}}
+
+    {{#if this.link}}
+      <p>{{this.link}}</p>
+    {{/if}}
+
+    <p>{{this.type}}</p>
+    <p>{{this.publishedAt}}</p>
+  </div>
+{{/each}}

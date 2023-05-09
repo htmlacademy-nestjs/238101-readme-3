@@ -1,34 +1,25 @@
 import {
-  PublicationKind,
   PublicationPhoto,
-  PublicationStatus,
+  PublicationKind,
 } from '@project/shared/shared-types';
-import { PublicationEntity } from './publication.entity';
+import {
+  PublicationEntity,
+  PublicationEntityConstructor,
+} from './publication.entity';
 
-export class PublicationPhotoEntity implements PublicationEntity {
-  public id?: number;
+export class PublicationPhotoEntity extends PublicationEntity {
+  public type: (typeof PublicationKind)['Photo'] = PublicationKind.Photo;
 
   public photo: string;
-  public status: PublicationStatus;
-  public tags?: string[];
-  public type: PublicationKind.Photo = PublicationKind.Photo;
 
-  public createdAt: string;
-  public updatedAt: string;
-
-  constructor(publication: PublicationPhoto) {
-    this.fillEntity(publication);
+  constructor(publication: PublicationEntityConstructor<PublicationPhoto>) {
+    super(publication);
   }
 
-  fillEntity(entity: PublicationPhoto) {
-    this.id = entity.id;
-
+  fillEntity(entity: Omit<PublicationPhoto, 'type'>) {
+    super.fillEntity(entity);
+    this.authorId = entity.authorId;
     this.photo = entity.photo;
-    this.status = entity.status;
-    this.tags = entity.tags;
-
-    this.createdAt = entity.createdAt;
-    this.updatedAt = entity.updatedAt;
   }
 
   public toObject(): PublicationPhoto {
