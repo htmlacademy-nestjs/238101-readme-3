@@ -12,7 +12,7 @@ import {
 import { ApiBearerAuth, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { UsersService } from './users.service';
 import { LoginUserDto, RegisterUserDto } from './dto';
-import { ALLOWED_AVATAR_EXTENCION, MAX_AVATAR_BITE_SIZE } from './user.const';
+import { UserLimitation } from './user.const';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ChangePasswordDto } from '@project/shared/shared-types';
 import { AuthorizationHeader } from '@project/shared/shared-decorators';
@@ -30,10 +30,10 @@ export class UsersController {
     @UploadedFile(
       new ParseFilePipeBuilder()
         .addFileTypeValidator({
-          fileType: ALLOWED_AVATAR_EXTENCION,
+          fileType: UserLimitation.AllowedExtension,
         })
         .addMaxSizeValidator({
-          maxSize: MAX_AVATAR_BITE_SIZE,
+          maxSize: UserLimitation.MaxBiteSize,
         })
         .build({
           errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,

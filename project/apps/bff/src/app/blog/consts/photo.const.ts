@@ -1,4 +1,4 @@
-export const PhotoLimitations = {
+export const PhotoLimitation = {
   MaxBiteSize: 1_048_576,
-  AllowedExtentions: /(jpg|png)$/,
+  AllowedExtension: /(jpg|png)$/,
 } as const;

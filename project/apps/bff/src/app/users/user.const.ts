@@ -1,2 +1,4 @@
-export const MAX_AVATAR_BITE_SIZE = 500 * 1024;
-export const ALLOWED_AVATAR_EXTENCION = /(jpeg|png)$/;
+export const UserLimitation = {
+  MaxBiteSize: 500 * 1024,
+  AllowedExtension: /(jpeg|png)$/,
+} as const;
