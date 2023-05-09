@@ -41,19 +41,20 @@ import { FileInterceptor } from '@nestjs/platform-express';
 export class AuthenticationController {
   constructor(private readonly authService: AuthenticationService) {}
 
+  @Post('register')
   @ApiResponse({
     description: 'The new user has been successfully created.',
     status: HttpStatus.CREATED,
     type: UserRdo,
   })
   @ApiConsumes('multipart/form-data')
-  @Post('register')
   @UseInterceptors(FileInterceptor('avatar'))
   public async register(@Body() dto: RegisterUserDto) {
     const newUser = await this.authService.register(dto);
     return fillObject(UserRdo, newUser);
   }
 
+  @Post('login')
   @ApiResponse({
     description: 'User has been successfully logged.',
     status: HttpStatus.OK,
@@ -67,12 +68,12 @@ export class AuthenticationController {
     type: LoginUserDto,
   })
   @UseGuards(LocalAuthGuard)
-  @Post('login')
   public async login(@Req() { user }: RequestWithUser) {
     const loggedUser = await this.authService.createUserToken(user);
     return fillObject(LoggedUserRdo, Object.assign(user, loggedUser));
   }
 
+  @Post('refresh')
   @ApiResponse({
     description: 'Get a new access/refresh tokens',
     status: HttpStatus.OK,
@@ -80,11 +81,11 @@ export class AuthenticationController {
   })
   @ApiBearerAuth()
   @UseGuards(JwtRefreshGuard)
-  @Post('refresh')
   public async refreshToken(@Req() { user }: RequestWithUser) {
     return this.authService.createUserToken(user);
   }
 
+  @Patch('change-password')
   @ApiResponse({
     status: HttpStatus.ACCEPTED,
     description: 'password changed successfully',
@@ -97,7 +98,6 @@ export class AuthenticationController {
   })
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
-  @Patch('change-password')
   public async changePassword(
     @Req() { user }: RequestWithTokenPayload,
     @Body() dto: ChangePasswordDto
@@ -109,8 +109,8 @@ export class AuthenticationController {
     });
   }
 
-  @UseGuards(JwtAuthGuard)
   @Post('check')
+  @UseGuards(JwtAuthGuard)
   public async checkToken(@Req() { user: payload }: RequestWithTokenPayload) {
     return payload;
   }
