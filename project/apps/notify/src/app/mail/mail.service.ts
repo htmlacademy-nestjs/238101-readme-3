@@ -1,6 +1,9 @@
 import { Publications, User } from '@project/shared/shared-types';
 import { Injectable } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
+import { MailingEmailParams } from './consts';
+
+const TEMPLATE_PATH = './post-news';
 
 @Injectable()
 export class MailService {
@@ -11,8 +14,8 @@ export class MailService {
 
     await this.mailerService.sendMail({
       to: email,
-      subject: 'New posts added',
-      template: './post-news',
+      subject: MailingEmailParams.Subject,
+      template: TEMPLATE_PATH,
       context: {
         user: `${name}`,
         publications: publications,
