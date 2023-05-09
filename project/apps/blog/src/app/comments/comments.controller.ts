@@ -25,26 +25,26 @@ import { UserId } from '@project/shared/shared-decorators';
 export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}
 
+  @Post()
   @ApiResponse({
     description: 'New comment has been successfully created.',
     status: HttpStatus.CREATED,
     type: CommentRdo,
   })
-  @Post()
-  async createComment(@Body() dto: CreateCommentDto) {
+  public async createComment(@Body() dto: CreateCommentDto) {
     const newComment = await this.commentsService.createComment(dto);
 
     return fillObject(CommentRdo, newComment);
   }
 
+  @Get(':publicationId')
   @ApiResponse({
     description: 'list of comments for publication',
     status: HttpStatus.OK,
     type: CommentRdo,
     isArray: true,
   })
-  @Get(':publicationId')
-  async getAllCommentsByPublication(
+  public async getAllCommentsByPublication(
     @Param('publicationId') publicationId: number,
     @Query() commentsQuery: CommentsQuery
   ) {
@@ -56,25 +56,25 @@ export class CommentsController {
     return comments.map((comment) => fillObject(CommentRdo, comment));
   }
 
+  @Get(':id')
   @ApiResponse({
     description: 'comment by id',
     status: HttpStatus.OK,
     type: CommentRdo,
   })
-  @Get(':id')
-  async getCommentById(@Param('id') id: number) {
+  public async getCommentById(@Param('id') id: number) {
     const comment = await this.commentsService.getCommentById(id);
 
     return fillObject(CommentRdo, comment);
   }
 
+  @Delete(':id')
   @ApiResponse({
     status: HttpStatus.NO_CONTENT,
     description: 'comment has been removed',
     type: DeleteCommentRdo,
   })
-  @Delete(':id')
-  async deleteComment(
+  public async deleteComment(
     @Param('id') commentId: number,
     @UserId() userId: string
   ) {

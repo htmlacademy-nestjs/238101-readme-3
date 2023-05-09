@@ -17,7 +17,7 @@ export class CommentsService {
     private readonly publicationsService: PublicationsService
   ) {}
 
-  async createComment(dto: CreateCommentDto) {
+  public async createComment(dto: CreateCommentDto) {
     const publication = await this.publicationsService.findById(
       dto.publicationId
     );
@@ -30,7 +30,7 @@ export class CommentsService {
     return this.commentsRepository.create(commentEntity);
   }
 
-  async getAllComentsByPublication(
+  public async getAllComentsByPublication(
     publicationId: number,
     commentsQuery: CommentsQuery
   ) {
@@ -40,7 +40,7 @@ export class CommentsService {
     );
   }
 
-  async getCommentById(commentId: number) {
+  public async getCommentById(commentId: number) {
     const comment = this.commentsRepository.findById(commentId);
 
     if (!comment) {
@@ -50,7 +50,7 @@ export class CommentsService {
     return comment;
   }
 
-  async deleteComment(commentId: number, userId: string) {
+  public async deleteComment(commentId: number, userId: string) {
     const comment = await this.getCommentById(commentId);
 
     if (!comment) {

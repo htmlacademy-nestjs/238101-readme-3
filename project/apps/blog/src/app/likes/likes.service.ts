@@ -42,7 +42,7 @@ export class LikesService {
     return this.likesRepository.findByPublication(publicationId);
   }
 
-  async removeLike(publicationId: number, userId: string) {
+  public async removeLike(publicationId: number, userId: string) {
     const like = await this.findLikeByPublication(publicationId);
 
     if (!like) {

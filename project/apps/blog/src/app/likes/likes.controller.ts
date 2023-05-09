@@ -16,7 +16,7 @@ export class LikesController {
     description: 'like added',
     type: LikeRdo,
   })
-  async addLike(
+  public async addLike(
     @Query('publicationId') publicationId: number,
     @UserId() userId: string
   ) {
@@ -29,7 +29,7 @@ export class LikesController {
     description: 'like removed',
     type: LikeRemovedRdo,
   })
-  async removeLike(
+  public async removeLike(
     @Query('publicationId') publicationId: number,
     @UserId() userId: string
   ) {
