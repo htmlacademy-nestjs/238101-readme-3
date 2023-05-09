@@ -1,8 +1,6 @@
-import {
-  PublicationKind,
-  PublicationStatus,
-  Tag,
-} from '@project/shared/shared-types';
+import { Tag } from '../tag.type';
+import { PublicationKind } from './publication-kind.enum';
+import { PublicationStatus } from './publication-status.enum';
 
 export interface Publication {
   id?: number;

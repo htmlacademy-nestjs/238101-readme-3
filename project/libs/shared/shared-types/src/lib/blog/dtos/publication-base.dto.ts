@@ -1,5 +1,5 @@
 import { ApiProperty, OmitType } from '@nestjs/swagger';
-import { PublicationStatus } from '@project/shared/shared-types';
+import { PublicationStatus } from '../../publication';
 import { Transform } from 'class-transformer';
 import {
   ArrayMaxSize,

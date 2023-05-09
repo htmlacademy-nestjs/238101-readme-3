@@ -1,4 +1,4 @@
-import { Publication } from '@project/shared/shared-types';
+import { Publication } from './publication';
 
 export interface Comment {
   id?: number;

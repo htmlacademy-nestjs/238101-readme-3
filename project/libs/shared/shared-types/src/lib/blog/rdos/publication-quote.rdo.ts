@@ -1,9 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
-import {
-  PublicationKind,
-  PublicationStatus,
-} from '@project/shared/shared-types';
+import { PublicationKind, PublicationStatus } from '../../publication';
 import { PublicationBaseRdo } from './publication-base.rdo';
 
 export class PublicationQuoteRdo extends PublicationBaseRdo {

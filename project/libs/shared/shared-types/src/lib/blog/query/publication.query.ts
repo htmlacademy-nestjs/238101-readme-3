@@ -6,7 +6,7 @@ import {
   Sorting,
 } from './publication.const';
 import { ApiProperty } from '@nestjs/swagger';
-import { PublicationKind } from '@project/shared/shared-types';
+import { PublicationKind } from '../../publication';
 
 export class PublicationQuery {
   @ApiProperty({
