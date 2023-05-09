@@ -30,10 +30,7 @@ import { BffPublicationPhotoDto } from './dto';
 import FormData from 'form-data';
 import { BffPublcationRepost } from './dto/publication-repost.dto';
 import { UsersService } from '../users/users.service';
-import {
-  MAILING_SENT_SUCCESS,
-  NO_NEW_PUBLICATIONS,
-} from './consts/mailing.conts';
+import { MailingMessage } from './consts/mailing.conts';
 import { NotifyService } from '../notify/notify.service';
 import dayjs from 'dayjs';
 
@@ -434,7 +431,7 @@ export class BlogService {
     const newPublications = await this.getAllPublicationsByStartWithDate(date);
 
     if (!newPublications.length) {
-      return NO_NEW_PUBLICATIONS;
+      return MailingMessage.NoNewPublications;
     }
 
     await this.notifyService.sendMailing({
@@ -442,6 +439,6 @@ export class BlogService {
       users,
     });
 
-    return MAILING_SENT_SUCCESS;
+    return MailingMessage.Success;
   }
 }

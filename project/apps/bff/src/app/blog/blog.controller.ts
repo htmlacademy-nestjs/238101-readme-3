@@ -50,7 +50,7 @@ import {
 } from './rdo';
 import { fillObject } from '@project/util/util-core';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ALLOWED_PHOTO_EXTENCION, MAX_PHOTO_BITE_SIZE } from './consts';
+import { PhotoLimitations } from './consts';
 import { BffPublicationPhotoDto } from './dto';
 import { UserId } from '@project/shared/shared-decorators';
 import { BffPublcationRepost } from './dto/publication-repost.dto';
@@ -116,10 +116,10 @@ export class BlogController {
     @UploadedFile(
       new ParseFilePipeBuilder()
         .addFileTypeValidator({
-          fileType: ALLOWED_PHOTO_EXTENCION,
+          fileType: PhotoLimitations.AllowedExtentions,
         })
         .addMaxSizeValidator({
-          maxSize: MAX_PHOTO_BITE_SIZE,
+          maxSize: PhotoLimitations.MaxBiteSize,
         })
         .build({
           errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
@@ -152,10 +152,10 @@ export class BlogController {
     @UploadedFile(
       new ParseFilePipeBuilder()
         .addFileTypeValidator({
-          fileType: ALLOWED_PHOTO_EXTENCION,
+          fileType: PhotoLimitations.AllowedExtentions,
         })
         .addMaxSizeValidator({
-          maxSize: MAX_PHOTO_BITE_SIZE,
+          maxSize: PhotoLimitations.MaxBiteSize,
         })
         .build({
           errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
