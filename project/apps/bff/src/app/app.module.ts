@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { HTTP_CLIENT_MAX_REDIRECTS, HTTP_CLIENT_TIMEOUT } from './app.config';
+import { HttpClientSetting } from './app.config';
 import { HttpModule } from '@nestjs/axios';
 import { CheckAuthGuard } from './guards';
 import { BlogModule } from './blog/blog.module';
@@ -12,12 +12,11 @@ import { ConfigBffModule } from '@project/config/config-bff';
     ConfigBffModule,
     {
       ...HttpModule.register({
-        timeout: HTTP_CLIENT_TIMEOUT,
-        maxRedirects: HTTP_CLIENT_MAX_REDIRECTS,
+        timeout: HttpClientSetting.Timeout,
+        maxRedirects: HttpClientSetting.MaxRedirects,
       }),
       global: true,
     },
-
     BlogModule,
     UsersModule,
     NotifyModule,
