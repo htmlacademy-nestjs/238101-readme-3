@@ -4,7 +4,7 @@ export * from './lib/stored-file.interface';
 export * from './lib/rabbit-routing.enum';
 export * from './lib/refresh-token-payload.interface';
 export * from './lib/request-with-user.interface';
-export * from './lib/subscriber.interface';
+export * from './lib/mailing.interface';
 export * from './lib/token-payload.interface';
 export * from './lib/token.interface';
 
@@ -19,3 +19,4 @@ export * from './lib/dto-with-user-id';
 export * from './lib/blog';
 export * from './lib/comments';
 export * from './lib/users';
+export * from './lib/notify';

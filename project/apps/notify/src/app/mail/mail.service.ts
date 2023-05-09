@@ -1,4 +1,4 @@
-import { Subscriber } from '@project/shared/shared-types';
+import { Publications, User } from '@project/shared/shared-types';
 import { Injectable } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
 
@@ -6,14 +6,16 @@ import { MailerService } from '@nestjs-modules/mailer';
 export class MailService {
   constructor(private readonly mailerService: MailerService) {}
 
-  public async sendNotifyNewPosts(subscriber: Subscriber) {
+  public async sendNotifyNewPosts(user: User, publications: Publications[]) {
+    const { email, name } = user;
+
     await this.mailerService.sendMail({
-      to: subscriber.email,
+      to: email,
       subject: 'New posts added',
       template: './post-news',
       context: {
-        user: `${subscriber.name}`,
-        email: `${subscriber.email}`,
+        user: `${name}`,
+        publications: publications,
       },
     });
   }

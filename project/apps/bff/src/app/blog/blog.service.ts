@@ -11,6 +11,7 @@ import {
   CreatePublicationBaseTextDto,
   CreatePublicationBaseVideoDto,
   DeleteCommentRdo,
+  MailingRdo,
   PublicationLinkRdo,
   PublicationPhotoRdo,
   PublicationQuery,
@@ -29,13 +30,19 @@ import { BffPublicationPhotoDto } from './dto';
 import FormData from 'form-data';
 import { BffPublcationRepost } from './dto/publication-repost.dto';
 import { UsersService } from '../users/users.service';
-import { MAILING_SENT_SUCCESS } from './consts/mailing.conts';
+import {
+  MAILING_SENT_SUCCESS,
+  NO_NEW_PUBLICATIONS,
+} from './consts/mailing.conts';
+import { NotifyService } from '../notify/notify.service';
+import dayjs from 'dayjs';
 
 @Injectable()
 export class BlogService {
   constructor(
     private readonly httpService: HttpService,
-    private readonly usersService: UsersService
+    private readonly usersService: UsersService,
+    private readonly notifyService: NotifyService
   ) {}
 
   private async getPublicationAuthor(authorId: string) {
@@ -415,13 +422,25 @@ export class BlogService {
   }
 
   public async sendMailing() {
-    const prevMailingDate: string | null = '2023-05-08';
+    const { data: lastMailing } =
+      await this.httpService.axiosRef.get<MailingRdo | null>(
+        `${ApplicationServiceURL.Notify}/`
+      );
+
+    const date = lastMailing?.mailingDate || dayjs().format('YYYY-MM');
 
     const users = await this.usersService.getAllUsers();
 
-    const newPublications = await this.getAllPublicationsByStartWithDate(
-      prevMailingDate
-    );
+    const newPublications = await this.getAllPublicationsByStartWithDate(date);
+
+    if (!newPublications.length) {
+      return NO_NEW_PUBLICATIONS;
+    }
+
+    await this.notifyService.sendMailing({
+      publications: newPublications,
+      users,
+    });
 
     return MAILING_SENT_SUCCESS;
   }

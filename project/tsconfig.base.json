@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@project/config/config-bff": ["libs/config/config-bff/src/index.ts"],
       "@project/config/config-notify": [
         "libs/config/config-notify/src/index.ts"
       ],
