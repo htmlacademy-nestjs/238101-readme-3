@@ -1,7 +1,9 @@
 import { registerAs } from '@nestjs/config';
 import * as Joi from 'joi';
 
-const DEFAULT_MONGO_PORT = 27017;
+const DbConfigDefaultSetting = {
+  Port: 27017,
+};
 
 export interface DbConfig {
   host: string;
@@ -15,7 +17,10 @@ export interface DbConfig {
 export default registerAs('db', (): DbConfig => {
   const config: DbConfig = {
     host: process.env.MONGO_HOST,
-    port: parseInt(process.env.MONGO_PORT ?? DEFAULT_MONGO_PORT.toString(), 10),
+    port: parseInt(
+      process.env.MONGO_PORT ?? DbConfigDefaultSetting.Port.toString(),
+      10
+    ),
     name: process.env.MONGO_DB,
     user: process.env.MONGO_USER,
     password: process.env.MONGO_PASSWORD,
@@ -24,7 +29,7 @@ export default registerAs('db', (): DbConfig => {
 
   const validationSchema = Joi.object<DbConfig>({
     host: Joi.string().hostname().required(),
-    port: Joi.number().port().default(DEFAULT_MONGO_PORT),
+    port: Joi.number().port().default(DbConfigDefaultSetting.Port),
     name: Joi.string().required(),
     user: Joi.string().required(),
     password: Joi.string().required(),

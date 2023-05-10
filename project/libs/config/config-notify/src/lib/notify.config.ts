@@ -1,10 +1,20 @@
 import { registerAs } from '@nestjs/config';
 import * as Joi from 'joi';
 
-const DEFAULT_PORT = 3000;
-const DEFAULT_MONGO_PORT = 27017;
-const DEFAULT_RABBIT_PORT = 5672;
-const DEFAULT_SMTP_PORT = 25;
+export const NotifyConfigDefaultSetting = {
+  App: {
+    Port: 3000,
+  },
+  Mongo: {
+    Port: 27017,
+  },
+  Rabbit: {
+    Port: 5672,
+  },
+  Smtp: {
+    Port: 25,
+  },
+} as const;
 
 export interface NotifyConfig {
   environment: string;
@@ -37,11 +47,15 @@ export interface NotifyConfig {
 export default registerAs('application', (): NotifyConfig => {
   const config: NotifyConfig = {
     environment: process.env.NODE_ENV,
-    port: parseInt(process.env.PORT || DEFAULT_PORT.toString(), 10),
+    port: parseInt(
+      process.env.PORT || NotifyConfigDefaultSetting.App.Port.toString(),
+      10
+    ),
     db: {
       host: process.env.MONGO_HOST,
       port: parseInt(
-        process.env.MONGO_PORT ?? DEFAULT_MONGO_PORT.toString(),
+        process.env.MONGO_PORT ??
+          NotifyConfigDefaultSetting.Mongo.Port.toString(),
         10
       ),
       name: process.env.MONGO_DB,
@@ -53,7 +67,8 @@ export default registerAs('application', (): NotifyConfig => {
       host: process.env.RABBIT_HOST,
       password: process.env.RABBIT_PASSWORD,
       port: parseInt(
-        process.env.RABBIT_PORT ?? DEFAULT_RABBIT_PORT.toString(),
+        process.env.RABBIT_PORT ??
+          NotifyConfigDefaultSetting.Rabbit.Port.toString(),
         10
       ),
       user: process.env.RABBIT_USER,
@@ -63,7 +78,8 @@ export default registerAs('application', (): NotifyConfig => {
     mail: {
       host: process.env.MAIL_SMTP_HOST,
       port: parseInt(
-        process.env.MAIL_SMTP_PORT ?? DEFAULT_SMTP_PORT.toString(),
+        process.env.MAIL_SMTP_PORT ??
+          NotifyConfigDefaultSetting.Smtp.Port.toString(),
         10
       ),
       user: process.env.MAIL_USER_NAME,
@@ -74,10 +90,10 @@ export default registerAs('application', (): NotifyConfig => {
 
   const validationSchema = Joi.object<NotifyConfig>({
     environment: Joi.string().valid('development', 'production', 'stage'),
-    port: Joi.number().port().default(DEFAULT_PORT),
+    port: Joi.number().port().default(NotifyConfigDefaultSetting.App.Port),
     db: Joi.object({
       host: Joi.string().valid().hostname(),
-      port: Joi.number().port(),
+      port: Joi.number().port().default(NotifyConfigDefaultSetting.Mongo.Port),
       name: Joi.string().required(),
       user: Joi.string().required(),
       password: Joi.string().required(),
@@ -86,14 +102,14 @@ export default registerAs('application', (): NotifyConfig => {
     rabbit: Joi.object({
       host: Joi.string().valid().hostname().required(),
       password: Joi.string().required(),
-      port: Joi.number().port().default(DEFAULT_RABBIT_PORT),
+      port: Joi.number().port().default(NotifyConfigDefaultSetting.Rabbit.Port),
       user: Joi.string().required(),
       queue: Joi.string().required(),
       exchange: Joi.string().required(),
     }),
     mail: Joi.object({
       host: Joi.string().valid().hostname().required(),
-      port: Joi.number().port().default(DEFAULT_SMTP_PORT),
+      port: Joi.number().port().default(NotifyConfigDefaultSetting.Smtp.Port),
       user: Joi.string().required(),
       password: Joi.string().required(),
       from: Joi.string().required(),
