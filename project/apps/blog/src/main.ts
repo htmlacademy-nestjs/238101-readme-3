@@ -9,9 +9,10 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 import { AppModule } from './app/app.module';
 
+const PORT = 3001;
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
 
@@ -30,7 +31,7 @@ async function bootstrap() {
     })
   );
 
-  const port = process.env.PORT || 3001;
+  const port = process.env.PORT || PORT;
   await app.listen(port);
 
   Logger.log(
