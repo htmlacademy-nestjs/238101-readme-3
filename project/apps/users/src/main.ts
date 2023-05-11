@@ -7,38 +7,49 @@ import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { getAppModeString, getAppRunningString } from '@project/util/util-core';
 
 import { AppModule } from './app/app.module';
+import { ApplicationConfig } from '@project/config/config-users';
+
+const AppDefaultSetting = {
+  Config: {
+    Namespace: 'application',
+  },
+  Swagger: {
+    Description: 'Users service API',
+    Title: 'The «Users» service',
+    Path: 'docs',
+    Version: '1.0',
+  },
+} as const;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
   const configService = app.get(ConfigService);
 
-  const globalPrefix = 'api';
+  const { port, globalPrefix, environment } =
+    configService.get<ApplicationConfig>(AppDefaultSetting.Config.Namespace);
+
   app.setGlobalPrefix(globalPrefix);
 
+  app.useGlobalPipes(new ValidationPipe());
+
   const config = new DocumentBuilder()
-    .setTitle('The «Users» service')
-    .setDescription('Users service API')
-    .setVersion('1.0')
+    .setTitle(AppDefaultSetting.Swagger.Title)
+    .setDescription(AppDefaultSetting.Swagger.Description)
+    .setVersion(AppDefaultSetting.Swagger.Version)
     .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('docs', app, document);
+  SwaggerModule.setup(AppDefaultSetting.Swagger.Path, app, document);
 
-  app.useGlobalPipes(new ValidationPipe());
-
-  const port = configService.get('application.port');
   await app.listen(port);
 
-  Logger.log(
-    `🚀 Application is running on: http://localhost:${port}/${globalPrefix}`
-  );
-
-  Logger.log(
-    `🎯  Current mode: ${configService.get('application.environment')}`
-  );
+  Logger.log(getAppRunningString(port, globalPrefix));
+  Logger.log(getAppModeString(environment));
 }
 
 bootstrap();

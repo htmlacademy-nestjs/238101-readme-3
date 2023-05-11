@@ -4,12 +4,14 @@ import * as Joi from 'joi';
 const ApplicationConfigDefaultSetting = {
   App: {
     Port: 3000,
+    GlobalPrefix: 'api',
   },
 };
 
 export interface ApplicationConfig {
   environment: string;
   port: number;
+  globalPrefix: string;
 }
 
 export default registerAs('application', (): ApplicationConfig => {
@@ -19,6 +21,9 @@ export default registerAs('application', (): ApplicationConfig => {
       process.env.PORT || ApplicationConfigDefaultSetting.App.Port.toString(),
       10
     ),
+    globalPrefix:
+      process.env.GLOBAL_PREFIX ||
+      ApplicationConfigDefaultSetting.App.GlobalPrefix,
   };
 
   const validationSchema = Joi.object<ApplicationConfig>({
@@ -26,6 +31,7 @@ export default registerAs('application', (): ApplicationConfig => {
       .valid('development', 'production', 'stage')
       .required(),
     port: Joi.number().port().default(ApplicationConfigDefaultSetting.App.Port),
+    globalPrefix: Joi.string().required(),
   });
 
   const { error } = validationSchema.validate(config, { abortEarly: true });
