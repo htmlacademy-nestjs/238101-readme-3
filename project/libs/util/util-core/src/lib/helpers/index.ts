@@ -1,3 +1,4 @@
+export * from './app.helper';
 export * from './fill-object.helper';
 export * from './mongo-connection.helper';
 export * from './parse-time.helper';
